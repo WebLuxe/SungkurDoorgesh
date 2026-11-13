@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sound — Doorgesh</title>
+<meta name="description" content="Play a drum kit in your browser, then check out Doorgesh's amp builds and DSP remasters as Zenn Prxd.">
+<meta name="theme-color" content="#0d0614">
+<meta property="og:title" content="Sound — Doorgesh">
+<meta property="og:description" content="Play a drum kit in your browser, then check out Doorgesh's amp builds and DSP remasters as Zenn Prxd.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/img/doorgesh-4.webp">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
+</head>
+<body data-page="sound" class="hold">
+<a class="skip" href="#main">Skip to content</a>
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__half t"></div><div class="loader__half b"></div>
+  <div class="loader__core">
+    <div class="loader__sun"></div>
+    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
+    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
+  </div>
+</div>
+<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
+<header class="nav" id="nav">
+  <div class="wrap nav__bar">
+    <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html" aria-current="page">Sound</a><a href="about.html">About</a></nav>
+    <a class="btn btn--sm nav__cta" href="contact.html">Let's talk</a>
+    <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
+  </div>
+</header>
+<div class="sheet" id="sheet" hidden>
+  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html" aria-current="page"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
+  <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+</div>
+<main id="main">
+<section class="phead">
+  <div class="phead__mini-sun" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow mono"><b>03</b> Sound</p>
+    <h1 class="vice h1 sun-text" aria-label="Sound check"><span class="ln"><span style="--i:0">Sound check</span></span></h1>
+    <p class="lede">Drummer, band leader and the producer behind <strong>Zenn Prxd</strong>. Go on, hit something. Every sound is made live in your browser.</p>
+    
+  </div>
+</section>
+<section aria-label="Drum kit">
+  <div class="wrap kit" id="kit">
+    <div class="pads"><button type="button" class="pad" data-v="kick" data-key="a" data-cursor="Hit"><b>Kick</b><span class="mono">Key A</span></button><button type="button" class="pad" data-v="snare" data-key="s" data-cursor="Hit"><b>Snare</b><span class="mono">Key S</span></button><button type="button" class="pad" data-v="hat" data-key="d" data-cursor="Hit"><b>Hi-hat</b><span class="mono">Key D</span></button><button type="button" class="pad" data-v="clap" data-key="f" data-cursor="Hit"><b>Clap</b><span class="mono">Key F</span></button><button type="button" class="pad" data-v="bass" data-key="g" data-cursor="Hit"><b>808</b><span class="mono">Key G</span></button><button type="button" class="pad" data-v="zap" data-key="h" data-cursor="Hit"><b>Zap</b><span class="mono">Key H</span></button></div>
+    <figure class="scope" aria-label="Oscilloscope showing the sound you play">
+      <canvas id="scope" aria-hidden="true"></canvas>
+      <figcaption class="scope__bar mono"><b>CH1 · Live output</b><span id="scopeLvl">idle</span></figcaption>
+    </figure>
+    <div class="kit__bar"><button class="btn" type="button" id="beat" aria-pressed="false" data-cursor="Play"><span>Play a beat</span> <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z"/></svg></button><p class="mono">Tap the pads, or use keys A S D F G H</p></div>
+  </div>
+</section>
+<section>
+  <div class="wrap split">
+    <div><p class="eyebrow mono">Audio hardware</p><h2 class="vice h3">Amps &amp; subs,<br><span class="sun-text-x">built to shake.</span></h2>
+      <p>I build and tune amplifier systems on these boards, then put them in custom subwoofer and speaker enclosures. Tuned by ear first, then by DSP.</p></div>
+    <div class="boards"><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>TPA3116D2</b><span>Class-D stereo amp board</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-TB21</b><span>Amp board with a bass channel</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-HT21</b><span>Stereo + subwoofer amp board</span></p></div></div>
+  </div>
+</section>
+<section>
+  <div class="wrap split">
+    <div><p class="eyebrow mono">Zenn Prxd</p><p class="bignum sun-text"><span data-count="200">0</span>K+</p><p class="mono" style="color:var(--muted);margin-top:10px">views on YouTube · 1K+ subscribers</p></div>
+    <div><h2 class="vice h3">Remasters &amp;<br><span class="sun-text-x">visualisers.</span></h2>
+      <p>DSP remasters and music visualisers on YouTube under the name Zenn Prxd, edited and rendered with:</p>
+      <ul class="chips"><li>DaVinci Resolve</li><li>Avee Player</li><li>Shotcut</li><li>Filmora</li></ul>
+      <p style="margin-top:26px"><a class="btn btn--ghost" href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">Find Zenn Prxd on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></p></div>
+  </div>
+</section>
+<section>
+  <div class="wrap split">
+    <div><p class="eyebrow mono">The band</p><h2 class="vice h3">Behind<br><span class="sun-text-x">the kit.</span></h2></div>
+    <div><p>Drummer and leader of a school band. Keeping time for a whole band is where the ear for tuning amps and remasters comes from.</p></div>
+  </div>
+</section>
+<section class="cta">
+  <div class="wrap">
+    <h2 class="vice h2 sun-text">Need it to<br>sound right?</h2>
+    <p class="lede">Amp builds, remasters, visualisers or video edits. Tell me about it.</p>
+    <a class="btn" href="contact.html">Start a conversation <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__word vice sun-text">Doorgesh</p>
+    <div class="foot__row">
+      <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js" defer></script>
+</body>
+</html>

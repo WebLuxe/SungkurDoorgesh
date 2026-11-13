@@ -3,383 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Doorgesh — Applied physics, hardware &amp; sound</title>
-<meta name="description" content="Doorgesh (Zenn Prxd) builds high-voltage propulsion experiments, custom audio systems and computer-vision hardware in Mauritius. 1st place, RGSC Science Quest 2026.">
-<meta name="theme-color" content="#0b0c0e">
-<meta property="og:title" content="Doorgesh — Applied physics, hardware & sound">
-<meta property="og:description" content="High-voltage experiments, custom audio systems and computer-vision hardware, built by hand in Mauritius.">
+<title>Doorgesh — Hardware, physics, sound &amp; code</title>
+<meta name="description" content="Doorgesh (Zenn Prxd) builds custom audio systems, sim rigs, computer-vision hardware and high-voltage experiments in Mauritius.">
+<meta name="theme-color" content="#0d0614">
+<meta property="og:title" content="Doorgesh — Hardware, physics, sound &amp; code">
+<meta property="og:description" content="Doorgesh (Zenn Prxd) builds custom audio systems, sim rigs, computer-vision hardware and high-voltage experiments in Mauritius.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="assets/img/doorgesh-1.webp">
+<meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<link rel="preload" as="image" href="assets/img/doorgesh-1.webp">
+<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
 </head>
-<body>
+<body data-page="home" class="hold">
+<svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
 <a class="skip" href="#main">Skip to content</a>
-
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__half t"></div><div class="loader__half b"></div>
+  <div class="loader__core">
+    <div class="loader__sun"></div>
+    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
+    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
+  </div>
+</div>
+<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
 <header class="nav" id="nav">
   <div class="wrap nav__bar">
-    <a class="mark" href="#top" aria-label="Doorgesh, back to top">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 9v14h4.2c4.2 0 6.8-2.7 6.8-7s-2.6-7-6.8-7Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="25.5" cy="7" r="2.2" fill="var(--hot)"/></svg>
-      <span>Doorgesh</span>
-    </a>
-    <nav class="nav__links" aria-label="Sections">
-      <a href="#ionic-leap">Ionic Leap</a>
-      <a href="#work">Work</a>
-      <a href="#sound">Sound</a>
-      <a href="#about">About</a>
-    </nav>
-    <a class="btn btn--sm nav__cta" href="#contact">Get in touch</a>
+    <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html" aria-current="page">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
+    <a class="btn btn--sm nav__cta" href="contact.html">Let's talk</a>
     <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
   </div>
 </header>
-
 <div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu">
-    <a href="#ionic-leap"><small>01</small>Ionic Leap</a>
-    <a href="#work"><small>02</small>Work</a>
-    <a href="#sound"><small>03</small>Sound</a>
-    <a href="#about"><small>04</small>About</a>
-    <a href="#contact"><small>05</small>Contact</a>
-  </nav>
-  <p class="sheet__foot mono">Mauritius · Open to collabs &amp; commissions</p>
+  <nav aria-label="Menu"><a href="index.html" aria-current="page"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
+  <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+</div>
+<main id="main">
+<div class="scene-pin">
+<section class="scene" id="scene" aria-label="Doorgesh">
+  <div class="layer stars" aria-hidden="true"></div>
+  <div class="layer sunglow" aria-hidden="true"></div>
+  <div class="layer sun" aria-hidden="true"><div></div></div>
+  <div class="layer skyline" aria-hidden="true"></div>
+  <div class="layer ocean" aria-hidden="true"><canvas></canvas></div>
+  <div class="layer title"><h1 class="vice">Doorgesh</h1></div>
+  <div class="palm-l" aria-hidden="true"></div><div class="palm-r" aria-hidden="true"></div>
+  <p class="scene__kicker mono fade-up" style="--d:1.1s">Hardware engineer · Applied physics · Full-stack IT · Audio producer</p>
+  <div class="scene__copy">
+    <div class="wrap">
+      <p class="fade-up" style="--d:1.3s">Mauritius-based builder, better known as Zenn Prxd. I solder it, code it, tune it and film it.</p>
+      <div class="scene__cta fade-up" style="--d:1.45s"><a class="btn" href="work.html">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--ghost" href="contact.html">Work with me</a></div>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true"></span>
+  <div class="shade" aria-hidden="true"></div>
+</section>
 </div>
 
-<main id="main">
+<section class="statement">
+  <div class="wrap">
+    <p data-hot="amps,code,physics,sound,mauritius">I'm a drummer, a coder and a hardware guy from Mauritius. I build amps, sim rigs and camera-powered gadgets, write the code that runs them, push physics past the textbook and make the sound and video around it all.</p>
+  </div>
+</section>
 
-<!-- HERO -->
-<section class="hero" id="top">
-  <canvas class="hero__field" id="field" aria-hidden="true"></canvas>
-  <div class="wrap hero__inner">
-    <p class="kicker mono rise" style="--i:0"><span class="dot"></span>Mauritius · Hardware · Physics · Sound</p>
-    <h1 class="hero__title">
-      <span class="line"><span class="rise" style="--i:1">Applied physics,</span></span>
-      <span class="line"><span class="rise" style="--i:2">built <em>by hand.</em></span></span>
-    </h1>
-    <p class="hero__lead rise" style="--i:3">I build things that fly on ions, shake rooms with bass and see through a camera. Open to collaborations, commissions and business ideas.</p>
-    <div class="hero__cta rise" style="--i:4">
-      <a class="btn" href="#ionic-leap">See the award project <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-      <a class="btn btn--line" href="#contact">Work with me</a>
+<section class="posters" aria-labelledby="pick">
+  <div class="wrap">
+    <div class="posters__head">
+      <div><p class="eyebrow mono">Pick a side</p><h2 id="pick" class="vice h2">Four sides,<br><span class="sun-text-x">one workbench.</span></h2></div>
+      <p class="lede">Tap a poster to jump into that side of the work.</p>
+    </div>
+    <div class="poster-row">
+      <a class="poster" href="work.html#hardware" data-cursor="Go">
+        <img src="assets/img/doorgesh-4.webp" alt="" style="filter:url(#duo-sunset);object-position:45% 30%" loading="lazy" decoding="async">
+        <span class="poster__no mono">01</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
+        <span class="poster__txt"><b>The Builder</b><span>Soldering, amps, sim rigs</span></span></a>
+      <a class="poster" href="work.html#code" data-cursor="Go">
+        <img src="assets/img/doorgesh-1.webp" alt="" style="filter:url(#duo-teal);object-position:52% 22%" loading="lazy" decoding="async">
+        <span class="poster__no mono">02</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
+        <span class="poster__txt"><b>The Coder</b><span>ESP32, vision, web &amp; IT</span></span></a>
+      <a class="poster" href="work.html#physics" data-cursor="Go">
+        <img src="assets/img/doorgesh-2.webp" alt="" style="filter:url(#duo-violet);object-position:30% 30%" loading="lazy" decoding="async">
+        <span class="poster__no mono">03</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
+        <span class="poster__txt"><b>The Physicist</b><span>High voltage &amp; mechanics</span></span></a>
+      <a class="poster" href="sound.html" data-cursor="Go">
+        <img src="assets/img/doorgesh-3.webp" alt="" style="filter:url(#duo-pink);object-position:40% 25%" loading="lazy" decoding="async">
+        <span class="poster__no mono">04</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
+        <span class="poster__txt"><b>The Producer</b><span>Drums, DSP &amp; video</span></span></a>
     </div>
   </div>
-  <div class="wrap hero__facts rise" style="--i:5">
+</section>
+
+<section class="stats" aria-label="Numbers">
+  <div class="wrap">
     <dl>
-      <div><dt class="mono">RGSC Science Quest 2026</dt><dd>1st place</dd></div>
-      <div><dt class="mono">YouTube views</dt><dd><span data-count="200">0</span>K+</dd></div>
-      <div><dt class="mono">Subscribers</dt><dd><span data-count="1">0</span>K+</dd></div>
+      <div><dd class="sun-text"><span data-count="200">0</span>K+</dd><dt>YouTube views as Zenn Prxd</dt></div>
+      <div><dd class="sun-text"><span data-count="1">0</span>K+</dd><dt>Subscribers</dt></div>
+      <div><dd class="sun-text"><span data-count="4">0</span></dd><dt>Microcontroller platforms: ESP32, ESP32-CAM, Uno, Nano</dt></div>
+      <div><dd class="sun-text">1st</dd><dt>Place, RGSC Science Quest 2026</dt></div>
     </dl>
-    <p class="hero__hint mono" aria-hidden="true"><span class="hint-desktop">Move your cursor through the field</span><span class="hint-touch">Drag through the field</span></p>
   </div>
 </section>
 
-<!-- IONIC LEAP: scroll-driven explainer -->
-<section class="leap" id="ionic-leap" aria-labelledby="leap-title">
-  <div class="wrap leap__head">
-    <p class="eyebrow mono"><span>01</span>Award project</p>
-    <h2 id="leap-title" class="h2">The Ionic Leap</h2>
-    <p class="leap__award"><span class="badge mono">1st place, nationally</span> Rajiv Gandhi Science Centre · Science Quest 2026</p>
-    <p class="lede">A high-voltage, atmospheric electrohydrodynamic thruster. It moves air with electricity alone: no propeller, no motor, no moving parts.</p>
-  </div>
-
-  <div class="wrap leap__body">
-    <div class="leap__stage">
-      <figure class="rig" id="rig" data-step="0" aria-label="Diagram of an ionic wind thruster: a thin emitter wire above a wide collector, with ions drifting between them and air pushed downward, creating thrust upward.">
-        <svg viewBox="0 0 400 420" class="rig__svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="g-ion" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9d8cff"/><stop offset="1" stop-color="#9d8cff" stop-opacity="0"/></linearGradient>
-            <radialGradient id="g-corona"><stop offset="0" stop-color="#b9adff" stop-opacity=".9"/><stop offset="1" stop-color="#7a66ff" stop-opacity="0"/></radialGradient>
-          </defs>
-          <!-- grid -->
-          <g class="rig__grid">
-            <path d="M0 60H400M0 120H400M0 180H400M0 240H400M0 300H400M0 360H400M50 0V420M100 0V420M150 0V420M200 0V420M250 0V420M300 0V420M350 0V420"/>
-          </g>
-          <g transform="translate(22 0)">
-          <!-- frame -->
-          <g class="rig__frame">
-            <path d="M60 110V300M340 110V300"/>
-            <path d="M52 110H68M332 110H348M52 300H68M332 300H348"/>
-          </g>
-          <!-- supply -->
-          <g class="rig__hv">
-            <path class="draw" d="M60 110H30V205H18M60 300H30V215H18" pathLength="1"/>
-            <rect x="2" y="196" width="16" height="28" rx="2"/>
-            <text x="10" y="186" text-anchor="middle">HV</text>
-          </g>
-          <!-- emitter wire -->
-          <g class="rig__emitter">
-            <path class="draw" d="M60 110H340" pathLength="1"/>
-            <text x="200" y="96" text-anchor="middle">emitter wire  +</text>
-          </g>
-          <ellipse class="rig__corona" cx="200" cy="110" rx="150" ry="16" fill="url(#g-corona)"/>
-          <!-- collector -->
-          <g class="rig__collector">
-            <rect x="60" y="290" width="280" height="20" rx="2"/>
-            <text x="200" y="334" text-anchor="middle">collector  −</text>
-          </g>
-          <!-- ions -->
-          <g class="rig__ions" id="rigIons"></g>
-          <!-- air flow -->
-          <g class="rig__air">
-            <path d="M120 320v62M120 382l-8-10M120 382l8-10"/>
-            <path d="M200 320v74M200 394l-8-10M200 394l8-10"/>
-            <path d="M280 320v62M280 382l-8-10M280 382l8-10"/>
-            <text x="22" y="372">ionic wind</text>
-          </g>
-          <!-- thrust -->
-          <g class="rig__thrust">
-            <path d="M200 70V12M200 12l-12 14M200 12l12 14"/>
-            <text x="216" y="40">thrust</text>
-          </g>
-          </g>
-        </svg>
-        <figcaption class="rig__readout mono"><span id="rigLabel">Step 0 · Idle</span><span class="rig__meter"><i id="rigMeter"></i></span></figcaption>
-      </figure>
+<section class="hpin" aria-labelledby="feat">
+  <div class="hpin__sticky">
+    <div class="hpin__head">
+      <div><p class="eyebrow mono">Featured builds</p><h2 id="feat" class="vice h2">Off the <span class="sun-text-x">bench.</span></h2></div>
+      <a class="btn btn--ghost" href="work.html">All the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
     </div>
-
-    <ol class="leap__steps">
-      <li class="step" data-step="1">
-        <span class="step__n mono">01</span>
-        <h3>High voltage on a thin wire</h3>
-        <p>A very thin emitter wire is charged to a high voltage. Because the wire is so thin, the electric field right at its surface becomes extremely strong.</p>
-      </li>
-      <li class="step" data-step="2">
-        <span class="step__n mono">02</span>
-        <h3>The air breaks down</h3>
-        <p>That field is strong enough to ionise the air around the wire. This is corona discharge: a faint violet glow and a steady supply of charged ions.</p>
-      </li>
-      <li class="step" data-step="3">
-        <span class="step__n mono">03</span>
-        <h3>Ions drag the air with them</h3>
-        <p>The ions race toward the oppositely charged collector. On the way they collide with neutral air molecules and push them along, creating a wind.</p>
-      </li>
-      <li class="step" data-step="4">
-        <span class="step__n mono">04</span>
-        <h3>Thrust, with no moving parts</h3>
-        <p>Air pushed one way means a force the other way. That is electrohydrodynamic thrust: silent, solid-state propulsion from electricity alone.</p>
-      </li>
-    </ol>
+    <div class="hpin__track">
+      <a class="pcard bg-audio" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><rect x="18" y="22" width="78" height="106" rx="6" class="fillg"/><circle cx="57" cy="88" r="28"/><circle cx="57" cy="88" r="10"/><circle cx="57" cy="44" r="10"/><path d="M110 75h12l7-26 9 52 9-52 9 52 7-26h17"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Audio hardware</p><h3>Amp &amp; sub systems</h3><p>High-power class-D boards in custom-built boxes, tuned by ear.</p></div></a>
+      <a class="pcard bg-sim" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><circle cx="70" cy="75" r="46"/><circle cx="70" cy="75" r="12" class="fillg"/><path d="M70 29v34M24 75h34M82 75h34"/><path d="M150 120V64M150 64h28M150 92h28M178 64v56M164 64v56"/><circle cx="150" cy="54" r="9" class="fillg"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Sim rig</p><h3>EuroSim wheel &amp; shifter</h3><p>A force-feedback wheel and gear shifter for Euro Truck Simulator 2.</p></div></a>
+      <a class="pcard bg-iot" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M46 52h108l-14 84H60Z" class="fillg"/><path d="M100 52v84M38 52h124"/><rect x="80" y="14" width="40" height="24" rx="5"/><circle cx="100" cy="26" r="6"/><path d="M100 38v14"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Computer vision</p><h3>AI sorting bin</h3><p>An ESP32-CAM bin that sees what you drop in and sorts it.</p></div></a>
+      <a class="pcard bg-hv" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M30 40H170"/><circle cx="30" cy="40" r="3" class="fillg"/><circle cx="170" cy="40" r="3" class="fillg"/><rect x="30" y="104" width="140" height="10" rx="2" class="fillg"/><path d="M55 48v48M80 48v48M105 48v48M130 48v48M155 48v48" stroke-dasharray="3 7"/><path d="M100 30V6M100 6l-9 10M100 6l9 10"/><path d="M60 122v18M100 122v22M140 122v18"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Applied physics<em>1st place</em></p><h3>The Ionic Leap</h3><p>Air moved by electricity alone. No propeller, no motor.</p></div></a>
+      <a class="pcard bg-led" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M14 92H186"/><circle cx="30" cy="92" r="8" class="fillg"/><circle cx="62" cy="92" r="8"/><circle cx="94" cy="92" r="8" class="fillg"/><circle cx="126" cy="92" r="8"/><circle cx="158" cy="92" r="8" class="fillg"/><path d="M110 58V20l34-8v36"/><circle cx="102" cy="58" r="8" class="fillg"/><circle cx="136" cy="48" r="8" class="fillg"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Embedded</p><h3>Music-reactive ARGB</h3><p>Addressable LEDs that hit on the beat.</p></div></a>
+      <a class="pcard bg-dsp" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M12 75h18l8-30 10 60 10-46 10 32 10-50 10 64 10-40 10 22 8-12h16"/><circle cx="168" cy="75" r="20" class="fillg"/><path d="M163 65v20l15-10Z"/></svg></div>
+      <div class="pcard__body"><p class="pcard__tag mono">Media</p><h3>DSP remasters</h3><p>Remasters and visualisers with 200K+ views on YouTube.</p></div></a>
+      <a class="end" href="work.html" data-cursor="All"><span class="vice h3 sun-text">See every build</span><span class="mono">8 projects · filters · details</span></a>
+    </div>
+    <div class="hpin__bar" aria-hidden="true"><i></i></div>
   </div>
 </section>
 
-<!-- WORK -->
-<section class="work" id="work" aria-labelledby="work-title">
+<div class="marquee" aria-hidden="true"><div><span>Solder it ✦ Code it ✦ Tune it ✦ Film it ✦</span><span>Solder it ✦ Code it ✦ Tune it ✦ Film it ✦</span><span>Solder it ✦ Code it ✦ Tune it ✦ Film it ✦</span><span>Solder it ✦ Code it ✦ Tune it ✦ Film it ✦</span></div></div>
+
+<section class="cta">
   <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow mono"><span>02</span>Builds</p>
-      <h2 id="work-title" class="h2">Wired, coded and<br>tested by hand.</h2>
-    </div>
-
-    <ul class="index" id="index">
-      <li class="row">
-        <button class="row__head" type="button" aria-expanded="false">
-          <span class="row__n mono">01</span>
-          <span class="row__title">The Ionic Leap</span>
-          <span class="row__tag mono">Applied physics</span>
-          <span class="row__plus" aria-hidden="true"></span>
-        </button>
-        <div class="row__body"><div>
-          <p>High-voltage atmospheric electrohydrodynamic propulsion. First place nationally at the Rajiv Gandhi Science Centre Science Quest 2026. <a href="#ionic-leap">How it works ↑</a></p>
-          <svg class="row__art" viewBox="0 0 200 90" aria-hidden="true"><path d="M20 20H180M20 70H180"/><path class="dash" d="M50 26v38M80 26v38M110 26v38M140 26v38"/></svg>
-        </div></div>
-      </li>
-      <li class="row">
-        <button class="row__head" type="button" aria-expanded="false">
-          <span class="row__n mono">02</span>
-          <span class="row__title">Amp &amp; sub systems</span>
-          <span class="row__tag mono">Audio hardware</span>
-          <span class="row__plus" aria-hidden="true"></span>
-        </button>
-        <div class="row__body"><div>
-          <p>High-power class-D amplifier boards (TPA3116D2, ZK-TB21, ZK-HT21) built into custom subwoofer and speaker enclosures, then tuned by ear.</p>
-          <svg class="row__art" viewBox="0 0 200 90" aria-hidden="true"><rect x="20" y="15" width="70" height="60" rx="4"/><circle cx="55" cy="45" r="20"/><circle cx="55" cy="45" r="7"/><path d="M110 45h10l6-18 8 36 8-36 8 36 6-18h24"/></svg>
-        </div></div>
-      </li>
-      <li class="row">
-        <button class="row__head" type="button" aria-expanded="false">
-          <span class="row__n mono">03</span>
-          <span class="row__title">EuroSim wheel &amp; shifter</span>
-          <span class="row__tag mono">Sim rig</span>
-          <span class="row__plus" aria-hidden="true"></span>
-        </button>
-        <div class="row__body"><div>
-          <p>A force-feedback steering wheel and gear shifter for Euro Truck Simulator 2, built from microcontrollers, potentiometers and 3D-modelled enclosures.</p>
-          <svg class="row__art" viewBox="0 0 200 90" aria-hidden="true"><circle cx="60" cy="45" r="32"/><circle cx="60" cy="45" r="8"/><path d="M60 13v24M28 45h24M68 45h24"/><path d="M140 75V30M140 30h30M140 52h30M170 30v45"/><circle cx="140" cy="22" r="7"/></svg>
-        </div></div>
-      </li>
-      <li class="row">
-        <button class="row__head" type="button" aria-expanded="false">
-          <span class="row__n mono">04</span>
-          <span class="row__title">AI sorting bin</span>
-          <span class="row__tag mono">Computer vision</span>
-          <span class="row__plus" aria-hidden="true"></span>
-        </button>
-        <div class="row__body"><div>
-          <p>An ESP32-CAM waste-sorting bin that recognises what you drop in and sends it to the right compartment on its own.</p>
-          <svg class="row__art" viewBox="0 0 200 90" aria-hidden="true"><path d="M40 30h120l-12 50H52Z"/><path d="M100 30v50"/><rect x="82" y="6" width="36" height="16" rx="3"/><circle cx="100" cy="14" r="4"/></svg>
-        </div></div>
-      </li>
-      <li class="row">
-        <button class="row__head" type="button" aria-expanded="false">
-          <span class="row__n mono">05</span>
-          <span class="row__title">Music-reactive ARGB</span>
-          <span class="row__tag mono">Embedded</span>
-          <span class="row__plus" aria-hidden="true"></span>
-        </button>
-        <div class="row__body"><div>
-          <p>WS2812B addressable LED strips driven by a microcontroller that listens to the music and lights up on the beat.</p>
-          <svg class="row__art row__art--leds" viewBox="0 0 200 90" aria-hidden="true"><path d="M10 45H190"/><circle cx="30" cy="45" r="6"/><circle cx="60" cy="45" r="6"/><circle cx="90" cy="45" r="6"/><circle cx="120" cy="45" r="6"/><circle cx="150" cy="45" r="6"/><circle cx="180" cy="45" r="6"/></svg>
-        </div></div>
-      </li>
-    </ul>
-
-    <div class="skills">
-      <article class="skill">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30 22 14M22 14l4-4 4 4-4 4zM26 10l4-4"/><path d="M6 34h14"/></svg>
-        <h3>Hands-on hardware</h3>
-        <p>Soldering and circuit benchwork, board mods, electrical troubleshooting, amplifier builds, mechanical CAD in Tinkercad.</p>
-      </article>
-      <article class="skill">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="8" width="24" height="24" rx="2"/><path d="M14 2v6M20 2v6M26 2v6M14 32v6M20 32v6M26 32v6M2 14h6M2 20h6M2 26h6M32 14h6M32 20h6M32 26h6"/></svg>
-        <h3>Code &amp; IT</h3>
-        <p>Web development, microcontroller C++ on Arduino and ESP32, ESP32-CAM computer vision, Linux and PC infrastructure.</p>
-      </article>
-      <article class="skill">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M22 3 10 22h10l-2 15 12-19H20z"/></svg>
-        <h3>Applied physics</h3>
-        <p>Electrohydrodynamics, high-voltage systems and mechanics. Award-winning research, built and measured for real.</p>
-      </article>
-      <article class="skill">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 20h5l3-9 5 18 5-22 5 18 3-5h6"/></svg>
-        <h3>Audio &amp; media</h3>
-        <p>DSP remastering, video editing, visualisers for YouTube. Drummer and leader of a school band.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- SOUND -->
-<section class="sound" id="sound" aria-labelledby="sound-title">
-  <div class="wrap sound__grid">
-    <div class="sound__text">
-      <p class="eyebrow mono"><span>03</span>Sound</p>
-      <h2 id="sound-title" class="h2">Tuned by ear,<br>and by DSP.</h2>
-      <p class="lede">Remasters and visualisers on YouTube as <b>Zenn Prxd</b>: more than 200,000 views and over 1,000 subscribers, edited in DaVinci Resolve, Avee Player, Shotcut and Filmora.</p>
-      <a class="btn btn--line" href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">Find Zenn Prxd on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
-    </div>
-    <figure class="scope" aria-label="Animated oscilloscope trace">
-      <canvas id="scope" aria-hidden="true"></canvas>
-      <figcaption class="scope__bar mono"><span>CH1</span><span id="scopeHz">— Hz</span><span>Zenn Prxd</span></figcaption>
-    </figure>
-  </div>
-  <div class="wrap garage">
-    <article>
-      <p class="mono">Garage</p>
-      <h3>Bicycle tuning &amp; wraps</h3>
-      <p>A 21-speed Raleigh: derailleur adjustment, brake servicing, gear tuning and a custom vinyl wrap. Car wrapping too.</p>
-    </article>
-    <article>
-      <p class="mono">Automotive</p>
-      <h3>Toyota engine study</h3>
-      <p>Studying the 4E-FE and the 4A-GE Blacktop, with long-term tuning plans for a Corolla EE111.</p>
-    </article>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about" id="about" aria-labelledby="about-title">
-  <div class="wrap about__grid">
-    <div class="deck" id="deck">
-      <div class="deck__cards" id="deckCards">
-        <figure class="card"><img style="object-position:52% 18%" src="assets/img/doorgesh-1.webp" alt="Doorgesh in a black Adidas tee, mirror selfie" width="960" height="767" decoding="async"></figure>
-        <figure class="card"><img style="object-position:30% 35%" src="assets/img/doorgesh-2.webp" alt="Doorgesh, side-on mirror selfie" width="900" height="720" decoding="async" loading="lazy"></figure>
-        <figure class="card"><img style="object-position:40% 25%" src="assets/img/doorgesh-3.webp" alt="Doorgesh in a dark blazer" width="660" height="528" decoding="async" loading="lazy"></figure>
-        <figure class="card"><img style="object-position:45% 40%" src="assets/img/doorgesh-4.webp" alt="Doorgesh flexing, black and white" width="900" height="720" decoding="async" loading="lazy"></figure>
-      </div>
-      <div class="deck__ctrl">
-        <button type="button" class="deck__btn" id="deckPrev" aria-label="Previous photo"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg></button>
-        <span class="mono" id="deckCount">01 / 04</span>
-        <button type="button" class="deck__btn" id="deckNext" aria-label="Next photo"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
-      </div>
-      <p class="deck__hint mono">Swipe or throw the photo</p>
-    </div>
-
-    <div class="about__text">
-      <p class="eyebrow mono"><span>04</span>About</p>
-      <h2 id="about-title" class="h2">Hi, I'm Doorgesh.</h2>
-      <p class="lede">Better known online as Zenn Prxd. I build high-voltage propulsion experiments, custom audio systems and computer-vision hardware, then write the code and make the content around them.</p>
-      <p>Drummer and leader of a school band, first-place winner at RGSC Science Quest 2026, and always in the middle of a new build.</p>
-      <p>I also run <a class="ulink" href="https://webluxe.github.io/WebLuxe/" target="_blank" rel="noopener">WebLuxe</a>, a web design studio in Mauritius.</p>
-      <ul class="handles">
-        <li><span class="mono">YouTube</span>Zenn Prxd</li>
-        <li><span class="mono">TikTok</span>@r0shibhadain</li>
-        <li><span class="mono">Based in</span>Mauritius</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section class="road" id="roadmap" aria-labelledby="road-title">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow mono"><span>05</span>Roadmap</p>
-      <h2 id="road-title" class="h2">Where the lab<br>is heading.</h2>
-    </div>
-    <ol class="trace" id="trace">
-      <li><span class="mono">Now</span><h3>Push the high-voltage research further</h3><p>Build on The Ionic Leap and go deeper into electrohydrodynamics and high-voltage systems.</p></li>
-      <li><span class="mono">Next</span><h3>Custom boards, smarter vision</h3><p>Design custom PCB layouts and grow the ESP32-CAM vision work into real products.</p></li>
-      <li><span class="mono">Then</span><h3>The Corolla EE111 build</h3><p>Turn the Toyota engine study into hands-on performance tuning.</p></li>
-      <li><span class="mono">Later</span><h3>Electronics &amp; engineering</h3><p>Study and build toward a career in electronics and applied physics.</p></li>
-      <li><span class="mono">The goal</span><h3>A tech company that ships</h3><p>Turn the hardware, audio and IT skills into a business that makes real products.</p></li>
-    </ol>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact" id="contact" aria-labelledby="contact-title">
-  <div class="wrap contact__grid">
-    <div>
-      <p class="eyebrow mono"><span>06</span>Contact</p>
-      <h2 id="contact-title" class="h2 h2--xl">Let's build<br><em>something.</em></h2>
-      <p class="lede">A project, a collab or a business idea: send a message and I'll get back to you.</p>
-      <ul class="links">
-        <li><a href="mailto:buildyourdreamwebsitedotcom@gmail.com"><span class="mono">Email</span>buildyourdreamwebsitedotcom@gmail.com<i aria-hidden="true">↗</i></a></li>
-        <li><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener"><span class="mono">TikTok</span>@r0shibhadain<i aria-hidden="true">↗</i></a></li>
-        <li><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener"><span class="mono">YouTube</span>Zenn Prxd<i aria-hidden="true">↗</i></a></li>
-      </ul>
-    </div>
-    <form class="form" id="form" novalidate>
-      <label><span class="mono">Name</span><input name="name" required autocomplete="name"></label>
-      <label><span class="mono">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label>
-      <fieldset>
-        <legend class="mono">About</legend>
-        <div class="chips">
-          <label><input type="radio" name="type" value="Hardware / electronics" checked><span>Hardware</span></label>
-          <label><input type="radio" name="type" value="Audio / media"><span>Audio</span></label>
-          <label><input type="radio" name="type" value="Web / IT"><span>Web &amp; IT</span></label>
-          <label><input type="radio" name="type" value="Wrapping / automotive"><span>Wraps</span></label>
-          <label><input type="radio" name="type" value="Business"><span>Business</span></label>
-        </div>
-      </fieldset>
-      <label><span class="mono">Message</span><textarea name="msg" rows="4" required></textarea></label>
-      <button class="btn" type="submit">Send message <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
-      <p class="form__note" id="note" role="status"></p>
-    </form>
+    <h2 class="vice h2 sun-text">Got a build<br>in mind?</h2>
+    <p class="lede">Hardware, audio, web or a business idea. Tell me what you want to make and I will tell you how I would build it.</p>
+    <a class="btn" href="contact.html">Start a conversation <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div>
 </section>
 </main>
-
 <footer class="foot">
-  <div class="wrap foot__row">
-    <p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p>
-    <p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p>
-    <a href="#top" class="mono">Back to top ↑</a>
+  <div class="wrap">
+    <p class="foot__word vice sun-text">Doorgesh</p>
+    <div class="foot__row">
+      <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+    </div>
   </div>
 </footer>
-
 <script src="js/main.js" defer></script>
 </body>
 </html>
