@@ -604,3 +604,8 @@ html.arriving #wipe i{transform:scaleY(1)}
 @media (prefers-reduced-motion:reduce){html.first [data-intro],html.first .scene .title h1{opacity:1}#introBlack{display:none}}
 
 @media (min-width:761px){.scene{--hz:80%}}
+
+/* the 2D loader only ever shows on a true first visit */
+html:not(.first) .loader{display:none}
+.bignum{color:var(--gold)}
+.loader__name span{transition:none!important;transform:none;opacity:1}

@@ -51,6 +51,7 @@ function label(t) {
 }
 if (gsap) {
   if (html.classList.contains('arriving') && !reduce) {
+    $('#loader')?.remove();
     const ch = label(ss.get('wipe') || ''); ss.del('wipe');
     gsap.set(bars, { scaleY: 1, transformOrigin: '50% 0%' });
     gsap.timeline({ onComplete: () => { html.classList.remove('arriving'); gsap.set(wipe, { clearProps: 'all' }); } })
