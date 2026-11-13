@@ -13,33 +13,177 @@ const PAGE_NAMES = { 'index.html': 'Home', '': 'Home', 'work.html': 'Work', 'web
 if (gsap) gsap.registerPlugin(...[ST, Split].filter(Boolean));
 
 let arrivedResolve; const arrived = new Promise(r => (arrivedResolve = r));
+arrived.then(() => { if (window.DG) window.DG.arrivedDone = true; });
 let introResolve; const introDone = new Promise(r => (introResolve = r));
 const DG = window.DG = { arrived, introDone: () => introResolve(), lenis: null, shake: null, extra: [] };
 const sceneReady = page === 'home' ? new Promise(r => (DG.sceneReadyResolve = r)) : Promise.resolve();
 
 /* safety net: if anything fails to load, never leave the page hidden */
-setTimeout(() => { html.classList.remove('first', 'arriving', 'loading'); $('#loader')?.remove(); arrivedResolve(); introResolve(); }, 12000);
+setTimeout(() => { if (!html.classList.contains('loading')) return; html.classList.remove('first', 'arriving', 'loading', 'lock'); $('#loader')?.remove(); locked = 0; arrivedResolve(); introResolve(); }, 15000);
 if (!gsap) { html.classList.remove('first', 'arriving', 'loading'); $('#loader')?.remove(); arrivedResolve(); introResolve(); }
 
 /* =========================================================
-   SMOOTH SCROLL (desktop wheel; phones keep native touch scrolling)
+   SCROLL: one wheel tick / swipe / key = one screen, eased.
+   Stops are measured from the real layout: every section, plus cut points
+   inside sections taller than the screen (so half a section fits).
    ========================================================= */
-let lenis = null;
-if (gsap && ST && window.Lenis && !reduce) {
-  lenis = new window.Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: 1 });
-  DG.lenis = lenis;
-  lenis.on('scroll', ST.update);
-  gsap.ticker.add(t => lenis.raf(t * 1000));
+const SNAP = !!gsap && !reduce;
+const CUTS = '[data-screen], .tiles, .pcard, .site, .trace li, .also__grid article, .boards, .about-hero > *, .contact-grid > *, .kit > *, .split > *';
+const snap = DG.snap = { stops: [0], target: 0, tween: null, how: '', endAt: 0 };
+let locked = 0;
+// while the loader, the menu or a build drawer is up the page itself must not move at all (html.lock)
+const stopScroll = () => { locked++; html.classList.add('lock'); if (!SNAP) document.body.style.overflow = 'hidden'; };
+const startScroll = () => { locked = Math.max(0, locked - 1); if (locked) return; html.classList.remove('lock'); if (!SNAP) document.body.style.overflow = ''; };
+DG.stopScroll = stopScroll; DG.startScroll = startScroll;
+const docTop = el => { let y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; };
+const maxY = () => Math.max(0, html.scrollHeight - innerHeight);
+
+function measure() {
+  const H = innerHeight, max = maxY(), out = [];
+  const blocks = [...$$('main > *'), $('.foot')].filter(el => el && el.offsetHeight > 0 && !/fixed|absolute/.test(getComputedStyle(el).position));
+  blocks.forEach(b => {
+    const top = docTop(b), h = b.offsetHeight, last = top + h - H;
+    out.push([top, 0]);
+    if (h <= H + 12 || b.classList.contains('scene-pin')) return;
+    // taller than the screen: step through it, starting each screen at the top of a card or row where one fits
+    const cuts = [...new Set($$(CUTS, b).filter(c => c.offsetHeight > 0).map(c => Math.round(docTop(c) - (parseFloat(getComputedStyle(c).scrollMarginTop) || 0))))].sort((x, y) => x - y);
+    let at = top;
+    for (let guard = 0; guard < 40 && last - at > 12; guard++) {
+      const fit = cuts.filter(c => c > at + H * .25 && c <= at + H + 2 && c <= last + 12);
+      at = fit.length ? fit[fit.length - 1] : Math.min(at + H, last);
+      out.push([at, 1]);                                         // a stop the content needs: never merged away
+    }
+  });
+  out.sort((x, y) => x[0] - y[0]);
+  const stops = [];
+  out.forEach(([y, need]) => { y = clamp(Math.round(y), 0, max); const gap = stops.length ? y - stops[stops.length - 1] : 1e9; if (gap > H * .16 || (need && gap > 12)) stops.push(y); });
+  if (max - stops[stops.length - 1] > H * .1) stops.push(max); else if (stops.length > 1) stops[stops.length - 1] = max;
+  if (stops[0] !== 0) stops.unshift(0);
+  snap.stops = stops;
+  return stops;
+}
+// Safety net for odd window sizes: when a one-screen section comes out a little taller than the window,
+// its content is scaled down just enough to fit (instead of leaving a tiny extra scroll step).
+function fit() {
+  if (!SNAP || !window.CSS || !CSS.supports('zoom', '0.9')) return;
+  const H = innerHeight;
+  $$('main > section, [data-screen], .site, .about-hero > *').forEach(el => {
+    const kids = [...el.children].filter(c => !/absolute|fixed/.test(getComputedStyle(c).position));
+    kids.forEach(c => (c.style.zoom = ''));
+    const h = el.offsetHeight;
+    if (h <= H + 2 || h > H * 1.34) return;
+    const cs = getComputedStyle(el), pads = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const z = Math.max(.74, (H - pads - 2) / (h - pads));
+    kids.forEach(c => (c.style.zoom = z.toFixed(3)));
+  });
+}
+DG.fit = fit;
+const nearest = y => snap.stops.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a), snap.stops[0]);
+const moving = () => !!(snap.tween && snap.tween.isActive());
+
+function scrollToY(y, how = 'wheel') {
+  const from = scrollY, dist = Math.abs(y - from);
+  snap.target = y; snap.how = how;
+  if (snap.tween) snap.tween.kill();
+  if (dist < 1) return;
+  const o = { y: from }, screens = dist / innerHeight;
+  const dur = how === 'touch' ? clamp(.55 + screens * .32, .6, 1.25) : how === 'fix' ? .55 : clamp(.72 + screens * .34, .8, 1.5);
+  snap.tween = gsap.to(o, {
+    y, duration: dur, ease: how === 'touch' ? 'power3.out' : how === 'fix' ? 'power2.out' : 'power2.inOut',
+    onUpdate: () => { scrollTo(0, o.y); ST && ST.update(); },
+    onComplete: () => { snap.endAt = performance.now(); }
+  });
+}
+function step(dir, how) {
+  if (locked) return false;
+  // a gesture during the slow tail of the last move chains on from where that move was heading
+  if (moving() && snap.tween.progress() < (snap.how === 'touch' ? .55 : .8)) return false;
+  const base = moving() ? snap.target : scrollY;
+  const next = dir > 0 ? snap.stops.find(s => s > base + 4) : [...snap.stops].reverse().find(s => s < base - 4);
+  if (next == null) return false;
+  scrollToY(next, how);
+  return true;
+}
+DG.go = (dir, how) => step(dir, how);
+DG.scrollTo = (y, how) => scrollToY(clamp(y, 0, maxY()), how);
+
+if (SNAP) {
+  html.classList.add('snap');
+  if (ST) ST.config({ ignoreMobileResize: true });
   gsap.ticker.lagSmoothing(0);
+  const inOverlay = t => t && t.closest && t.closest('dialog[open], .sheet.open');
+  const inField = t => t && (/^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable);
+
+  // wheel + trackpad. Trackpads keep sending a fading tail after the fingers lift: that tail must not count as a new scroll.
+  let wLast = 0, wAbs = 0;
+  addEventListener('wheel', e => {
+    if (e.ctrlKey || inOverlay(e.target)) return;
+    e.preventDefault();
+    const now = performance.now(), abs = Math.abs(e.deltaY), gap = now - wLast, prev = wAbs;
+    wLast = now; wAbs = abs;
+    if (locked || abs < 2 || Math.abs(e.deltaX) > abs) return;
+    if (moving() && snap.tween.progress() < .8) return;
+    const fresh = gap > 130 || abs > prev * 1.5 + 6 || (abs >= 80 && !moving() && now - snap.endAt > 260);
+    if (!fresh) return;
+    step(e.deltaY > 0 ? 1 : -1, 'wheel');
+  }, { passive: false });
+
+  // touch: the page never free-scrolls (html.snap sets touch-action); a swipe starts the move straight away
+  let t0 = null;
+  addEventListener('touchstart', e => { t0 = e.touches.length === 1 && !inOverlay(e.target) && !inField(e.target) ? { x: e.touches[0].clientX, y: e.touches[0].clientY, done: false } : null; }, { passive: true });
+  addEventListener('touchmove', e => {
+    if (!t0 || t0.done || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - t0.x, dy = e.touches[0].clientY - t0.y;
+    if (Math.abs(dy) < 22 || Math.abs(dy) < Math.abs(dx) * 1.3) return;
+    t0.done = true; step(dy < 0 ? 1 : -1, 'touch');
+  }, { passive: true });
+  addEventListener('touchend', () => { t0 = null; }, { passive: true });
+  addEventListener('touchcancel', () => { t0 = null; }, { passive: true });
+
+  addEventListener('keydown', e => {
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || inField(e.target) || inOverlay(e.target) || inOverlay(document.activeElement)) return;
+    const k = e.key, onBtn = e.target.closest && e.target.closest('button, a, [tabindex], summary');
+    let dir = 0;
+    if (k === 'ArrowDown' || k === 'PageDown' || (k === ' ' && !e.shiftKey && !onBtn)) dir = 1;
+    else if (k === 'ArrowUp' || k === 'PageUp' || (k === ' ' && e.shiftKey && !onBtn)) dir = -1;
+    else if (k === 'Home') { e.preventDefault(); if (!locked) scrollToY(0); return; }
+    else if (k === 'End') { e.preventDefault(); if (!locked) scrollToY(snap.stops[snap.stops.length - 1]); return; }
+    if (!dir) return;
+    e.preventDefault(); step(dir, 'wheel');
+  });
+
+  // anything else that moves the page (tabbing to a link, find-in-page) settles on the nearest screen
+  let idle = 0;
+  addEventListener('scroll', () => {
+    clearTimeout(idle);
+    idle = setTimeout(() => { if (locked || moving() || inField(document.activeElement)) return; const n = nearest(scrollY); if (Math.abs(n - scrollY) > 2) scrollToY(n, 'fix'); }, 170);
+  }, { passive: true });
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href^="#"]'); if (!a) return;
     const t = document.querySelector(a.getAttribute('href')); if (!t) return;
-    e.preventDefault(); lenis.scrollTo(t, { offset: -80, duration: 1.4 });
+    e.preventDefault(); scrollToY(nearest(docTop(t)));
   });
+
+  let rz = 0, lastW = innerWidth, lastH = innerHeight;
+  const remeasure = () => { measure(); if (!locked && !moving()) scrollTo(0, nearest(scrollY)); };
+  addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => {
+      // phones fire resize when the keyboard or address bar moves: only a real change of size re-lays the page out
+      if (innerWidth === lastW && Math.abs(innerHeight - lastH) < 120 && matchMedia('(pointer: coarse)').matches) return;
+      lastW = innerWidth; lastH = innerHeight; fit(); ST && ST.refresh(); remeasure();
+    }, 220);
+  });
+  if (ST) ST.addEventListener('refresh', measure);
+  addEventListener('load', () => setTimeout(remeasure, 60));
+  DG.measure = measure;
+  measure();
+
+  // slim progress line on the right edge
+  const pg = document.createElement('div'); pg.className = 'pg'; pg.setAttribute('aria-hidden', 'true'); pg.innerHTML = '<i></i>'; document.body.append(pg);
+  const pgi = pg.firstChild;
+  addEventListener('scroll', () => { pgi.style.transform = `scaleY(${(scrollY / (maxY() || 1)).toFixed(4)})`; }, { passive: true });
 }
-const stopScroll = () => { lenis ? lenis.stop() : (document.body.style.overflow = 'hidden'); };
-const startScroll = () => { lenis ? lenis.start() : (document.body.style.overflow = ''); };
-DG.stopScroll = stopScroll; DG.startScroll = startScroll;
 
 /* =========================================================
    ARRIVAL: page wipe (between pages), 2D loader (first visit, inner pages),
@@ -76,35 +220,51 @@ function runLoader() {
   if (!L) { html.classList.remove('loading', 'first'); arrivedResolve(); introResolve(); return; }
   scrollTo(0, 0); stopScroll();
   const num = $('.loader__num', L), msg = $('.loader__msg', L);
-  const t0 = performance.now(), MIN = 1700, MAX = 9000;
+  const t0 = performance.now(), MIN = 1500, MAX = 9000;
   // real progress: fonts, the page's images, window load, plus anything the page registers (the intro film)
   let fontsOk = false, loadOk = document.readyState === 'complete', sceneOk = false;
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => (fontsOk = true));
   addEventListener('load', () => (loadOk = true));
   Promise.race([sceneReady, new Promise(r => setTimeout(r, 5000))]).then(() => (sceneOk = true));
   const imgs = $$('img').filter(i => i.loading !== 'lazy');
-  let shown = 0;
+  let shown = 0, last = t0, lastV = -1;
   const msgs = ['Loading the drive', 'Tuning the amps', 'Charging the ions', 'Warming up the kit'];
-  gsap.from('.loader__out, .loader__fill', { yPercent: 40, opacity: 0, duration: 1.1, ease: 'expo.out' });
-  gsap.from('.loader__top span, .loader__bottom > *', { y: 20, opacity: 0, stagger: .08, duration: .9, ease: 'expo.out', delay: .1 });
+  // Everything that moves in the loader is a CSS transition on transform/opacity, so it keeps gliding on the
+  // compositor even while the main thread is busy starting the 3D scene. JS only feeds it the number.
   (function tick(now) {
-    const el = now - t0;
+    const el = now - t0, dt = Math.min(now - last, 100) / 1000; last = now;
     const parts = [fontsOk ? 1 : 0, loadOk ? 1 : 0, sceneOk ? 1 : 0, imgs.length ? imgs.filter(i => i.complete).length / imgs.length : 1, ...DG.extra.map(x => Math.min(1, x.p || 0))];
     const real = parts.reduce((a, b) => a + b, 0) / parts.length;
-    const target = Math.min(real, el / MIN) * 100;
-    shown += (Math.max(target, el > MAX ? 100 : 0) - shown) * .12;
+    const creep = 64 * (1 - Math.exp(-el / 3000));                 // never sits still while things download
+    let target = Math.min(Math.max(real * 100, creep), el / MIN * 100, 99);
+    if ((real >= 1 && el >= MIN) || el > MAX) target = 100;
+    const gap = target - shown;                                     // eased and rate-limited: a slow frame can't make it jump
+    if (gap > 0) shown += Math.min(gap, clamp(gap * 4.2, 9, 80) * dt);
     const v = Math.min(100, Math.floor(shown + .5));
-    L.style.setProperty('--lp', v + '%');
-    num.textContent = String(v).padStart(3, '0');
-    msg.textContent = msgs[Math.min(msgs.length - 1, Math.floor(v / 26))];
+    if (v !== lastV) {
+      lastV = v;
+      L.style.setProperty('--lp', (v / 100).toFixed(2));
+      num.textContent = String(v).padStart(3, '0');
+      msg.textContent = msgs[Math.min(msgs.length - 1, Math.floor(v / 26))];
+    }
     if (v < 100) return requestAnimationFrame(tick);
-    gsap.timeline({ onComplete: () => { L.remove(); html.classList.remove('loading'); if (page !== 'home') html.classList.remove('first'); startScroll(); if (page !== 'home') introResolve(); } })
-      .to('.loader__word', { scale: 1.08, duration: .5, ease: 'power2.inOut' }, .1)
-      .to('.loader__top, .loader__bottom, .loader__line', { opacity: 0, duration: .3 }, .1)
-      .to('.loader__word', { yPercent: -60, opacity: 0, duration: .55, ease: 'expo.in' }, .45)
-      .to(L, { clipPath: 'inset(0 0 100% 0)', duration: .9, ease: 'expo.inOut' }, .6)
-      .call(arrivedResolve, null, .95);
+    setTimeout(leave, 340);                                         // let the fill finish gliding to the last letter
   })(t0);
+
+  async function leave() {
+    // home, first visit: the film starts underneath and the loader cross-fades into it. Everywhere else the
+    // word lifts away and the whole panel slides up off the page.
+    let mode = 'page';
+    try { if (DG.gate) mode = (await Promise.race([DG.gate(), new Promise(r => setTimeout(() => r('page'), 2200))])) || 'page'; } catch (e) {}
+    const film = mode === 'film';
+    L.classList.add('done', film ? 'to-film' : 'to-page');
+    setTimeout(arrivedResolve, film ? 0 : 480);
+    setTimeout(() => {
+      L.remove(); html.classList.remove('loading');
+      if (page !== 'home') { html.classList.remove('first'); introResolve(); }
+      startScroll();
+    }, film ? 950 : 1500);
+  }
 }
 
 // leaving: sunset panels sweep up, page name rises, then go
@@ -146,11 +306,11 @@ const nav = $('#nav'), menuBtn = $('#menuBtn'), sheet = $('#sheet');
 let sheetOpen = false, lastY = 0;
 const onScroll = y => {
   nav.classList.toggle('solid', y > 40);
-  if (!sheetOpen && y > lastY + 4 && y > 500) nav.classList.add('away');
+  if (!sheetOpen && y > lastY + 4 && y > innerHeight * .4) nav.classList.add('away');
   if (y < lastY - 4) nav.classList.remove('away');
   lastY = y;
 };
-lenis ? lenis.on('scroll', ({ scroll }) => onScroll(scroll)) : addEventListener('scroll', () => onScroll(scrollY), { passive: true });
+addEventListener('scroll', () => onScroll(scrollY), { passive: true });
 function setSheet(open) {
   sheetOpen = open; menuBtn.setAttribute('aria-expanded', open);
   if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); stopScroll(); nav.classList.remove('away'); }
@@ -169,6 +329,7 @@ const CARDS = '.grid-work .pcard, .tool, .board, .also__grid article, .pad, .sco
 
 Promise.all([fontsReady, arrived]).then(() => {
   if (!gsap || !ST || reduce) { countAll(); return; }
+  fit();
 
   // headings: letters flip up out of a mask
   $$('.h2, .h3, .split-chars').forEach(el => {
@@ -258,12 +419,12 @@ Promise.all([fontsReady, arrived]).then(() => {
   });
 
   // roadmap trace
-  const trace = $('#trace');
-  if (trace) {
+  $$('.trace').forEach(trace => {
     gsap.fromTo(trace, { '--tp': 0 }, { '--tp': 1, ease: 'none', scrollTrigger: { trigger: trace, start: 'top 65%', end: 'bottom 65%', scrub: true } });
     $$('li', trace).forEach(li => ST.create({ trigger: li, start: 'top 65%', end: 'max', onToggle: s => li.classList.toggle('on', s.isActive) }));
-  }
+  });
 
+  fit();            // again now the headings are split into lines, which can add a few pixels
   countAll();
   ST.refresh();
   addEventListener('load', () => ST.refresh());

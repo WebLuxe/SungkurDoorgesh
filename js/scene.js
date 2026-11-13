@@ -13,7 +13,7 @@ let seed = 11;
 const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 
 /* ---------- state the intro + scroll drive ---------- */
-const S = { camY: 2.4, camZ: 8, lookY: 7.5, speed: 14, sunY: 24, fovAdd: 0, shake: 0, p: 0, px: 0, py: 0, tpx: 0, tpy: 0 };
+const S = { camY: 2.4, camZ: 8, lookY: 7.5, speed: 14, sunY: 24, fovAdd: 0, shake: 0, p: 0, px: 0, py: 0, tpx: 0, tpy: 0, hold: document.documentElement.classList.contains('loading') };
 
 let renderer = null;
 try {
@@ -191,7 +191,8 @@ function build() {
   addEventListener('resize', () => { if (Math.abs(innerWidth - lastW) > 2 || !small) { lastW = innerWidth; size(); } });
 
   const clock = new THREE.Clock();
-  let visible = true, raf = 0, frames = 0, acc = 0;
+  let visible = true, raf = 0, warm = 0, frames = 0, acc = 0, settle = 30, tried = null, locked = false;
+  const PR_MIN = Math.min(pr, .7);
   const look = new THREE.Vector3();
   function frame() {
     const dt = Math.min(clock.getDelta(), .05);
@@ -210,11 +211,29 @@ function build() {
     if (Math.abs(camera.fov - fov) > .01) { camera.fov = fov; camera.updateProjectionMatrix(); }
     sun.position.y = S.sunY - S.p * 30;
     renderer.render(scene, camera);
-    // keep it smooth on slow phones: drop resolution if frames are slow
-    if (frames < 120) { frames++; acc += dt; if (frames === 120 && acc / 120 > 1 / 40 && pr > 1) { pr = 1; renderer.setPixelRatio(pr); size(); } }
-    raf = visible && !document.hidden ? requestAnimationFrame(frame) : 0;
+    // Keep every effect and trade resolution for smoothness instead: whenever a run of frames comes in slow,
+    // the scene is drawn a step smaller (and upscaled). It never drops below 0.7x.
+    if (settle > 0) settle--;
+    else if (!S.hold) {
+      frames++; acc += dt;
+      if (frames >= 45) {
+        const avg = acc / frames;
+        if (tried && avg > tried.avg * .93) {
+          // the smaller picture did not buy smoother frames, so something else is the limit: go back up and stay
+          pr = tried.pr; renderer.setPixelRatio(pr); locked = true; tried = null; settle = 20;
+        } else {
+          tried = null;
+          if (!locked && avg > 1 / 50 && pr > PR_MIN) { tried = { pr, avg }; pr = Math.max(PR_MIN, pr * .8); renderer.setPixelRatio(pr); settle = 20; }
+        }
+        frames = 0; acc = 0;
+      }
+    }
+    // while the loader or the intro film covers the scene, draw two frames to warm the shaders up, then wait
+    warm++;
+    raf = visible && !document.hidden && !(S.hold && warm > 2) ? requestAnimationFrame(frame) : 0;
   }
-  const start = () => { if (!raf && visible && !document.hidden) { clock.getDelta(); raf = requestAnimationFrame(frame); } };
+  const start = () => { if (!raf && visible && !document.hidden && !(S.hold && warm > 2)) { clock.getDelta(); raf = requestAnimationFrame(frame); } };
+  DG.wake = () => { if (!S.hold) return; S.hold = false; settle = 30; frames = 0; acc = 0; start(); };
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; start(); }).observe(sceneEl);
   document.addEventListener('visibilitychange', start);
   start();
@@ -236,7 +255,8 @@ fontsReady.then(() => {
   const first = document.documentElement.classList.contains('first') && !reduce;
   setTimeout(() => DG.sceneReadyResolve && DG.sceneReadyResolve(), 0);
 
-  const done = () => { document.documentElement.classList.remove('first'); DG.introDone && DG.introDone(); };
+  const wake = () => { DG.wake ? DG.wake() : (S.hold = false); };
+  const done = () => { wake(); document.documentElement.classList.remove('first'); DG.introDone && DG.introDone(); };
 
   if (!gsap || reduce) { gsap && gsap.set([chars, reveals], { opacity: 1, clearProps: 'transform' }); ui && ui.remove(); document.getElementById('film')?.remove(); done(); setupScroll(chars); return; }
 
@@ -255,13 +275,16 @@ fontsReady.then(() => {
       vid.addEventListener('canplaythrough', () => (src.p = 1), { once: true });
       vid.addEventListener('error', () => (src.p = 1), { once: true });
       setTimeout(() => (src.p = 1), 6500);
-      DG.arrived.then(() => playFilm(filmEl));
+      // the loader asks this when it reaches 100: start the film underneath it, answer once it is really rolling
+      DG.gate = () => startFilm(filmEl);
+      if (DG.arrivedDone) startFilm(filmEl);
     } else DG.arrived.then(cinematic);
   } else {
     ui && ui.remove();
     const go = () => {
       gsap.fromTo(chars, { yPercent: 115, rotate: 8, opacity: 0 }, { yPercent: 0, rotate: 0, opacity: 1, stagger: .05, duration: 1.1, ease: 'expo.out', delay: .05 });
-      gsap.fromTo(reveals, { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', delay: .4 });
+      gsap.fromTo(reveals, { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', clearProps: 'transform', delay: .4 });
+      wake();
       Object.assign(S, { speed: 60 }); gsap.to(S, { speed: 14, duration: 2.2, ease: 'power3.out' });
       done();
     };
@@ -269,6 +292,7 @@ fontsReady.then(() => {
   }
 
   function cinematic() {
+    wake();
     document.getElementById('film')?.remove();
     ui && gsap.set(ui, { autoAlpha: 1 }); gsap.set('#introBlack', { opacity: 1 });
     // ---- cinematic first-visit intro ----
@@ -294,21 +318,25 @@ fontsReady.then(() => {
     const end = 3.45 + chars.length * .085;
     tl.fromTo(flash, { opacity: .9 }, { opacity: 0, duration: .7, ease: 'power2.out', immediateRender: false }, end)
       .call(() => { title.classList.add('rgb'); setTimeout(() => title.classList.remove('rgb'), 650); }, null, end)
-      .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out' }, end + .1);
+      .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', clearProps: 'transform' }, end + .1);
     const skip = ui.querySelector('.intro__skip');
     skip && skip.addEventListener('click', () => tl.timeScale(5));
     sceneEl.addEventListener('pointerdown', () => tl.progress() < .95 && tl.timeScale(5), { once: true });
   }
 
   // ---- the rendered intro film (already buffered by the loader) ----
-  function playFilm(filmEl) {
-    const vid = filmEl.querySelector('video');
+  let filmStart = null;
+  function startFilm(filmEl) {
+    if (filmStart) return filmStart;
+    const vid = filmEl.querySelector('video'), skip = filmEl.querySelector('.film__skip');
     ui && gsap.set(ui, { autoAlpha: 0 });
     gsap.set('#introBlack', { opacity: 0 });
-    let finished = false;
-    const fallback = () => { if (finished) return; finished = true; cinematic(); };
+    let finished = false, rolling = false, answer;
+    filmStart = new Promise(r => (answer = r));
+    const fallback = () => { if (finished) return; finished = true; answer('page'); DG.arrived.then(cinematic); };
     const finish = () => {
-      if (finished) return; finished = true;
+      if (finished) return; finished = true; answer('film');
+      wake();
       Object.assign(S, { speed: 70 }); gsap.to(S, { speed: 14, duration: 2.4, ease: 'power3.out' });
       gsap.timeline({ onComplete: () => { filmEl.remove(); DG.startScroll && DG.startScroll(); done(); } })
         .fromTo(flash, { opacity: 0 }, { opacity: 1, duration: .14, ease: 'power2.in' })
@@ -316,18 +344,35 @@ fontsReady.then(() => {
         .to(flash, { opacity: 0, duration: .9, ease: 'power2.out' })
         .fromTo(chars, { opacity: 0, scale: 2.2, yPercent: -20, filter: 'blur(10px)' }, { opacity: 1, scale: 1, yPercent: 0, filter: 'blur(0px)', stagger: .045, duration: .55, ease: 'expo.out', immediateRender: false }, .12)
         .call(() => { DG.shake && DG.shake(1); title.classList.add('rgb'); setTimeout(() => title.classList.remove('rgb'), 650); }, null, .12 + chars.length * .045)
-        .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out' }, .5);
+        .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', clearProps: 'transform' }, .5);
     };
-    vid.addEventListener('timeupdate', () => { if (vid.duration && vid.currentTime > vid.duration - .12) finish(); });
+    // phones taller than the film: fill the bars above and below with the film's own colours (a tiny live copy, stretched soft)
+    const ambient = () => {
+      const c = filmEl.querySelector('.film__amb');
+      if (!c || !vid.videoWidth || innerWidth / innerHeight > vid.videoWidth / vid.videoHeight * .985) return;
+      c.width = 18; c.height = 32;
+      const x = c.getContext('2d'); c.classList.add('on');
+      const draw = () => { if (finished) return; try { x.drawImage(vid, 0, 0, c.width, c.height); } catch (e) {} vid.requestVideoFrameCallback ? vid.requestVideoFrameCallback(draw) : requestAnimationFrame(draw); };
+      draw();
+    };
+    const roll = () => {
+      if (rolling || finished) return; rolling = true;
+      filmEl.classList.add('on'); ambient(); answer('film');
+      gsap.to(skip, { opacity: 1, duration: .6, delay: 1.2 });
+    };
+    vid.addEventListener('timeupdate', () => {
+      if (!vid.duration) return;
+      if (vid.currentTime > vid.duration - .6) wake();          // the 3D scene starts drawing again just before the cut
+      if (vid.currentTime > vid.duration - .12) finish();
+    });
     vid.addEventListener('ended', finish);
     vid.addEventListener('error', fallback, { once: true });
-    filmEl.querySelector('.film__skip').addEventListener('click', finish);
+    vid.addEventListener('playing', roll, { once: true });
+    skip.addEventListener('click', finish);
     const pr = vid.play();
-    (pr && pr.then ? pr : Promise.resolve()).then(() => {
-      gsap.fromTo(vid, { opacity: 0 }, { opacity: 1, duration: .4 });
-      gsap.to(filmEl.querySelector('.film__skip'), { opacity: 1, duration: .6, delay: .8 });
-    }).catch(fallback);
-    setTimeout(() => { if (!finished && vid.paused) fallback(); }, 2500);
+    if (pr && pr.catch) pr.catch(fallback);
+    setTimeout(() => { if (rolling || finished) return; if (vid.paused || vid.readyState < 3) fallback(); else roll(); }, 2000);
+    return filmStart;
   }
   setupScroll(chars);
 });

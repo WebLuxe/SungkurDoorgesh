@@ -762,3 +762,265 @@ body::after{inset:-10%}
 @media (max-width:760px){.loader__word{font-size:19vw}}
 .wd-nb,.foot__word,.title h1{white-space:nowrap}
 
+/* ================= V6: one screen per section, seamless loader, cheaper paint ================= */
+:root{--top:88px;--bot:36px;--scr:100svh}
+/* short laptop windows and small phones: everything sized in rem steps down together so a section still fits */
+@media (min-width:761px) and (max-height:700px){html{font-size:14.5px}:root{--top:80px;--bot:28px}}
+@media (max-width:760px){:root{--top:72px;--bot:18px}}
+@media (max-width:760px) and (max-height:690px){html{font-size:14.5px}}
+@media (max-width:760px) and (max-height:600px){html{font-size:13.5px}}
+
+/* the page moves one screen per gesture (js/main.js): no free scroll, no scrollbar, a slim progress line instead */
+html.snap{scrollbar-width:none;overscroll-behavior:none;scroll-behavior:auto}
+html.snap::-webkit-scrollbar{display:none}
+html.snap,html.snap body{touch-action:pan-x pinch-zoom}
+html.lock{overflow:hidden}
+.sheet,.drawer{overscroll-behavior:contain}
+html.snap .sheet,html.snap .drawer,html.snap textarea{touch-action:pan-y pinch-zoom}
+/* sideways-scrolling rows may only pan sideways, or a swipe that starts on one would free-scroll the page */
+html.snap .filters,html.snap .poster-row,html.snap .rail{touch-action:pan-x}
+.pg{position:fixed;right:0;top:0;bottom:0;width:3px;z-index:70;pointer-events:none;background:rgba(255,243,234,.05)}
+.pg i{display:block;width:100%;height:100%;background:var(--sunset);transform:scaleY(0);transform-origin:top;will-change:transform}
+
+/* type that also respects the height of the window */
+.h1{font-size:clamp(3.2rem,min(15vw,27svh),15rem)}
+.h2{font-size:clamp(2.5rem,min(8vw,13.5svh),7.4rem)}
+.h3{font-size:clamp(1.9rem,min(4.4vw,8svh),3.6rem)}
+.about-hero .h1{font-size:clamp(3.2rem,min(9vw,16svh),9.5rem)}
+.bignum{font-size:clamp(3.6rem,min(10vw,17svh),8.5rem)}
+
+/* every section is one screen tall with its content centred */
+main>section{min-height:var(--scr);display:flex;flex-direction:column;justify-content:center}
+.me,.built,.music,.sidequest,.cta,.phead,.toolkit,.road,.also,main>section{padding:var(--top) 0 var(--bot)}
+main>section>.wrap{flex:none}
+.scene{min-height:0}
+.toolkit{border-top:0}
+.split{padding:0 max(var(--pad),env(safe-area-inset-left));border-top:0;align-items:center}
+.kit,.grid-work,.contact-grid{padding-bottom:0}
+.sec-head{margin-bottom:clamp(18px,3.4svh,56px)}
+.eyebrow{margin-bottom:clamp(8px,1.8svh,20px)}
+.cta .h2{margin-bottom:clamp(12px,2.4svh,22px)}
+.cta .lede{margin-bottom:clamp(18px,3.6svh,34px)}
+.phead .h1{margin-bottom:clamp(12px,2.4svh,22px)}
+.photo-card{aspect-ratio:auto;height:clamp(120px,min(26svh,24vw),340px)}
+.shot__img{max-height:calc(var(--scr) - var(--top) - var(--bot) - 70px)}
+.pcard,.tool,.trace li,.also__grid article,.boards,.kit>*,.split>*,.contact-grid>*,.tiles{scroll-margin-top:var(--top)}
+
+/* home: about me */
+.me__photo{max-height:calc(var(--scr) - var(--top) - var(--bot) - 12px)}
+.me__text .h2{margin-bottom:clamp(10px,2.4svh,22px)}
+.me__p{margin-bottom:clamp(12px,2.6svh,26px)}
+.facts{padding:clamp(10px,2.2svh,20px) 0;margin-bottom:clamp(14px,3svh,28px)}
+
+/* home: builds. Desktop: heading row + four tall photo tiles in one screen */
+.built__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:clamp(14px,3svh,34px) clamp(14px,1.8vw,24px);height:calc(var(--scr) - var(--top) - var(--bot))}
+.built__s{display:contents}
+.built .sec-head{grid-column:1;grid-row:1;margin:0;align-self:end}
+.built .rows__more{grid-column:2;grid-row:1;justify-self:end;align-self:end;margin:0}
+.tiles--a{grid-column:1;grid-row:2}
+.tiles--b{grid-column:2;grid-row:2}
+.built .tiles{height:100%;min-height:0;grid-auto-rows:minmax(0,1fr)}
+.built .tile{aspect-ratio:auto;min-height:0}
+.tile__t{font-size:clamp(1.7rem,min(3.4vw,6.4svh),3.2rem)}
+.music .h2{margin-bottom:clamp(10px,2.2svh,20px)}
+.music .lede{margin-bottom:clamp(14px,3svh,28px)}
+.sidequest__shots{height:clamp(170px,min(24vw,38svh),320px)}
+.sidequest__grid{width:calc(100% - 2*var(--pad));max-width:1248px}
+
+/* work: all eight builds on one screen (4 x 2), photo behind the text */
+.grid-work{--g:clamp(10px,1.3vw,20px);grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:calc((var(--scr) - var(--top) - var(--bot) - var(--g))/2);gap:var(--g)}
+.grid-work .pcard.wide{grid-column:auto}
+.grid-work .pcard{justify-content:flex-end;isolation:isolate;min-height:0}
+.grid-work .pcard__art,.grid-work .pcard.wide .pcard__art{position:absolute;inset:0;z-index:-1;aspect-ratio:auto;min-height:0;flex:none}
+.grid-work .pcard__art::before{background:linear-gradient(180deg,rgba(21,10,32,.08) 18%,rgba(21,10,32,.55) 52%,rgba(21,10,32,.94) 86%)}
+.grid-work .pcard__body{flex:none;gap:6px;padding:16px 18px 18px}
+.grid-work .pcard h3{font-size:clamp(1.45rem,min(2.2vw,4.6svh),2.2rem)}
+.grid-work .pcard p:not(.pcard__tag){font-size:.9rem;line-height:1.45}
+.tk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:1px}
+.tk__s{display:contents}
+.tk__head{grid-column:1/-1;margin-bottom:clamp(16px,3.4svh,56px)}
+.toolkit__grid{margin-top:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-radius:22px 0 0 22px}
+.tk__s+.tk__s .toolkit__grid{border-radius:0 22px 22px 0}
+.tool{padding:clamp(16px,2.8svh,34px) clamp(18px,2.2vw,30px)}
+.tool h3{margin-bottom:clamp(8px,1.6svh,16px)}
+.tool li{padding:clamp(5px,1.1svh,9px) 0}
+
+/* web: one site per screen */
+.sec-sites{display:block;padding:0}
+.sites{display:block;padding:0 max(var(--pad),env(safe-area-inset-left))}
+.site{min-height:var(--scr);padding:var(--top) 0 var(--bot);align-content:center;scroll-margin-top:0}
+.site__body h3{font-size:clamp(2.3rem,min(5.6vw,10svh),5rem)}
+
+/* sound */
+.pads{width:100%;max-width:calc((var(--scr) - var(--top) - var(--bot) - 96px)*1.5);align-self:center}
+.scope{min-height:0}
+.scope canvas{min-height:clamp(120px,24svh,260px)}
+.board{padding:clamp(10px,2svh,18px) 20px}
+
+/* about */
+.deck{max-width:min(440px,calc((var(--scr) - var(--top) - var(--bot) - 124px)*.8))}
+.bio p{margin-bottom:clamp(8px,1.6svh,14px)}
+.handles{margin-top:clamp(14px,3svh,30px);padding-top:clamp(12px,2.2svh,22px)}
+.road__s{display:contents}
+.trace{margin-top:clamp(14px,3.4svh,64px)}
+.trace--b{margin-top:0}
+.trace--b::before,.trace--b::after{top:-10px}
+.trace li{padding:clamp(8px,1.6svh,26px) 0 clamp(10px,2svh,38px)}
+.trace h3{font-size:clamp(1.5rem,min(3.6vw,4.6svh),3rem)}
+.trace p{font-size:.96rem}
+.trace li::before{top:calc(clamp(8px,1.6svh,26px) + 4px)}
+.also__grid{margin-top:clamp(14px,3svh,28px)}
+.also__grid article img{max-height:30svh}
+
+/* about roadmap on a wide screen: heading on the left, the timeline on the right, so all five steps fit */
+@media (min-width:1061px){
+  .road__in{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);column-gap:clamp(30px,5vw,80px);align-content:center}
+  .road__head{grid-column:1;grid-row:1/span 2;align-self:center}
+  .road__head .h2{font-size:clamp(2.4rem,min(5vw,11svh),5.6rem)}
+  .road .trace{grid-column:2;margin-top:0}
+  .trace li{grid-template-columns:90px minmax(0,1fr)}
+}
+
+/* contact */
+.form{gap:clamp(10px,2svh,18px);padding:clamp(18px,3svh,36px)}
+.form input:not([type=radio]),.form textarea{padding:clamp(9px,1.7svh,14px) 16px}
+.form textarea{min-height:clamp(64px,11svh,130px)}
+.links a{padding:clamp(12px,2.4svh,20px) 0}
+
+/* footer: the last stop */
+.foot{padding-top:clamp(36px,6svh,110px)}
+.foot__word{font-size:min(19vw,34svh,20rem);margin-bottom:clamp(18px,4svh,60px)}
+
+@media (max-width:1060px){
+  /* builds: two rows of cards are exactly one screen, so every stop starts on a card edge */
+  .sec-grid{padding:0}
+  .grid-work{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:calc((var(--scr) - 2*var(--g))/2);padding-block:calc(var(--g)/2)}
+  .grid-work .pcard{scroll-margin-top:calc(var(--g)/2)}
+  /* about: text is one screen, the photo deck the next */
+  .phead--about{padding:0}
+  .about-hero{gap:0}
+  .about-hero>*{min-height:var(--scr);padding:var(--top) 0 var(--bot);display:flex;flex-direction:column;justify-content:center;scroll-margin-top:0}
+  .deck{margin-inline:auto;width:100%}
+  .split{gap:clamp(16px,3svh,30px)}
+  .contact-grid{gap:clamp(18px,3svh,36px)}
+}
+@media (max-width:900px){
+  /* home builds: 2 x 2 in one screen */
+  .built__in{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)}
+  .built .rows__more{grid-column:1;justify-self:end}
+  .tiles--a{grid-column:1;grid-row:2}.tiles--b{grid-column:1;grid-row:3}
+  .me__grid{gap:0}
+  .me__photo{max-width:none;width:100%;aspect-ratio:auto;height:clamp(170px,36svh,420px);border-radius:22px}
+  .me__photo::after{background:linear-gradient(180deg,transparent 35%,rgba(13,6,20,.94) 92%)}
+  .me__text{position:relative;z-index:1;margin-top:calc(-1*clamp(64px,11svh,96px));padding-inline:4px}
+  .music__grid{gap:clamp(16px,3svh,36px)}
+  .music__nums{grid-template-columns:1fr 1fr;gap:16px}
+  .sidequest__grid{gap:clamp(14px,2.4svh,30px)}
+  .site{gap:clamp(14px,2.6svh,24px)}
+  .shot__img{max-height:30svh}
+  .site__body{gap:clamp(8px,1.5svh,14px)}
+  .site__body p{font-size:1rem}
+  .site__body .chips{margin-top:4px}
+}
+@media (max-width:760px){
+  /* home builds on a phone: two screens. Heading + two tiles, then two tiles + the button */
+  .built{padding:0;display:block}
+  .built__in{display:block;height:auto}
+  .built__s{display:flex;flex-direction:column;gap:12px;height:var(--scr);padding:var(--top) 0 var(--bot);scroll-margin-top:0}
+  .built .sec-head{margin:0 0 4px}
+  .built .tiles{flex:1;gap:12px;grid-template-columns:minmax(0,1fr)}
+  .built .rows__more{align-self:flex-start;margin:4px 0 0}
+  .tile__d{font-size:.9rem}
+  .lede{font-size:1rem}
+  .me__p{font-size:.94rem}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;font-size:.9rem}
+  .grid-work{grid-template-columns:minmax(0,1fr)}
+  /* toolkit: heading + two lists, then the other two */
+  .toolkit{padding:0;display:block}
+  .tk{display:block}
+  .tk__s{display:flex;flex-direction:column;justify-content:center;min-height:var(--scr);padding:var(--top) 0 var(--bot);scroll-margin-top:0}
+  .tk__head{margin-bottom:14px}
+  .toolkit__grid,.tk__s+.tk__s .toolkit__grid{grid-template-columns:minmax(0,1fr);border-radius:18px}
+  .tool li{font-size:.92rem}
+  .kit{gap:14px}
+  .scope canvas{min-height:clamp(110px,20svh,200px)}
+  .photo-card{height:20svh;margin-top:14px}
+  .split p{margin-bottom:8px}
+  .chips{margin-top:10px}
+  /* roadmap: heading + three steps, then the last two */
+  .road{padding:0;display:block}
+  .road__s{display:flex;flex-direction:column;justify-content:center;min-height:var(--scr);padding:var(--top) 0 var(--bot);scroll-margin-top:0}
+  /* contact: the links are one screen, the form the next */
+  .contact-grid>div{min-height:calc(var(--scr) - var(--top) - var(--bot));display:flex;flex-direction:column;justify-content:center}
+  .form{min-height:calc(var(--scr) - var(--top) - var(--bot));align-content:center;gap:clamp(8px,1.6svh,18px);padding:clamp(14px,2.4svh,26px) 18px}
+  .opts span{height:clamp(34px,5.4svh,42px)}
+  /* about side quests: a row each, photo on the left */
+  .also__grid{gap:10px}
+  .also__grid article{display:grid;grid-template-columns:34% minmax(0,1fr);column-gap:14px;align-content:center;padding:0 14px 0 0;min-height:0}
+  .also__grid article img{grid-row:1/4;width:100%;height:100%;min-height:clamp(96px,16svh,130px);max-height:none;margin:0;aspect-ratio:auto}
+  .also__grid article .mono{align-self:end;padding-top:12px}
+  .also__grid h3{font-size:1.45rem;margin:4px 0}
+  .also__grid p{font-size:.9rem;padding-bottom:12px}
+  .foot__word{margin-bottom:18px}
+  .foot__row{gap:12px}
+}
+
+/* ----- loader: text waits for its font, every moving part is a compositor transition ----- */
+.loader{clip-path:none;--lp:0;will-change:transform,opacity}
+.loader__top span,.loader__bottom>*{animation:ldUp .9s var(--ease) both}
+.loader__top span:nth-child(2){animation-delay:.08s}
+.loader__bottom>:nth-child(1){animation-delay:.16s}
+.loader__bottom>:nth-child(2){animation-delay:.24s}
+@keyframes ldUp{from{opacity:0;transform:translateY(18px)}}
+.loader__word{transition:transform .8s var(--ease-io),opacity .45s ease}
+.loader__word::before{content:"";position:absolute;left:8%;right:8%;top:-70%;bottom:-70%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(255,45,138,.34),rgba(255,145,71,.1) 55%,transparent);opacity:var(--lp);transition:opacity .6s linear}
+.loader__w{position:relative;display:inline-block;padding:.1em .12em;opacity:0;transform:translateY(.14em) scale(.985);transition:opacity .7s ease,transform 1.1s var(--ease)}
+html.lf .loader__w{opacity:1;transform:none}
+.loader__out{display:block}
+.loader__fill{position:absolute;inset:0;display:block;overflow:hidden;padding:.1em .12em;background:none;clip-path:none;filter:none;transform:translateX(calc((var(--lp) - 1)*100%));transition:transform .4s linear;will-change:transform}
+.loader__fill i{display:block;font-style:inherit;margin:0 -.12em;padding:0 .12em;background:linear-gradient(180deg,#fff3c4,#ffd36e 25%,#ff8a4a 50%,#ff2d8a 78%,#b62ad8);-webkit-background-clip:text;background-clip:text;color:transparent;transform:translateX(calc((1 - var(--lp))*100%));transition:transform .4s linear;will-change:transform}
+.loader__line i{width:100%;transform:scaleX(var(--lp));transform-origin:left;transition:transform .4s linear;will-change:transform}
+.loader.done .loader__top,.loader.done .loader__bottom{opacity:0;transition:opacity .35s ease}
+/* leaving for a page: the word lifts away, then the panel slides up with the sunset line as its edge */
+.loader.to-page{transform:translateY(-100.5%);transition:transform .95s var(--ease-io) .5s}
+.loader.to-page .loader__word{transform:translateY(-50%) translateY(-18%) scale(1.04);opacity:0;transition-delay:.08s,.2s}
+/* leaving for the intro film: cross-fade into the film that is already rolling underneath */
+.loader.to-film{opacity:0;transition:opacity .7s ease .2s}
+.loader.to-film .loader__word{transform:translateY(-50%) scale(1.12);opacity:0;transition:transform .9s var(--ease),opacity .4s ease}
+.loader.to-film .loader__line{opacity:0;transition:opacity .35s ease}
+
+/* intro film */
+.film video{opacity:1}
+.film__amb{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .6s ease}
+.film__amb.on{opacity:.8}
+@media (max-aspect-ratio:9/16){.film video{-webkit-mask-image:linear-gradient(180deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(180deg,transparent,#000 5%,#000 95%,transparent)}}
+
+/* ----- same look, cheaper to draw ----- */
+/* one compositor layer per letter was eating memory on phones: GSAP promotes letters only while they move */
+.h2 .ch,.h3 .ch,.h1 .ch,.foot__word .ch{will-change:auto}
+/* the two tinted photos are pre-tinted files now (assets/img/*-sunset, *-violet) instead of a live SVG filter */
+.me__photo img{filter:none}
+.sec-bg img{filter:none}
+/* glow orbs: a radial gradient gives the same soft blob as blur(60px) without a blur pass every frame */
+.orbs i{filter:none;width:64vw;opacity:.42;will-change:transform}
+.orbs i:nth-child(1){left:-22vw;background:radial-gradient(closest-side,rgba(255,45,138,.85),rgba(255,45,138,.38) 45%,transparent)}
+.orbs i:nth-child(2){right:-24vw;background:radial-gradient(closest-side,rgba(139,77,255,.85),rgba(139,77,255,.38) 45%,transparent)}
+.orbs i:nth-child(3){background:radial-gradient(closest-side,rgba(255,145,71,.85),rgba(255,145,71,.38) 45%,transparent);opacity:.22}
+@media (prefers-reduced-motion:reduce){.loader__w{opacity:1;transform:none}.loader__top span,.loader__bottom>*{animation:none}}
+
+
+/* ----- phones and tablets: identical effects, built from cheaper layers (measured on a Galaxy A23) ----- */
+@media (pointer:coarse){
+  /* grain keeps moving, but as a see-through speckle tile instead of a full-screen blend pass */
+  body::after{mix-blend-mode:normal;opacity:.17;background:url(../assets/img/grain.png) 0 0/144px 144px}
+  /* hero name: the hard shadow rides on each letter, the pink haze behind it is a gradient instead of a 40px blur redone every frame */
+  .title h1{filter:none}
+  .title h1 .tch{filter:drop-shadow(0 5px 0 rgba(36,16,58,.55))}
+  .title h1::after{content:"";position:absolute;left:2%;right:2%;top:18%;bottom:-38%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(255,45,138,.4),rgba(255,45,138,.16) 55%,transparent)}
+  /* frosted glass over a moving 3D scene is the single dearest thing on a phone GPU: same tint, no live blur */
+  .btn--ghost,.nav__menu,.poster__go,.drawer__close{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(13,6,20,.6)}
+  .nav.solid{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(13,6,20,.9)}
+  .drawer::backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(13,6,20,.78)}
+}
+.title h1{position:relative}
+.title h1 .tch{will-change:auto}

@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
 <script src="js/main.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"}}</script>
 </head>
@@ -30,10 +30,11 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
   <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
   <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
+<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
@@ -67,6 +68,7 @@
   <div id="introBlack" aria-hidden="true"></div>
   <div class="flash" id="flash" aria-hidden="true"></div>
   <div class="film" id="film">
+    <canvas class="film__amb" aria-hidden="true"></canvas>
     <video muted playsinline preload="auto" aria-label="Intro film: a drive into a neon sunset city ending on the name Doorgesh"></video>
     <button type="button" class="film__skip mono">Skip intro →</button>
   </div>
@@ -80,7 +82,7 @@
 <section class="me" aria-labelledby="me-title">
   <div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="wrap me__grid">
-    <figure class="me__photo" data-parallax><img src="assets/img/doorgesh-4.webp" alt="Doorgesh flexing, black and white mirror selfie" loading="lazy" decoding="async" style="object-position:45% 35%"></figure>
+    <figure class="me__photo" data-parallax><img src="assets/img/doorgesh-4-sunset.webp" alt="Doorgesh flexing, mirror selfie in sunset colours" loading="lazy" decoding="async" style="object-position:45% 35%"></figure>
     <div class="me__text">
       <p class="eyebrow mono">Hey</p>
       <h2 id="me-title" class="vice h2">I'm <span class="sun-text-x">Doorgesh.</span></h2>
@@ -97,20 +99,26 @@
 </section>
 
 <section class="built" aria-labelledby="built-title">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow mono">Things I've built</p><h2 id="built-title" class="vice h2">Made with <span class="sun-text-x">my hands.</span></h2></div>
-    <div class="tiles">
-      <a class="tile" href="work.html"><img src="assets/img/mood/ionic.webp" alt="" loading="lazy"><span class="tile__k mono">01 &middot; Physics</span><span class="tile__t">The Ionic Engine</span><span class="tile__d">Air pushed by electricity alone. First place, Science Quest 2026.</span></a>
-      <a class="tile" href="work.html"><img src="assets/img/mood/amp.webp" alt="" loading="lazy"><span class="tile__k mono">02 &middot; Audio</span><span class="tile__t">Amp &amp; sub systems</span><span class="tile__d">Class-D amp boards in boxes I built and tuned myself.</span></a>
-      <a class="tile" href="work.html"><img src="assets/img/mood/sim.webp" alt="" loading="lazy"><span class="tile__k mono">03 &middot; Sim rig</span><span class="tile__t">EuroSim wheel</span><span class="tile__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span></a>
-      <a class="tile" href="work.html"><img src="assets/img/mood/bin.webp" alt="" loading="lazy"><span class="tile__k mono">04 &middot; Vision</span><span class="tile__t">AI sorting bin</span><span class="tile__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span></a>
+  <div class="wrap built__in">
+    <div class="built__s" data-screen>
+      <div class="sec-head"><p class="eyebrow mono">Things I've built</p><h2 id="built-title" class="vice h2">Made with <span class="sun-text-x">my hands.</span></h2></div>
+      <div class="tiles tiles--a">
+        <a class="tile" href="work.html"><img src="assets/img/mood/ionic.webp" alt="" loading="lazy" decoding="async"><span class="tile__k mono">01 &middot; Physics</span><span class="tile__t">The Ionic Engine</span><span class="tile__d">Air pushed by electricity alone. First place, Science Quest 2026.</span></a>
+        <a class="tile" href="work.html"><img src="assets/img/mood/amp.webp" alt="" loading="lazy" decoding="async"><span class="tile__k mono">02 &middot; Audio</span><span class="tile__t">Amp &amp; sub systems</span><span class="tile__d">Class-D amp boards in boxes I built and tuned myself.</span></a>
+      </div>
     </div>
-    <a class="btn btn--ghost rows__more" href="work.html">All my builds <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <div class="built__s" data-screen>
+      <div class="tiles tiles--b">
+        <a class="tile" href="work.html"><img src="assets/img/mood/sim.webp" alt="" loading="lazy" decoding="async"><span class="tile__k mono">03 &middot; Sim rig</span><span class="tile__t">EuroSim wheel</span><span class="tile__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span></a>
+        <a class="tile" href="work.html"><img src="assets/img/mood/bin.webp" alt="" loading="lazy" decoding="async"><span class="tile__k mono">04 &middot; Vision</span><span class="tile__t">AI sorting bin</span><span class="tile__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span></a>
+      </div>
+      <a class="btn btn--ghost rows__more" href="work.html">All my builds <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
   </div>
 </section>
 
 <section class="music has-bg" aria-labelledby="music-title">
-  <div class="sec-bg" data-parallax><img src="assets/img/mood/drums.webp" alt="" loading="lazy"></div>
+  <div class="sec-bg" data-parallax><img src="assets/img/mood/drums-violet.webp" alt="" loading="lazy"></div>
   <div class="wrap music__grid">
     <div>
       <p class="eyebrow mono">Zenn Prxd</p>

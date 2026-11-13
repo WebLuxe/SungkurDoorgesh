@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
 <script src="js/main.js" defer></script>
 
 </head>
@@ -29,10 +29,11 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
   <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
   <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
+<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
@@ -57,7 +58,7 @@
     <div class="filters" role="group" aria-label="Filter builds"><button type="button" data-f="all" aria-pressed="true">All<i>8</i></button><button type="button" data-f="hardware" aria-pressed="false">Hardware<i>4</i></button><button type="button" data-f="physics" aria-pressed="false">Physics<i>1</i></button><button type="button" data-f="code" aria-pressed="false">Code &amp; IoT<i>3</i></button><button type="button" data-f="audio" aria-pressed="false">Audio<i>3</i></button><button type="button" data-f="garage" aria-pressed="false">Garage<i>2</i></button></div>
   </div>
 </section>
-<section aria-label="Builds">
+<section class="sec-grid" aria-label="Builds">
   <div class="wrap grid-work">
       <button type="button" class="pcard bg-audio wide" data-cat="audio hardware" data-tagline="Audio hardware" data-uses="TPA3116D2|ZK-TB21|ZK-HT21|Custom subwoofer boxes" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/amp.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Audio hardware</p><h3>Amp &amp; sub systems</h3><p>High-power class-D boards in custom-built boxes, tuned by ear.</p></div>
@@ -86,10 +87,15 @@
   </div>
 </section>
 <section class="toolkit" aria-labelledby="tk">
-  <div class="wrap">
-    <p class="eyebrow mono">Toolkit</p>
-    <h2 id="tk" class="vice h2">What's on <span class="sun-text-x">the bench.</span></h2>
-    <div class="toolkit__grid"><article class="tool"><span class="mono">Hands-on</span><h3>Hardware</h3><ul><li>Soldering and circuit benchwork</li><li>Board mods and troubleshooting</li><li>Amplifier builds</li><li>Mechanical CAD in Tinkercad</li></ul></article><article class="tool"><span class="mono">Code</span><h3>IT &amp; software</h3><ul><li>Web development</li><li>Microcontroller C++ (Arduino, ESP32)</li><li>ESP32-CAM computer vision</li><li>Linux and PC infrastructure</li></ul></article><article class="tool"><span class="mono">Science</span><h3>Physics</h3><ul><li>Electrohydrodynamics</li><li>High-voltage systems</li><li>Mechanics</li><li>Award-winning research</li></ul></article><article class="tool"><span class="mono">Media</span><h3>Audio &amp; video</h3><ul><li>DSP remastering</li><li>Video editing</li><li>Band leadership and drumming</li><li>Visualisers for YouTube</li></ul></article></div>
+  <div class="wrap tk">
+    <div class="tk__s" data-screen>
+      <div class="tk__head"><p class="eyebrow mono">Toolkit</p>
+    <h2 id="tk" class="vice h2">What's on <span class="sun-text-x">the bench.</span></h2></div>
+      <div class="toolkit__grid"><article class="tool"><span class="mono">Hands-on</span><h3>Hardware</h3><ul><li>Soldering and circuit benchwork</li><li>Board mods and troubleshooting</li><li>Amplifier builds</li><li>Mechanical CAD in Tinkercad</li></ul></article><article class="tool"><span class="mono">Code</span><h3>IT &amp; software</h3><ul><li>Web development</li><li>Microcontroller C++ (Arduino, ESP32)</li><li>ESP32-CAM computer vision</li><li>Linux and PC infrastructure</li></ul></article></div>
+    </div>
+    <div class="tk__s" data-screen>
+      <div class="toolkit__grid"><article class="tool"><span class="mono">Science</span><h3>Physics</h3><ul><li>Electrohydrodynamics</li><li>High-voltage systems</li><li>Mechanics</li><li>Award-winning research</li></ul></article><article class="tool"><span class="mono">Media</span><h3>Audio &amp; video</h3><ul><li>DSP remastering</li><li>Video editing</li><li>Band leadership and drumming</li><li>Visualisers for YouTube</li></ul></article></div>
+    </div>
   </div>
 </section>
 <section class="cta has-video">

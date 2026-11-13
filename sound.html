@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
 <script src="js/main.js" defer></script>
 
 </head>
@@ -29,10 +29,11 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
   <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
   <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
+<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
@@ -58,7 +59,7 @@
   </div>
 </section>
 <div class="kit-pulse" aria-hidden="true"></div>
-<section aria-label="Drum kit">
+<section class="sec-kit" aria-label="Drum kit">
   <div class="wrap kit" id="kit">
     <div class="pads"><button type="button" class="pad" data-v="kick" data-key="a" data-cursor="Hit"><b>Kick</b><span class="mono">Key A</span></button><button type="button" class="pad" data-v="snare" data-key="s" data-cursor="Hit"><b>Snare</b><span class="mono">Key S</span></button><button type="button" class="pad" data-v="hat" data-key="d" data-cursor="Hit"><b>Hi-hat</b><span class="mono">Key D</span></button><button type="button" class="pad" data-v="clap" data-key="f" data-cursor="Hit"><b>Clap</b><span class="mono">Key F</span></button><button type="button" class="pad" data-v="bass" data-key="g" data-cursor="Hit"><b>808</b><span class="mono">Key G</span></button><button type="button" class="pad" data-v="zap" data-key="h" data-cursor="Hit"><b>Zap</b><span class="mono">Key H</span></button></div>
     <figure class="scope" aria-label="Oscilloscope showing the sound you play">

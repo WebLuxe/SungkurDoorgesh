@@ -11,6 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
 <script src="js/main.js" defer></script>
 
 </head>
@@ -30,10 +30,11 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
   <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
   <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
+<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
@@ -48,7 +49,7 @@
   <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
 </div>
 <main id="main">
-<section class="phead">
+<section class="phead phead--about">
   <div class="wrap about-hero">
     <div class="bio">
       <p class="eyebrow mono"><b>04</b> About</p>
@@ -70,10 +71,15 @@
   </div>
 </section>
 <section class="road" aria-labelledby="rm">
-  <div class="wrap">
-    <p class="eyebrow mono">Roadmap</p>
-    <h2 id="rm" class="vice h2">Where it's <span class="sun-text-x">heading.</span></h2>
-    <ol class="trace" id="trace"><li><span class="mono">Now</span><h3>Push the high-voltage research further</h3><p>Build on The Ionic Engine and go deeper into electrohydrodynamics and high-voltage systems.</p></li><li><span class="mono">Next</span><h3>Custom boards, smarter vision</h3><p>Design custom PCB layouts and grow the ESP32-CAM vision work into real products.</p></li><li><span class="mono">Then</span><h3>The Corolla EE111 build</h3><p>Turn the Toyota engine study into hands-on performance tuning.</p></li><li><span class="mono">Later</span><h3>Electronics &amp; engineering</h3><p>Study and build toward a career in electronics and applied physics.</p></li><li><span class="mono">The goal</span><h3>A tech company that ships</h3><p>Turn the hardware, audio and IT skills into a business that makes real products.</p></li></ol>
+  <div class="wrap road__in">
+    <div class="road__s" data-screen>
+      <div class="road__head"><p class="eyebrow mono">Roadmap</p>
+    <h2 id="rm" class="vice h2">Where it's <span class="sun-text-x">heading.</span></h2></div>
+      <ol class="trace"><li><span class="mono">Now</span><h3>Push the high-voltage research further</h3><p>Build on The Ionic Engine and go deeper into electrohydrodynamics and high-voltage systems.</p></li><li><span class="mono">Next</span><h3>Custom boards, smarter vision</h3><p>Design custom PCB layouts and grow the ESP32-CAM vision work into real products.</p></li><li><span class="mono">Then</span><h3>The Corolla EE111 build</h3><p>Turn the Toyota engine study into hands-on performance tuning.</p></li></ol>
+    </div>
+    <div class="road__s" data-screen>
+      <ol class="trace trace--b" start="4"><li><span class="mono">Later</span><h3>Electronics &amp; engineering</h3><p>Study and build toward a career in electronics and applied physics.</p></li><li><span class="mono">The goal</span><h3>A tech company that ships</h3><p>Turn the hardware, audio and IT skills into a business that makes real products.</p></li></ol>
+    </div>
   </div>
 </section>
 <section class="also" aria-labelledby="al">
