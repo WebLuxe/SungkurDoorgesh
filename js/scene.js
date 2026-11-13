@@ -255,7 +255,7 @@ fontsReady.then(() => {
   const first = document.documentElement.classList.contains('first') && !reduce;
   setTimeout(() => DG.sceneReadyResolve && DG.sceneReadyResolve(), 0);
 
-  const HIT = 6.27;                         // where the big hit sits in the track: it lands as the name slams in
+  const HIT = 9.76;                         // where the big hit sits in the track: it lands as the name slams in
   let music = null, soundOK = false, muted = false, musicReady = Promise.resolve(false);
   try { muted = localStorage.getItem('dg-mute') === '1'; } catch (e) {}
   const wake = () => { DG.wake ? DG.wake() : (S.hold = false); };
@@ -270,7 +270,7 @@ fontsReady.then(() => {
     const filmEl = document.getElementById('film');
     if (filmEl) {
       const vid = filmEl.querySelector('video');
-      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + '.mp4';
+      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + '.mp4?v=2';
       vid.load();
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);
       const upd = () => { try { if (vid.duration && vid.buffered.length) src.p = Math.max(src.p, vid.buffered.end(vid.buffered.length - 1) / vid.duration); } catch (e) {} if (vid.readyState >= 4) src.p = 1; };
@@ -304,7 +304,7 @@ fontsReady.then(() => {
     try {
       music = new Audio(); music.preload = 'auto'; music.volume = .85; DG.music = music;
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);       // the loader waits for it like it does for the film
-      musicReady = fetch('assets/audio/intro.mp3').then(r => (r.ok ? r.blob() : Promise.reject())).then(b => { music.src = URL.createObjectURL(b); return true; })
+      musicReady = fetch('assets/audio/intro.mp3?v=2').then(r => (r.ok ? r.blob() : Promise.reject())).then(b => { music.src = URL.createObjectURL(b); return true; })
         .catch(() => { music = null; return false; }).then(ok => { src.p = 1; return ok; });
       setTimeout(() => (src.p = 1), 5000);
     } catch (e) { music = null; }
