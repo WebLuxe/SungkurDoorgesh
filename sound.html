@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
+<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){sessionStorage.removeItem('seen');sessionStorage.removeItem('wipe');if(!/(^|\/)(index\.html)?$/.test(location.pathname)){h.classList.add('loading');location.replace('index.html');return}}if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
 <noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
@@ -72,7 +72,8 @@
 <section>
   <div class="wrap split">
     <div><p class="eyebrow mono">Audio hardware</p><h2 class="vice h3">Amps &amp; subs,<br><span class="sun-text-x">built to shake.</span></h2>
-      <p>I build and tune amplifier systems on these boards, then put them in custom subwoofer and speaker enclosures. Tuned by ear first, then by DSP.</p></div>
+      <p>I build and tune amplifier systems on these boards, then put them in custom subwoofer and speaker enclosures. Tuned by ear first, then by DSP.</p>
+      <figure class="photo-card"><video muted loop playsinline preload="none" poster="assets/video/real/solder.jpg" data-src="assets/video/real/solder.mp4"></video></figure></div>
     <div class="boards"><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>TPA3116D2</b><span>Class-D stereo amp board</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-TB21</b><span>Amp board with a bass channel</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-HT21</b><span>Stereo + subwoofer amp board</span></p></div></div>
   </div>
 </section>

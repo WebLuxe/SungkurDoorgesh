@@ -778,7 +778,7 @@ html.lock{overflow:hidden}
 .sheet,.drawer{overscroll-behavior:contain}
 html.snap .sheet,html.snap .drawer,html.snap textarea{touch-action:pan-y pinch-zoom}
 /* sideways-scrolling rows may only pan sideways, or a swipe that starts on one would free-scroll the page */
-html.snap .filters,html.snap .poster-row,html.snap .rail{touch-action:pan-x}
+html.snap .filters,html.snap .poster-row,html.snap .rail,html.snap .reel__row{touch-action:pan-x}
 .pg{position:fixed;right:0;top:0;bottom:0;width:3px;z-index:70;pointer-events:none;background:rgba(255,243,234,.05)}
 .pg i{display:block;width:100%;height:100%;background:var(--sunset);transform:scaleY(0);transform-origin:top;will-change:transform}
 
@@ -1024,3 +1024,28 @@ html.lf .loader__w{opacity:1;transform:none}
 }
 .title h1{position:relative}
 .title h1 .tch{will-change:auto}
+
+/* ================= real footage: clips on the build cards, in the drawer, and the home reel ================= */
+.pcard__art video,.drawer__art video,.photo-card video,.tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pcard__art video{transition:transform 1.2s var(--ease)}
+.pcard:hover .pcard__art video{transform:scale(1.08)}
+.reel{padding:var(--top) 0 var(--bot);position:relative;isolation:isolate}
+.reel::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(50% 55% at 12% 15%,rgba(139,77,255,.16),transparent 70%),radial-gradient(45% 50% at 90% 85%,rgba(255,45,138,.14),transparent 70%),repeating-linear-gradient(180deg,rgba(255,255,255,.022) 0 1px,transparent 1px 4px)}
+.reel__in{display:flex;flex-direction:column;height:calc(var(--scr) - var(--top) - var(--bot))}
+.reel .sec-head{margin-bottom:clamp(12px,2.6svh,30px)}
+.reel__row{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,1.3vw,20px)}
+.shot-clip{position:relative;margin:0;border-radius:22px;overflow:hidden;background:var(--plum);box-shadow:0 30px 60px -30px rgba(0,0,0,.9),inset 0 0 0 1px var(--line);isolation:isolate}
+.shot-clip:nth-child(even){margin-top:clamp(10px,4svh,40px)}
+.shot-clip:nth-child(odd){margin-bottom:clamp(10px,4svh,40px)}
+.shot-clip video{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.shot-clip::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(13,6,20,.05) 50%,rgba(13,6,20,.88)),linear-gradient(135deg,rgba(255,45,138,.16),transparent 45%)}
+.shot-clip::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(360px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.14),transparent 60%);opacity:0;transition:opacity .4s}
+.shot-clip:hover::after{opacity:1}
+.shot-clip figcaption{position:absolute;left:16px;right:14px;bottom:14px;display:flex;flex-direction:column;gap:6px;font-family:var(--disp);font-style:italic;font-weight:900;font-stretch:68%;text-transform:uppercase;font-size:clamp(1.3rem,min(2vw,4svh),2rem);line-height:.9}
+.shot-clip figcaption .mono{font-style:normal;font-weight:400;color:var(--gold)}
+@media (max-width:900px){
+  /* phones: the clips sit in a row you flick sideways, the next one always peeking in */
+  .reel__row{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;gap:12px;margin-inline:calc(-1*var(--pad));padding:0 var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
+  .reel__row::-webkit-scrollbar{display:none}
+  .shot-clip,.shot-clip:nth-child(even),.shot-clip:nth-child(odd){flex:0 0 64vw;margin:0;scroll-snap-align:center}
+}

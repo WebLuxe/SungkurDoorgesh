@@ -325,7 +325,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && sheetOpen) { setShe
    ========================================================= */
 const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]);
 const BLOCKS = '.eyebrow, .chips, .handles, .links li, .form, .kit__bar, .cta .btn, .filters, .site__go, .deck, .facts, .rows__more, .sidequest__grid, .music__nums div, .me__photo, .me__text .btn, .music .btn, .photo-card';
-const CARDS = '.grid-work .pcard, .tool, .board, .also__grid article, .pad, .scope, .site__shot, .tile';
+const CARDS = '.grid-work .pcard, .tool, .board, .also__grid article, .pad, .scope, .site__shot, .tile, .shot-clip';
 
 Promise.all([fontsReady, arrived]).then(() => {
   if (!gsap || !ST || reduce) { countAll(); return; }
@@ -442,10 +442,10 @@ function countAll() {
 /* =========================================================
    TILT + spotlight under the mouse
    ========================================================= */
-if (fine && !reduce && gsap) $$('.tile, .site__shot, .me__photo').forEach(p => {
+if (fine && !reduce && gsap) $$('.tile, .site__shot, .me__photo, .shot-clip').forEach(p => {
   const rx = gsap.quickTo(p, 'rotationX', { duration: .6, ease: 'power3' }), ry = gsap.quickTo(p, 'rotationY', { duration: .6, ease: 'power3' });
   gsap.set(p, { transformPerspective: 1100 });
-  const k = p.classList.contains('tile') ? .7 : .3;
+  const k = p.classList.contains('tile') || p.classList.contains('shot-clip') ? .7 : .3;
   p.addEventListener('pointermove', e => {
     const r = p.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
     ry((x - .5) * 14 * k); rx((.5 - y) * 10 * k);
@@ -482,6 +482,8 @@ if (grid) {
     const art = $('.drawer__art', dlg);
     art.className = 'drawer__art ' + ([...c.classList].find(k => k.startsWith('bg-')) || '');
     art.innerHTML = $('.pcard__art', c).innerHTML;
+    const dv = $('video', art);                      // a build with real footage: it plays in the drawer too
+    if (dv) { dv.src = dv.dataset.src; if (!reduce) dv.play().catch(() => {}); }
     $('.drawer__tag', dlg).textContent = c.dataset.tagline || '';
     $('h2', dlg).textContent = $('h3', c).textContent;
     $('.drawer__text', dlg).innerHTML = $('template', c).innerHTML;
@@ -496,7 +498,7 @@ if (grid) {
     dlg.classList.add('closing');
     setTimeout(() => { dlg.classList.remove('closing'); dlg.close(); }, 380);
   };
-  dlg.addEventListener('close', startScroll);
+  dlg.addEventListener('close', () => { $('.drawer__art video', dlg)?.pause(); startScroll(); });
   $('.drawer__close', dlg).addEventListener('click', close);
   dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
   dlg.addEventListener('cancel', e => { e.preventDefault(); close(); });
