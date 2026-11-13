@@ -240,9 +240,26 @@ fontsReady.then(() => {
   if (!gsap || reduce) { gsap && gsap.set([chars, reveals], { opacity: 1, clearProps: 'transform' }); ui && ui.remove(); done(); setupScroll(chars); return; }
 
   if (first) {
-    // ---- cinematic first-visit intro ----
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     scrollTo(0, 0); DG.stopScroll && DG.stopScroll();
+    gsap.set(chars, { opacity: 0 }); gsap.set(title, { opacity: 1 }); gsap.set(reveals, { opacity: 0, y: 30 });
+    const filmEl = document.getElementById('film');
+    if (filmEl) playFilm(filmEl); else cinematic();
+  } else {
+    ui && ui.remove();
+    const go = () => {
+      gsap.fromTo(chars, { yPercent: 115, rotate: 8, opacity: 0 }, { yPercent: 0, rotate: 0, opacity: 1, stagger: .05, duration: 1.1, ease: 'expo.out', delay: .05 });
+      gsap.fromTo(reveals, { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', delay: .4 });
+      Object.assign(S, { speed: 60 }); gsap.to(S, { speed: 14, duration: 2.2, ease: 'power3.out' });
+      done();
+    };
+    DG.arrived ? DG.arrived.then(go) : go();
+  }
+
+  function cinematic() {
+    document.getElementById('film')?.remove();
+    ui && gsap.set(ui, { autoAlpha: 1 }); gsap.set('#introBlack', { opacity: 1 });
+    // ---- cinematic first-visit intro ----
     Object.assign(S, { camY: 38, camZ: 70, lookY: -6, speed: 140, sunY: -14, fovAdd: 18 });
     gsap.set(chars, { opacity: 0 }); gsap.set(title, { opacity: 1 });
     gsap.set(reveals, { opacity: 0, y: 30 });
@@ -269,15 +286,59 @@ fontsReady.then(() => {
     const skip = ui.querySelector('.intro__skip');
     skip && skip.addEventListener('click', () => tl.timeScale(5));
     sceneEl.addEventListener('pointerdown', () => tl.progress() < .95 && tl.timeScale(5), { once: true });
-  } else {
-    ui && ui.remove();
-    const go = () => {
-      gsap.fromTo(chars, { yPercent: 115, rotate: 8, opacity: 0 }, { yPercent: 0, rotate: 0, opacity: 1, stagger: .05, duration: 1.1, ease: 'expo.out', delay: .05 });
-      gsap.fromTo(reveals, { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out', delay: .4 });
-      Object.assign(S, { speed: 60 }); gsap.to(S, { speed: 14, duration: 2.2, ease: 'power3.out' });
-      done();
+  }
+
+  // ---- the rendered intro film ----
+  function playFilm(filmEl) {
+    const vid = filmEl.querySelector('video'), num = filmEl.querySelector('.film__num'), bar = filmEl.querySelector('.film__bar i');
+    const portrait = innerHeight > innerWidth;
+    ui && gsap.set(ui, { autoAlpha: 0 });
+    gsap.set('#introBlack', { opacity: 0 });
+    vid.src = 'assets/video/intro-' + (portrait ? 'portrait' : 'landscape') + '.mp4';
+    vid.load();
+    let started = false, finished = false, shown = 0;
+    const t0 = performance.now();
+    // the counter follows the real download, never runs backwards, and creeps while waiting
+    const tick = () => {
+      if (started) return;
+      let real = 0;
+      try { if (vid.duration && vid.buffered.length) real = vid.buffered.end(vid.buffered.length - 1) / vid.duration; } catch (e) {}
+      const creep = Math.min(.85, (performance.now() - t0) / 3500);
+      shown = Math.max(shown, Math.min(.99, Math.max(real, creep)));
+      num.textContent = String(Math.round(shown * 100)).padStart(3, '0'); bar.style.transform = `scaleX(${shown})`;
+      requestAnimationFrame(tick);
     };
-    DG.arrived ? DG.arrived.then(go) : go();
+    tick();
+    gsap.from(filmEl.querySelectorAll('.film__logo span'), { yPercent: 110, stagger: .05, duration: .9, ease: 'expo.out', delay: .1 });
+    const go = () => {
+      if (started) return; started = true;
+      num.textContent = '100'; bar.style.transform = 'scaleX(1)';
+      const p = vid.play();
+      (p && p.then ? p : Promise.resolve()).then(() => {
+        gsap.to(filmEl.querySelector('.film__load'), { opacity: 0, scale: 1.1, duration: .5, ease: 'power2.in' });
+        gsap.fromTo(vid, { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out' });
+        gsap.to(filmEl.querySelector('.film__skip'), { opacity: 1, duration: .6, delay: .6 });
+      }).catch(() => { started = false; fallback(); });
+    };
+    const fallback = () => { if (finished) return; finished = true; cinematic(); };
+    const finish = () => {
+      if (finished) return; finished = true;
+      Object.assign(S, { speed: 70 }); gsap.to(S, { speed: 14, duration: 2.4, ease: 'power3.out' });
+      const tl = gsap.timeline({ onComplete: () => { filmEl.remove(); DG.startScroll && DG.startScroll(); done(); } });
+      tl.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: .14, ease: 'power2.in' })
+        .set(filmEl, { opacity: 0 })
+        .to(flash, { opacity: 0, duration: .9, ease: 'power2.out' })
+        .fromTo(chars, { opacity: 0, scale: 2.2, yPercent: -20, filter: 'blur(10px)' }, { opacity: 1, scale: 1, yPercent: 0, filter: 'blur(0px)', stagger: .045, duration: .55, ease: 'expo.out', immediateRender: false }, .12)
+        .call(() => { DG.shake && DG.shake(1); title.classList.add('rgb'); setTimeout(() => title.classList.remove('rgb'), 650); }, null, .12 + chars.length * .045)
+        .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out' }, .5);
+    };
+    vid.addEventListener('canplaythrough', go, { once: true });
+    vid.addEventListener('error', fallback, { once: true });
+    vid.addEventListener('timeupdate', () => { if (vid.duration && vid.currentTime > vid.duration - .12) finish(); });
+    vid.addEventListener('ended', finish);
+    filmEl.querySelector('.film__skip').addEventListener('click', finish);
+    // slow connection or data saver: start as soon as there is enough, or fall back
+    setTimeout(() => { if (!started && !finished) { vid.readyState >= 3 ? go() : fallback(); } }, 5500);
   }
   setupScroll(chars);
 });
