@@ -354,5 +354,5 @@ function setupScroll(chars) {
     ease: 'power2.in', duration: 1, stagger: { each: .02, from: 'center' }
   }, 0)
     .to('.scene__copy, .scene__kicker, .scroll-cue', { opacity: 0, y: -60, duration: .35, ease: 'power2.in' }, 0)
-    .to('.scene .shade', { opacity: 1, duration: .35, ease: 'none' }, .65);
+    .to('.scene .shade', { opacity: .85, duration: .2, ease: 'none' }, .8);
 }

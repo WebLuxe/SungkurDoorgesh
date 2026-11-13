@@ -127,7 +127,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && sheetOpen) { setShe
    SCROLL ANIMATIONS (GSAP + ScrollTrigger + SplitText)
    ========================================================= */
 const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]);
-const BLOCKS = '.eyebrow, .chips, .handles, .links li, .form, .kit__bar, .cta .btn, .filters, .hpin__head .btn, .posters__head .lede, .site__go, .deck, .stack__more';
+const BLOCKS = '.eyebrow, .chips, .handles, .links li, .form, .kit__bar, .cta .btn, .filters, .site__go, .deck, .facts, .rows li, .rows__more, .sidequest__grid, .music__nums div, .me__photo, .me__text .btn, .music .btn';
 const CARDS = '.grid-work .pcard, .tool, .board, .also__grid article, .pad, .scope, .site__shot';
 
 Promise.all([fontsReady, arrived]).then(() => {
