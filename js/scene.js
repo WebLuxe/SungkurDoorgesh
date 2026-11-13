@@ -234,17 +234,29 @@ fontsReady.then(() => {
   const chars = split ? split.chars : [title];
   const reveals = [...document.querySelectorAll('[data-intro]')];
   const first = document.documentElement.classList.contains('first') && !reduce;
+  setTimeout(() => DG.sceneReadyResolve && DG.sceneReadyResolve(), 0);
 
   const done = () => { document.documentElement.classList.remove('first'); DG.introDone && DG.introDone(); };
 
-  if (!gsap || reduce) { gsap && gsap.set([chars, reveals], { opacity: 1, clearProps: 'transform' }); ui && ui.remove(); done(); setupScroll(chars); return; }
+  if (!gsap || reduce) { gsap && gsap.set([chars, reveals], { opacity: 1, clearProps: 'transform' }); ui && ui.remove(); document.getElementById('film')?.remove(); done(); setupScroll(chars); return; }
 
   if (first) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     scrollTo(0, 0); DG.stopScroll && DG.stopScroll();
     gsap.set(chars, { opacity: 0 }); gsap.set(title, { opacity: 1 }); gsap.set(reveals, { opacity: 0, y: 30 });
     const filmEl = document.getElementById('film');
-    if (filmEl) playFilm(filmEl); else cinematic();
+    if (filmEl) {
+      const vid = filmEl.querySelector('video');
+      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + '.mp4';
+      vid.load();
+      const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);
+      const upd = () => { try { if (vid.duration && vid.buffered.length) src.p = Math.max(src.p, vid.buffered.end(vid.buffered.length - 1) / vid.duration); } catch (e) {} if (vid.readyState >= 4) src.p = 1; };
+      ['progress', 'loadeddata', 'canplay'].forEach(ev => vid.addEventListener(ev, upd));
+      vid.addEventListener('canplaythrough', () => (src.p = 1), { once: true });
+      vid.addEventListener('error', () => (src.p = 1), { once: true });
+      setTimeout(() => (src.p = 1), 6500);
+      DG.arrived.then(() => playFilm(filmEl));
+    } else DG.arrived.then(cinematic);
   } else {
     ui && ui.remove();
     const go = () => {
@@ -288,57 +300,34 @@ fontsReady.then(() => {
     sceneEl.addEventListener('pointerdown', () => tl.progress() < .95 && tl.timeScale(5), { once: true });
   }
 
-  // ---- the rendered intro film ----
+  // ---- the rendered intro film (already buffered by the loader) ----
   function playFilm(filmEl) {
-    const vid = filmEl.querySelector('video'), num = filmEl.querySelector('.film__num'), bar = filmEl.querySelector('.film__bar i');
-    const portrait = innerHeight > innerWidth;
+    const vid = filmEl.querySelector('video');
     ui && gsap.set(ui, { autoAlpha: 0 });
     gsap.set('#introBlack', { opacity: 0 });
-    vid.src = 'assets/video/intro-' + (portrait ? 'portrait' : 'landscape') + '.mp4';
-    vid.load();
-    let started = false, finished = false, shown = 0;
-    const t0 = performance.now();
-    // the counter follows the real download, never runs backwards, and creeps while waiting
-    const tick = () => {
-      if (started) return;
-      let real = 0;
-      try { if (vid.duration && vid.buffered.length) real = vid.buffered.end(vid.buffered.length - 1) / vid.duration; } catch (e) {}
-      const creep = Math.min(.85, (performance.now() - t0) / 3500);
-      shown = Math.max(shown, Math.min(.99, Math.max(real, creep)));
-      num.textContent = String(Math.round(shown * 100)).padStart(3, '0'); bar.style.transform = `scaleX(${shown})`;
-      requestAnimationFrame(tick);
-    };
-    tick();
-    gsap.from(filmEl.querySelectorAll('.film__logo span'), { yPercent: 110, stagger: .05, duration: .9, ease: 'expo.out', delay: .1 });
-    const go = () => {
-      if (started) return; started = true;
-      num.textContent = '100'; bar.style.transform = 'scaleX(1)';
-      const p = vid.play();
-      (p && p.then ? p : Promise.resolve()).then(() => {
-        gsap.to(filmEl.querySelector('.film__load'), { opacity: 0, scale: 1.1, duration: .5, ease: 'power2.in' });
-        gsap.fromTo(vid, { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out' });
-        gsap.to(filmEl.querySelector('.film__skip'), { opacity: 1, duration: .6, delay: .6 });
-      }).catch(() => { started = false; fallback(); });
-    };
+    let finished = false;
     const fallback = () => { if (finished) return; finished = true; cinematic(); };
     const finish = () => {
       if (finished) return; finished = true;
       Object.assign(S, { speed: 70 }); gsap.to(S, { speed: 14, duration: 2.4, ease: 'power3.out' });
-      const tl = gsap.timeline({ onComplete: () => { filmEl.remove(); DG.startScroll && DG.startScroll(); done(); } });
-      tl.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: .14, ease: 'power2.in' })
+      gsap.timeline({ onComplete: () => { filmEl.remove(); DG.startScroll && DG.startScroll(); done(); } })
+        .fromTo(flash, { opacity: 0 }, { opacity: 1, duration: .14, ease: 'power2.in' })
         .set(filmEl, { opacity: 0 })
         .to(flash, { opacity: 0, duration: .9, ease: 'power2.out' })
         .fromTo(chars, { opacity: 0, scale: 2.2, yPercent: -20, filter: 'blur(10px)' }, { opacity: 1, scale: 1, yPercent: 0, filter: 'blur(0px)', stagger: .045, duration: .55, ease: 'expo.out', immediateRender: false }, .12)
         .call(() => { DG.shake && DG.shake(1); title.classList.add('rgb'); setTimeout(() => title.classList.remove('rgb'), 650); }, null, .12 + chars.length * .045)
         .to(reveals, { opacity: 1, y: 0, stagger: .08, duration: .9, ease: 'expo.out' }, .5);
     };
-    vid.addEventListener('canplaythrough', go, { once: true });
-    vid.addEventListener('error', fallback, { once: true });
     vid.addEventListener('timeupdate', () => { if (vid.duration && vid.currentTime > vid.duration - .12) finish(); });
     vid.addEventListener('ended', finish);
+    vid.addEventListener('error', fallback, { once: true });
     filmEl.querySelector('.film__skip').addEventListener('click', finish);
-    // slow connection or data saver: start as soon as there is enough, or fall back
-    setTimeout(() => { if (!started && !finished) { vid.readyState >= 3 ? go() : fallback(); } }, 5500);
+    const pr = vid.play();
+    (pr && pr.then ? pr : Promise.resolve()).then(() => {
+      gsap.fromTo(vid, { opacity: 0 }, { opacity: 1, duration: .4 });
+      gsap.to(filmEl.querySelector('.film__skip'), { opacity: 1, duration: .6, delay: .8 });
+    }).catch(fallback);
+    setTimeout(() => { if (!finished && vid.paused) fallback(); }, 2500);
   }
   setupScroll(chars);
 });

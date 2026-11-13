@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
-<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
+<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
@@ -28,12 +28,11 @@
 <svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__half t"></div><div class="loader__half b"></div>
-  <div class="loader__core">
-    <div class="loader__sun"></div>
-    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
-    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
-  </div>
+  <div class="loader__bg"></div>
+  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
+  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__line"><i></i></div>
 </div>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
@@ -82,13 +81,14 @@
     <p class="eyebrow mono">Also</p>
     <h2 id="al" class="vice h3">Side quests.</h2>
     <div class="also__grid">
-      <article><span class="mono">Wraps</span><h3>Bicycle &amp; car vinyl</h3><p>Custom vinyl wrapping, from my own 21-speed Raleigh to cars.</p></article>
-      <article><span class="mono">Web</span><h3>Websites</h3><p>I design and code sites too. <a class="ulink" href="web.html">See some</a>.</p></article>
-      <article><span class="mono">Content</span><h3>TikTok &amp; YouTube</h3><p>Builds, remasters and visualisers as Zenn Prxd and @r0shibhadain.</p></article>
+      <article><img src="assets/img/mood/bike.webp" alt="" loading="lazy"><span class="mono">Wraps</span><h3>Bicycle &amp; car vinyl</h3><p>Custom vinyl wrapping, from my own 21-speed Raleigh to cars.</p></article>
+      <article><img src="assets/img/sites/edenvilla.webp" alt="" loading="lazy"><span class="mono">Web</span><h3>Websites</h3><p>I design and code sites too. <a class="ulink" href="web.html">See some</a>.</p></article>
+      <article><img src="assets/img/mood/stage.webp" alt="" loading="lazy"><span class="mono">Content</span><h3>TikTok &amp; YouTube</h3><p>Builds, remasters and visualisers as Zenn Prxd and @r0shibhadain.</p></article>
     </div>
   </div>
 </section>
-<section class="cta">
+<section class="cta has-video">
+  <div class="sec-video" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/video/drive-loop.jpg" data-src="assets/video/drive-loop.mp4"></video></div>
   <div class="wrap">
     <h2 class="vice h2 sun-text">Say hi.</h2>
     <p class="lede">A collab, a build, a jam or just a hello.</p>
@@ -104,6 +104,7 @@
       <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
   </div>
 </footer>
 </body>

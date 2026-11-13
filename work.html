@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
-<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
+<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
@@ -27,12 +27,11 @@
 <body data-page="work">
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__half t"></div><div class="loader__half b"></div>
-  <div class="loader__core">
-    <div class="loader__sun"></div>
-    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
-    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
-  </div>
+  <div class="loader__bg"></div>
+  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
+  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__line"><i></i></div>
 </div>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
@@ -49,6 +48,7 @@
 </div>
 <main id="main">
 <section class="phead">
+  <div class="phead__bg" aria-hidden="true"><img src="assets/img/mood/argb.webp" alt=""></div>
   <div class="phead__mini-sun" aria-hidden="true"></div>
   <div class="wrap">
     <p class="eyebrow mono"><b>02</b> Builds</p>
@@ -59,28 +59,28 @@
 </section>
 <section aria-label="Builds">
   <div class="wrap grid-work">
-      <button type="button" class="pcard bg-audio wide" data-cat="audio hardware" data-tagline="Audio hardware" data-uses="TPA3116D2|ZK-TB21|ZK-HT21|Custom subwoofer boxes" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Bass</span></div>
+      <button type="button" class="pcard bg-audio wide" data-cat="audio hardware" data-tagline="Audio hardware" data-uses="TPA3116D2|ZK-TB21|ZK-HT21|Custom subwoofer boxes" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/amp.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Audio hardware</p><h3>Amp &amp; sub systems</h3><p>High-power class-D boards in custom-built boxes, tuned by ear.</p></div>
       <template><p>I build and tune amplifier systems on TPA3116D2, ZK-TB21 and ZK-HT21 boards, paired with custom subwoofers and speaker enclosures.</p><p>Every build gets tuned by ear first, then cleaned up with DSP.</p></template></button>
-      <button type="button" class="pcard bg-hv" data-cat="physics hardware" data-tagline="1st place · RGSC Science Quest 2026" data-uses="High voltage|Electrohydrodynamics|Physics research" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Ions</span></div>
+      <button type="button" class="pcard bg-hv" data-cat="physics hardware" data-tagline="1st place · RGSC Science Quest 2026" data-uses="High voltage|Electrohydrodynamics|Physics research" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/ionic.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Applied physics<em>1st place</em></p><h3>The Ionic Engine</h3><p>Air moved by electricity alone. No propeller, no motor.</p></div>
       <template><p>A high-voltage atmospheric electrohydrodynamic propulsion project. A strong electric field ionises the air, the ions drift toward a collector and drag the air with them, so it makes thrust with no moving parts.</p><p>It took first place at the 11th Science Quest, the Rajiv Gandhi Science Centre&rsquo;s national competition, with winners announced on 28 May 2026.</p></template></button>
-      <button type="button" class="pcard bg-sim" data-cat="hardware code" data-tagline="Sim rig" data-uses="Microcontrollers|Potentiometers|3D-modelled enclosures|Tinkercad" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Drive</span></div>
+      <button type="button" class="pcard bg-sim" data-cat="hardware code" data-tagline="Sim rig" data-uses="Microcontrollers|Potentiometers|3D-modelled enclosures|Tinkercad" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/sim.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Sim rig</p><h3>EuroSim wheel &amp; shifter</h3><p>A force-feedback wheel and gear shifter for Euro Truck Simulator 2.</p></div>
       <template><p>A force-feedback steering wheel and gear shifter for Euro Truck Simulator 2, built from microcontrollers, potentiometers and enclosures I modelled in 3D.</p></template></button>
-      <button type="button" class="pcard bg-iot" data-cat="code hardware" data-tagline="Computer vision" data-uses="ESP32-CAM|Computer vision|Arduino C++" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Vision</span></div>
+      <button type="button" class="pcard bg-iot" data-cat="code hardware" data-tagline="Computer vision" data-uses="ESP32-CAM|Computer vision|Arduino C++" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/bin.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Computer vision</p><h3>AI sorting bin</h3><p>An ESP32-CAM bin that sees what you drop in and sorts it.</p></div>
       <template><p>An ESP32-CAM waste-sorting bin that recognises objects and sends each one to the right compartment automatically.</p></template></button>
-      <button type="button" class="pcard bg-led" data-cat="code audio" data-tagline="Embedded" data-uses="WS2812B|Microcontroller|Audio-reactive code" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Light</span></div>
+      <button type="button" class="pcard bg-led" data-cat="code audio" data-tagline="Embedded" data-uses="WS2812B|Microcontroller|Audio-reactive code" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/argb.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Embedded</p><h3>Music-reactive ARGB</h3><p>Addressable LEDs that hit on the beat.</p></div>
       <template><p>WS2812B addressable LED setups driven by a microcontroller that listens to the music and lights up on the beat.</p></template></button>
-      <button type="button" class="pcard bg-dsp" data-cat="audio" data-tagline="Zenn Prxd on YouTube" data-uses="DaVinci Resolve|Avee Player|Shotcut|Filmora" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Remix</span></div>
+      <button type="button" class="pcard bg-dsp" data-cat="audio" data-tagline="Zenn Prxd on YouTube" data-uses="DaVinci Resolve|Avee Player|Shotcut|Filmora" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/dsp.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Media</p><h3>DSP remasters</h3><p>Remasters and visualisers with 200K+ views on YouTube.</p></div>
       <template><p>Remasters and visualisers on YouTube as Zenn Prxd: more than 200,000 views and over 1,000 subscribers.</p></template></button>
-      <button type="button" class="pcard bg-bike" data-cat="garage" data-tagline="Garage" data-uses="Derailleur tuning|Brake servicing|Vinyl wrapping" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">Gears</span></div>
+      <button type="button" class="pcard bg-bike" data-cat="garage" data-tagline="Garage" data-uses="Derailleur tuning|Brake servicing|Vinyl wrapping" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/bike.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Garage</p><h3>Raleigh 21-speed</h3><p>Tuned, serviced and wrapped in custom vinyl.</p></div>
       <template><p>A 21-speed Raleigh with derailleur adjustment, brake servicing, gear tuning and a custom vinyl wrap. I do car vinyl wraps too.</p></template></button>
-      <button type="button" class="pcard bg-car" data-cat="garage" data-tagline="In progress" data-uses="4E-FE|4A-GE Blacktop|Corolla EE111" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><span class="pcard__big">4A-GE</span></div>
+      <button type="button" class="pcard bg-car" data-cat="garage" data-tagline="In progress" data-uses="4E-FE|4A-GE Blacktop|Corolla EE111" data-cursor="Open"><div class="pcard__art" aria-hidden="true"><img src="assets/img/mood/car.webp" alt="" loading="lazy"></div>
       <div class="pcard__body"><p class="pcard__tag mono">Automotive</p><h3>Toyota engine study</h3><p>The 4E-FE, the 4A-GE Blacktop and a Corolla EE111 plan.</p></div>
       <template><p>Studying the 4E-FE and 4A-GE Blacktop engines, with long-term performance-tuning plans for a Corolla EE111.</p></template></button>
   </div>
@@ -92,7 +92,8 @@
     <div class="toolkit__grid"><article class="tool"><span class="mono">Hands-on</span><h3>Hardware</h3><ul><li>Soldering and circuit benchwork</li><li>Board mods and troubleshooting</li><li>Amplifier builds</li><li>Mechanical CAD in Tinkercad</li></ul></article><article class="tool"><span class="mono">Code</span><h3>IT &amp; software</h3><ul><li>Web development</li><li>Microcontroller C++ (Arduino, ESP32)</li><li>ESP32-CAM computer vision</li><li>Linux and PC infrastructure</li></ul></article><article class="tool"><span class="mono">Science</span><h3>Physics</h3><ul><li>Electrohydrodynamics</li><li>High-voltage systems</li><li>Mechanics</li><li>Award-winning research</li></ul></article><article class="tool"><span class="mono">Media</span><h3>Audio &amp; video</h3><ul><li>DSP remastering</li><li>Video editing</li><li>Band leadership and drumming</li><li>Visualisers for YouTube</li></ul></article></div>
   </div>
 </section>
-<section class="cta">
+<section class="cta has-video">
+  <div class="sec-video" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/video/drive-loop.jpg" data-src="assets/video/drive-loop.mp4"></video></div>
   <div class="wrap">
     <h2 class="vice h2 sun-text">Got an idea?</h2>
     <p class="lede">Collabs and custom builds are always fun. Tell me what you have in mind.</p>
@@ -119,6 +120,7 @@
       <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
   </div>
 </footer>
 </body>

@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
-<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
+<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
@@ -27,7 +27,13 @@
 <body data-page="home">
 <svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
 <a class="skip" href="#main">Skip to content</a>
-
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__bg"></div>
+  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
+  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__line"><i></i></div>
+</div>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
@@ -62,7 +68,6 @@
   <div class="flash" id="flash" aria-hidden="true"></div>
   <div class="film" id="film">
     <video muted playsinline preload="auto" aria-label="Intro film: a drive into a neon sunset city ending on the name Doorgesh"></video>
-    <div class="film__load"><p class="film__logo" aria-hidden="true"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></p><div class="film__row"><span class="mono">Loading the drive</span><span class="film__bar"><i></i></span><span class="film__num">000</span></div></div>
     <button type="button" class="film__skip mono">Skip intro →</button>
   </div>
   <div class="intro" id="introUI" aria-hidden="true">
@@ -73,6 +78,7 @@
 </div>
 
 <section class="me" aria-labelledby="me-title">
+  <div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="wrap me__grid">
     <figure class="me__photo" data-parallax><img src="assets/img/doorgesh-4.webp" alt="Doorgesh flexing, black and white mirror selfie" loading="lazy" decoding="async" style="object-position:45% 35%"></figure>
     <div class="me__text">
@@ -93,17 +99,18 @@
 <section class="built" aria-labelledby="built-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow mono">Things I've built</p><h2 id="built-title" class="vice h2">Made with <span class="sun-text-x">my hands.</span></h2></div>
-    <ol class="rows">
-      <li><a href="work.html"><span class="rows__n mono">01</span><span class="rows__t">The Ionic Engine</span><span class="rows__d">Air pushed by electricity alone. First place, Science Quest 2026.</span><span class="rows__k mono">Physics</span></a></li>
-      <li><a href="work.html"><span class="rows__n mono">02</span><span class="rows__t">Amp &amp; sub systems</span><span class="rows__d">Class-D amp boards in boxes I built and tuned myself.</span><span class="rows__k mono">Audio</span></a></li>
-      <li><a href="work.html"><span class="rows__n mono">03</span><span class="rows__t">EuroSim wheel</span><span class="rows__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span><span class="rows__k mono">Sim rig</span></a></li>
-      <li><a href="work.html"><span class="rows__n mono">04</span><span class="rows__t">AI sorting bin</span><span class="rows__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span><span class="rows__k mono">Vision</span></a></li>
-    </ol>
+    <div class="tiles">
+      <a class="tile" href="work.html"><img src="assets/img/mood/ionic.webp" alt="" loading="lazy"><span class="tile__k mono">01 &middot; Physics</span><span class="tile__t">The Ionic Engine</span><span class="tile__d">Air pushed by electricity alone. First place, Science Quest 2026.</span></a>
+      <a class="tile" href="work.html"><img src="assets/img/mood/amp.webp" alt="" loading="lazy"><span class="tile__k mono">02 &middot; Audio</span><span class="tile__t">Amp &amp; sub systems</span><span class="tile__d">Class-D amp boards in boxes I built and tuned myself.</span></a>
+      <a class="tile" href="work.html"><img src="assets/img/mood/sim.webp" alt="" loading="lazy"><span class="tile__k mono">03 &middot; Sim rig</span><span class="tile__t">EuroSim wheel</span><span class="tile__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span></a>
+      <a class="tile" href="work.html"><img src="assets/img/mood/bin.webp" alt="" loading="lazy"><span class="tile__k mono">04 &middot; Vision</span><span class="tile__t">AI sorting bin</span><span class="tile__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span></a>
+    </div>
     <a class="btn btn--ghost rows__more" href="work.html">All my builds <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div>
 </section>
 
-<section class="music" aria-labelledby="music-title">
+<section class="music has-bg" aria-labelledby="music-title">
+  <div class="sec-bg" data-parallax><img src="assets/img/mood/drums.webp" alt="" loading="lazy"></div>
   <div class="wrap music__grid">
     <div>
       <p class="eyebrow mono">Zenn Prxd</p>
@@ -134,7 +141,8 @@
   </div>
 </section>
 
-<section class="cta">
+<section class="cta has-video">
+  <div class="sec-video" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/video/drive-loop.jpg" data-src="assets/video/drive-loop.mp4"></video></div>
   <div class="wrap">
     <h2 class="vice h2 sun-text">Say hi.</h2>
     <p class="lede">A collab, a build, a jam or just a hello. My inbox is open.</p>
@@ -150,6 +158,7 @@
       <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
   </div>
 </footer>
 <script type="module" src="js/scene.js"></script>

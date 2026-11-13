@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
-<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
+<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
@@ -27,12 +27,11 @@
 <body data-page="contact">
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__half t"></div><div class="loader__half b"></div>
-  <div class="loader__core">
-    <div class="loader__sun"></div>
-    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
-    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
-  </div>
+  <div class="loader__bg"></div>
+  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
+  <div class="loader__word"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div>
+  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__line"><i></i></div>
 </div>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
 <header class="nav" id="nav" data-intro>
@@ -49,6 +48,7 @@
 </div>
 <main id="main">
 <section class="phead">
+  <div class="phead__bg" aria-hidden="true"><img src="assets/img/mood/car.webp" alt=""></div>
   <div class="phead__mini-sun" aria-hidden="true"></div>
   <div class="wrap">
     <p class="eyebrow mono"><b>05</b> Contact</p>
@@ -86,6 +86,7 @@
       <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
   </div>
 </footer>
 </body>
