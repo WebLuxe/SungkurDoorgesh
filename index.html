@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Doorgesh — Hardware, physics, sound &amp; code</title>
-<meta name="description" content="Doorgesh (Zenn Prxd) builds custom audio systems, sim rigs, computer-vision hardware and high-voltage experiments in Mauritius.">
+<title>Doorgesh — Websites, hardware &amp; sound</title>
+<meta name="description" content="Doorgesh (Zenn Prxd) builds websites for businesses in Mauritius, plus custom audio systems, sim rigs and award-winning physics projects.">
 <meta name="theme-color" content="#0d0614">
-<meta property="og:title" content="Doorgesh — Hardware, physics, sound &amp; code">
-<meta property="og:description" content="Doorgesh (Zenn Prxd) builds custom audio systems, sim rigs, computer-vision hardware and high-voltage experiments in Mauritius.">
+<meta property="og:title" content="Doorgesh — Websites, hardware &amp; sound">
+<meta property="og:description" content="Doorgesh (Zenn Prxd) builds websites for businesses in Mauritius, plus custom audio systems, sim rigs and award-winning physics projects.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/img/doorgesh-4.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -15,57 +15,91 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
+<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+<script src="js/main.js" defer></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"}}</script>
 </head>
-<body data-page="home" class="hold">
+<body data-page="home">
 <svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
 <a class="skip" href="#main">Skip to content</a>
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__half t"></div><div class="loader__half b"></div>
-  <div class="loader__core">
-    <div class="loader__sun"></div>
-    <div class="loader__name"><span>D</span><span>O</span><span>O</span><span>R</span><span>G</span><span>E</span><span>S</span><span>H</span></div>
-    <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
-  </div>
-</div>
-<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
-<header class="nav" id="nav">
+
+<div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
+<header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
     <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html" aria-current="page">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html" aria-current="page">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
     <a class="btn btn--sm nav__cta" href="contact.html">Let's talk</a>
     <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
   </div>
 </header>
 <div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html" aria-current="page"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
+  <nav aria-label="Menu"><a href="index.html" aria-current="page"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="web.html"><small>03</small>Web</a><a href="sound.html"><small>04</small>Sound</a><a href="about.html"><small>05</small>About</a><a href="contact.html"><small>06</small>Contact</a></nav>
   <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
 </div>
 <main id="main">
 <div class="scene-pin">
 <section class="scene" id="scene" aria-label="Doorgesh">
+  <canvas class="gl" id="gl" aria-hidden="true"></canvas>
   <div class="layer stars" aria-hidden="true"></div>
   <div class="layer sunglow" aria-hidden="true"></div>
   <div class="layer sun" aria-hidden="true"><div></div></div>
-  <div class="layer skyline" aria-hidden="true"></div>
-  <div class="layer ocean" aria-hidden="true"><canvas></canvas></div>
-  <div class="layer title"><h1 class="vice">Doorgesh</h1></div>
-  <div class="palm-l" aria-hidden="true"></div><div class="palm-r" aria-hidden="true"></div>
-  <p class="scene__kicker mono fade-up" style="--d:1.1s">Hardware engineer · Applied physics · Full-stack IT · Audio producer</p>
+  <div class="layer title"><h1 class="vice" id="heroTitle">Doorgesh</h1></div>
+  <p class="scene__kicker mono" data-intro>Hardware engineer · Applied physics · Full-stack IT · Audio producer</p>
   <div class="scene__copy">
     <div class="wrap">
-      <p class="fade-up" style="--d:1.3s">Mauritius-based builder, better known as Zenn Prxd. I solder it, code it, tune it and film it.</p>
-      <div class="scene__cta fade-up" style="--d:1.45s"><a class="btn" href="work.html">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--ghost" href="contact.html">Work with me</a></div>
+      <p data-intro>Web developer, hardware builder and producer from Mauritius, better known as Zenn Prxd. I build websites, amps and gadgets that people actually use.</p>
+      <div class="scene__cta" data-intro><a class="btn" href="work.html">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--ghost" href="contact.html">Work with me</a></div>
     </div>
   </div>
-  <span class="scroll-cue" aria-hidden="true"></span>
+  <span class="scroll-cue" aria-hidden="true" data-intro></span>
   <div class="shade" aria-hidden="true"></div>
+  <div id="introBlack" aria-hidden="true"></div>
+  <div class="flash" id="flash" aria-hidden="true"></div>
+  <div class="intro" id="introUI" aria-hidden="true">
+    <p class="intro__word"><span class="mk"><i>Now</i></span><span class="mk"><i>arriving</i></span><span class="mk"><i>Mauritius</i></span></p>
+    <div class="intro__meta"><span class="intro__num">000</span><span class="intro__bar"><i></i></span><button type="button" class="intro__skip">Skip intro →</button></div>
+  </div>
 </section>
 </div>
 
 <section class="statement">
   <div class="wrap">
-    <p data-hot="amps,code,physics,sound,mauritius">I'm a drummer, a coder and a hardware guy from Mauritius. I build amps, sim rigs and camera-powered gadgets, write the code that runs them, push physics past the textbook and make the sound and video around it all.</p>
+    <p data-hot="websites,amps,physics,sound,mauritius">I'm a coder, a hardware guy and a drummer from Mauritius. I design and ship websites for real businesses, build amps, sim rigs and camera-powered gadgets, push physics past the textbook and make the sound and video around it all.</p>
+  </div>
+</section>
+
+<section class="stack" aria-labelledby="shipped">
+  <div class="wrap">
+    <div class="stack__head">
+      <div><p class="eyebrow mono">Shipped &amp; live</p><h2 id="shipped" class="vice h2">Websites I've<br><span class="sun-text-x">built.</span></h2></div>
+      <p class="lede">Real sites for real businesses in Mauritius, designed, coded and launched through my studio WebLuxe.</p>
+    </div>
+    <article class="stack__card" style="--i:0">
+      <div class="stack__info"><span class="stack__no">01</span><p class="mono">Used-car dealership</p><h3>V8 Motors</h3><p>A used-car dealership site with an engine-start intro and a real 3D showroom you can turn the cars around in, plus stock pages and enquiries.</p>
+        <a class="btn btn--ghost" href="https://webluxe.github.io/V8-Motors-Website/" target="_blank" rel="noopener" data-cursor="Visit">Visit live site <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
+      <div class="shot"><div class="shot__bar"><i></i><i></i><i></i><span>webluxe.github.io/V8-Motors-Website</span></div><div class="shot__img" data-parallax><img src="assets/img/sites/v8motors.webp" alt="V8 Motors website" loading="lazy" decoding="async" width="1120" height="700"></div></div>
+    </article>
+    <article class="stack__card" style="--i:1">
+      <div class="stack__info"><span class="stack__no">02</span><p class="mono">Auto styling workshop</p><h3>SIGNTUNING</h3><p>Window tint, full wraps, chrome delete, stickers and number plates. A cinematic, dark site that sends quote requests straight to WhatsApp.</p>
+        <a class="btn btn--ghost" href="https://webluxe.github.io/SignTuning-Website/" target="_blank" rel="noopener" data-cursor="Visit">Visit live site <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
+      <div class="shot"><div class="shot__bar"><i></i><i></i><i></i><span>webluxe.github.io/SignTuning-Website</span></div><div class="shot__img" data-parallax><img src="assets/img/sites/signtuning.webp" alt="SIGNTUNING website" loading="lazy" decoding="async" width="1120" height="700"></div></div>
+    </article>
+    <article class="stack__card" style="--i:2">
+      <div class="stack__info"><span class="stack__no">03</span><p class="mono">Hotel, Belle Mare</p><h3>Eden Villa</h3><p>A booking website for a small family hotel: availability calendars, payments, staff logins and an admin panel to run it all.</p>
+        <a class="btn btn--ghost" href="https://webluxe.github.io/HighTier_EdenVilla/" target="_blank" rel="noopener" data-cursor="Visit">Visit live site <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
+      <div class="shot"><div class="shot__bar"><i></i><i></i><i></i><span>webluxe.github.io/HighTier_EdenVilla</span></div><div class="shot__img" data-parallax><img src="assets/img/sites/edenvilla.webp" alt="Eden Villa website" loading="lazy" decoding="async" width="1120" height="700"></div></div>
+    </article>
+    <article class="stack__card" style="--i:3">
+      <div class="stack__info"><span class="stack__no">04</span><p class="mono">Tools dealer</p><h3>AC Hardware</h3><p>A one-stop tools station and TOTAL tools dealer: searchable catalogue, aisles, a saved list and click-to-call.</p>
+        <a class="btn btn--ghost" href="https://webluxe.github.io/ACHardware-Website/" target="_blank" rel="noopener" data-cursor="Visit">Visit live site <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
+      <div class="shot"><div class="shot__bar"><i></i><i></i><i></i><span>webluxe.github.io/ACHardware-Website</span></div><div class="shot__img" data-parallax><img src="assets/img/sites/achardware.webp" alt="AC Hardware website" loading="lazy" decoding="async" width="1120" height="700"></div></div>
+    </article>
+    <div class="stack__more"><a class="btn" href="web.html">See all 8 websites <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
   </div>
 </section>
 
@@ -80,10 +114,10 @@
         <img src="assets/img/doorgesh-4.webp" alt="" style="filter:url(#duo-sunset);object-position:45% 30%" loading="lazy" decoding="async">
         <span class="poster__no mono">01</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
         <span class="poster__txt"><b>The Builder</b><span>Soldering, amps, sim rigs</span></span></a>
-      <a class="poster" href="work.html#code" data-cursor="Go">
+      <a class="poster" href="web.html" data-cursor="Go">
         <img src="assets/img/doorgesh-1.webp" alt="" style="filter:url(#duo-teal);object-position:52% 22%" loading="lazy" decoding="async">
         <span class="poster__no mono">02</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
-        <span class="poster__txt"><b>The Coder</b><span>ESP32, vision, web &amp; IT</span></span></a>
+        <span class="poster__txt"><b>The Developer</b><span>Websites, ESP32 &amp; IT</span></span></a>
       <a class="poster" href="work.html#physics" data-cursor="Go">
         <img src="assets/img/doorgesh-2.webp" alt="" style="filter:url(#duo-violet);object-position:30% 30%" loading="lazy" decoding="async">
         <span class="poster__no mono">03</span><span class="poster__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span>
@@ -101,7 +135,7 @@
     <dl>
       <div><dd class="sun-text"><span data-count="200">0</span>K+</dd><dt>YouTube views as Zenn Prxd</dt></div>
       <div><dd class="sun-text"><span data-count="1">0</span>K+</dd><dt>Subscribers</dt></div>
-      <div><dd class="sun-text"><span data-count="4">0</span></dd><dt>Microcontroller platforms: ESP32, ESP32-CAM, Uno, Nano</dt></div>
+      <div><dd class="sun-text"><span data-count="8">0</span>+</dd><dt>Live websites shipped for businesses and projects</dt></div>
       <div><dd class="sun-text">1st</dd><dt>Place, RGSC Science Quest 2026</dt></div>
     </dl>
   </div>
@@ -121,12 +155,12 @@
       <a class="pcard bg-iot" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M46 52h108l-14 84H60Z" class="fillg"/><path d="M100 52v84M38 52h124"/><rect x="80" y="14" width="40" height="24" rx="5"/><circle cx="100" cy="26" r="6"/><path d="M100 38v14"/></svg></div>
       <div class="pcard__body"><p class="pcard__tag mono">Computer vision</p><h3>AI sorting bin</h3><p>An ESP32-CAM bin that sees what you drop in and sorts it.</p></div></a>
       <a class="pcard bg-hv" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M30 40H170"/><circle cx="30" cy="40" r="3" class="fillg"/><circle cx="170" cy="40" r="3" class="fillg"/><rect x="30" y="104" width="140" height="10" rx="2" class="fillg"/><path d="M55 48v48M80 48v48M105 48v48M130 48v48M155 48v48" stroke-dasharray="3 7"/><path d="M100 30V6M100 6l-9 10M100 6l9 10"/><path d="M60 122v18M100 122v22M140 122v18"/></svg></div>
-      <div class="pcard__body"><p class="pcard__tag mono">Applied physics<em>1st place</em></p><h3>The Ionic Leap</h3><p>Air moved by electricity alone. No propeller, no motor.</p></div></a>
+      <div class="pcard__body"><p class="pcard__tag mono">Applied physics<em>1st place</em></p><h3>The Ionic Engine</h3><p>Air moved by electricity alone. No propeller, no motor.</p></div></a>
       <a class="pcard bg-led" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M14 92H186"/><circle cx="30" cy="92" r="8" class="fillg"/><circle cx="62" cy="92" r="8"/><circle cx="94" cy="92" r="8" class="fillg"/><circle cx="126" cy="92" r="8"/><circle cx="158" cy="92" r="8" class="fillg"/><path d="M110 58V20l34-8v36"/><circle cx="102" cy="58" r="8" class="fillg"/><circle cx="136" cy="48" r="8" class="fillg"/></svg></div>
       <div class="pcard__body"><p class="pcard__tag mono">Embedded</p><h3>Music-reactive ARGB</h3><p>Addressable LEDs that hit on the beat.</p></div></a>
       <a class="pcard bg-dsp" href="work.html" data-cursor="View"><div class="pcard__art"><svg viewBox="0 0 200 150"><path d="M12 75h18l8-30 10 60 10-46 10 32 10-50 10 64 10-40 10 22 8-12h16"/><circle cx="168" cy="75" r="20" class="fillg"/><path d="M163 65v20l15-10Z"/></svg></div>
       <div class="pcard__body"><p class="pcard__tag mono">Media</p><h3>DSP remasters</h3><p>Remasters and visualisers with 200K+ views on YouTube.</p></div></a>
-      <a class="end" href="work.html" data-cursor="All"><span class="vice h3 sun-text">See every build</span><span class="mono">8 projects · filters · details</span></a>
+      <a class="end" href="work.html" data-cursor="All"><span class="vice sun-text" style="font-size:clamp(2rem,4vw,3.4rem)">See every build</span><span class="mono">8 projects · filters · details</span></a>
     </div>
     <div class="hpin__bar" aria-hidden="true"><i></i></div>
   </div>
@@ -136,8 +170,8 @@
 
 <section class="cta">
   <div class="wrap">
-    <h2 class="vice h2 sun-text">Got a build<br>in mind?</h2>
-    <p class="lede">Hardware, audio, web or a business idea. Tell me what you want to make and I will tell you how I would build it.</p>
+    <h2 class="vice h2 sun-text">Got something<br>to build?</h2>
+    <p class="lede">A website for your business, a custom build, audio work or an idea you want to make real. Tell me about it.</p>
     <a class="btn" href="contact.html">Start a conversation <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
   </div>
 </section>
@@ -147,11 +181,11 @@
     <p class="foot__word vice sun-text">Doorgesh</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
   </div>
 </footer>
-<script src="js/main.js" defer></script>
+<script type="module" src="js/scene.js"></script>
 </body>
 </html>

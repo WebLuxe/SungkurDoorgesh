@@ -15,9 +15,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
+<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+<script src="js/main.js" defer></script>
+
 </head>
-<body data-page="contact" class="hold">
+<body data-page="contact">
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__half t"></div><div class="loader__half b"></div>
@@ -27,25 +34,25 @@
     <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
   </div>
 </div>
-<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
-<header class="nav" id="nav">
+<div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
+<header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
     <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
     <a class="btn btn--sm nav__cta" href="contact.html" aria-current="page">Let's talk</a>
     <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
   </div>
 </header>
 <div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html" aria-current="page"><small>05</small>Contact</a></nav>
+  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="web.html"><small>03</small>Web</a><a href="sound.html"><small>04</small>Sound</a><a href="about.html"><small>05</small>About</a><a href="contact.html" aria-current="page"><small>06</small>Contact</a></nav>
   <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
 </div>
 <main id="main">
 <section class="phead">
   <div class="phead__mini-sun" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="eyebrow mono"><b>05</b> Contact</p>
-    <h1 class="vice h1 sun-text" aria-label="Let&#x27;s build something"><span class="ln"><span style="--i:0">Let's build</span></span><span class="ln"><span style="--i:1">something</span></span></h1>
+    <p class="eyebrow mono"><b>06</b> Contact</p>
+    <h1 class="vice h1 sun-text" aria-label="Let&#x27;s build something">Let's build<br>something</h1>
     <p class="lede">A project, a collab or a business idea: send a message and I will get back to you.</p>
     
   </div>
@@ -63,7 +70,7 @@
     <form class="form" id="form" novalidate>
       <label><span class="mono">Name</span><input name="name" required autocomplete="name"></label>
       <label><span class="mono">Email</span><input name="email" type="email" required autocomplete="email" inputmode="email"></label>
-      <fieldset><legend class="mono">It's about</legend><div class="opts"><label><input type="radio" name="type" value="Hardware / electronics" checked><span>Hardware</span></label><label><input type="radio" name="type" value="Audio / media"><span>Audio</span></label><label><input type="radio" name="type" value="Web / IT"><span>Web &amp; IT</span></label><label><input type="radio" name="type" value="Wrapping / automotive"><span>Wraps</span></label><label><input type="radio" name="type" value="Business"><span>Business</span></label></div></fieldset>
+      <fieldset><legend class="mono">It's about</legend><div class="opts"><label><input type="radio" name="type" value="Hardware / electronics" checked><span>Hardware</span></label><label><input type="radio" name="type" value="Audio / media"><span>Audio</span></label><label><input type="radio" name="type" value="Web / IT"><span>Web &amp; IT</span></label><label><input type="radio" name="type" value="Wrapping / automotive"><span>Wraps</span></label><label><input type="radio" name="type" value="Business"><span>Business</span></label><label><input type="radio" name="type" value="Website"><span>Website</span></label></div></fieldset>
       <label><span class="mono">Message</span><textarea name="msg" rows="4" required></textarea></label>
       <button class="btn" type="submit">Send message <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
       <p class="form__note" id="note" role="status"></p>
@@ -76,11 +83,10 @@
     <p class="foot__word vice sun-text">Doorgesh</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
   </div>
 </footer>
-<script src="js/main.js" defer></script>
 </body>
 </html>

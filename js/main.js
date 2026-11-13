@@ -2,343 +2,261 @@
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const html = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const ss = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }, del(k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
-const PAGE_NAMES = { 'index.html': 'Home', '': 'Home', 'work.html': 'Work', 'sound.html': 'Sound', 'about.html': 'About', 'contact.html': 'Contact' };
+const gsap = window.gsap, ST = window.ScrollTrigger, Split = window.SplitText;
+const page = document.body.dataset.page;
+const PAGE_NAMES = { 'index.html': 'Home', '': 'Home', 'work.html': 'Work', 'web.html': 'Web', 'sound.html': 'Sound', 'about.html': 'About', 'contact.html': 'Contact' };
+if (gsap) gsap.registerPlugin(...[ST, Split].filter(Boolean));
 
-/* seeded random so the skyline and palms look the same every visit */
-let seed = 7;
-const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+let arrivedResolve; const arrived = new Promise(r => (arrivedResolve = r));
+let introResolve; const introDone = new Promise(r => (introResolve = r));
+const DG = window.DG = { arrived, introDone: () => introResolve(), lenis: null, shake: null };
+
+/* safety net: if anything fails to load, never leave the page hidden */
+setTimeout(() => { html.classList.remove('first', 'arriving'); arrivedResolve(); introResolve(); }, 9000);
+if (!gsap) { html.classList.remove('first', 'arriving'); $('#loader')?.remove(); arrivedResolve(); introResolve(); }
 
 /* =========================================================
-   1. ARRIVAL: intro loader (first visit) or sunset wipe (between pages)
+   SMOOTH SCROLL (desktop wheel; phones keep native touch scrolling)
    ========================================================= */
-const wipe = $('#wipe');
-const fromWipe = ss.get('wipe');
-let startIntro;
-const introReady = new Promise(r => (startIntro = r));
-function releaseHold() { document.body.classList.remove('hold'); startIntro(); }
+let lenis = null;
+if (gsap && ST && window.Lenis && !reduce) {
+  lenis = new window.Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: 1 });
+  DG.lenis = lenis;
+  lenis.on('scroll', ST.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); lenis.scrollTo(t, { offset: -80, duration: 1.4 });
+  });
+}
+const stopScroll = () => { lenis ? lenis.stop() : (document.body.style.overflow = 'hidden'); };
+const startScroll = () => { lenis ? lenis.start() : (document.body.style.overflow = ''); };
+DG.stopScroll = stopScroll; DG.startScroll = startScroll;
 
-if (reduce) { ss.set('seen', '1'); ss.del('wipe'); $('#loader')?.remove(); releaseHold(); }
-else if (fromWipe) {
-  ss.del('wipe');
-  $('#loader')?.remove();
-  wipe.querySelector('span').textContent = fromWipe;
-  wipe.classList.add('reveal');
-  setTimeout(releaseHold, 250);
-  wipe.addEventListener('animationend', e => { if (e.target === wipe) wipe.classList.remove('reveal'); });
-} else if (!ss.get('seen')) {
+/* =========================================================
+   ARRIVAL: page wipe (between pages), 2D loader (first visit, inner pages),
+   or the 3D intro (home, handled in scene.js)
+   ========================================================= */
+const wipe = $('#wipe'), bars = wipe ? $$('i', wipe) : [], wlabel = wipe ? $('span', wipe) : null;
+function label(t) {
+  wlabel.textContent = t;
+  return Split ? new Split(wlabel, { type: 'chars' }).chars : [wlabel];
+}
+if (gsap) {
+  if (html.classList.contains('arriving') && !reduce) {
+    const ch = label(ss.get('wipe') || ''); ss.del('wipe');
+    gsap.set(bars, { scaleY: 1, transformOrigin: '50% 0%' });
+    gsap.timeline({ onComplete: () => { html.classList.remove('arriving'); gsap.set(wipe, { clearProps: 'all' }); } })
+      .to(ch, { yPercent: -120, stagger: .03, duration: .45, ease: 'power3.in' }, .05)
+      .to(bars, { scaleY: 0, stagger: { each: .06, from: 'start' }, duration: .8, ease: 'expo.inOut' }, .2)
+      .call(arrivedResolve, null, .5);
+    if (page !== 'home') introResolve();
+  } else if (html.classList.contains('first') && page !== 'home' && !reduce) {
+    runLoader();
+  } else {
+    html.classList.remove('arriving');
+    $('#loader')?.remove();
+    arrivedResolve();
+    if (page !== 'home') { html.classList.remove('first'); introResolve(); }
+  }
   ss.set('seen', '1');
-  runLoader();
-} else { $('#loader')?.remove(); releaseHold(); }
+}
 
 function runLoader() {
-  const L = $('#loader'); if (!L) { releaseHold(); return; }
-  document.body.classList.add('loading');
-  const num = $('.loader__num', L), name = $('.loader__name', L);
-  $$('span', name).forEach((s, i) => (s.style.transitionDelay = (i * .05) + 's'));
-  requestAnimationFrame(() => requestAnimationFrame(() => name.classList.add('on')));
-  const t0 = performance.now(), MIN = 1900, MAX = 4500;
-  let loaded = false;
-  Promise.all([document.fonts ? document.fonts.ready : 0, new Promise(r => (document.readyState === 'complete' ? r() : addEventListener('load', r)))]).then(() => (loaded = true));
-  let shown = 0;
-  (function tick(now) {
-    const el = now - t0;
-    const done = loaded && el > MIN;
-    const target = done ? 100 : Math.min(90, el / MIN * 90);
-    shown += (target - shown) * (done ? .18 : .08);
-    if (el > MAX) shown = 100;
-    const v = Math.min(100, Math.round(shown + .4));
-    L.style.setProperty('--lp', v + '%');
-    num.textContent = String(v).padStart(3, '0');
-    if (v < 100) requestAnimationFrame(tick);
-    else setTimeout(() => {
-      L.classList.add('out');
-      document.body.classList.remove('loading');
-      setTimeout(releaseHold, 200);
-      setTimeout(() => L.remove(), 1300);
-    }, 250);
-  })(t0);
+  const L = $('#loader'); if (!L) { html.classList.remove('first'); arrivedResolve(); introResolve(); return; }
+  stopScroll();
+  const num = $('.loader__num', L), name = $$('.loader__name span', L), cnt = { v: 0 };
+  gsap.timeline({ onComplete: () => { L.remove(); html.classList.remove('first'); startScroll(); arrivedResolve(); introResolve(); } })
+    .to(cnt, { v: 100, duration: 1.5, ease: 'power2.inOut', onUpdate: () => { num.textContent = String(Math.round(cnt.v)).padStart(3, '0'); L.style.setProperty('--lp', cnt.v + '%'); } }, 0)
+    .fromTo(name, { yPercent: 120, rotate: 10, opacity: 0 }, { yPercent: 0, rotate: 0, opacity: 1, stagger: .05, duration: .8, ease: 'expo.out' }, .15)
+    .to('.loader__core', { scale: 1.25, opacity: 0, duration: .7, ease: 'expo.in' }, 1.7)
+    .to('.loader__half.t', { yPercent: -100, duration: 1, ease: 'expo.inOut' }, 1.9)
+    .to('.loader__half.b', { yPercent: 100, duration: 1, ease: 'expo.inOut' }, 1.9);
 }
 
-// leaving: cover with the wipe, then go
+// leaving: sunset panels sweep up, page name rises, then go
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href]');
-  if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank' || a.hasAttribute('download')) return;
+  if (!a || !gsap || reduce || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank' || a.hasAttribute('download')) return;
   const url = new URL(a.href, location.href);
-  if (url.origin !== location.origin || !/(\.html|\/)$/.test(url.pathname)) return;
-  if (url.pathname === location.pathname) return;
-  if (reduce) return;
+  if (url.origin !== location.origin || !/(\.html|\/)$/.test(url.pathname) || url.pathname === location.pathname) return;
   e.preventDefault();
   const name = PAGE_NAMES[url.pathname.split('/').pop()] || '';
-  wipe.querySelector('span').textContent = name;
-  wipe.classList.remove('reveal'); wipe.classList.add('cover');
   ss.set('wipe', name);
-  setTimeout(() => { location.href = url.href; }, 640);
+  const ch = label(name);
+  gsap.set(wipe, { visibility: 'visible' });
+  gsap.set(bars, { scaleY: 0, transformOrigin: '50% 100%' });
+  gsap.set(ch, { yPercent: 120 });
+  gsap.timeline()
+    .to(bars, { scaleY: 1, stagger: .055, duration: .62, ease: 'expo.inOut' })
+    .to(ch, { yPercent: 0, stagger: .03, duration: .5, ease: 'expo.out' }, .35)
+    .call(() => { location.href = url.href; }, null, .9);
 });
-addEventListener('pageshow', e => { if (e.persisted) { wipe.classList.remove('cover', 'reveal'); ss.del('wipe'); } });
+addEventListener('pageshow', e => { if (e.persisted && gsap) { gsap.set(bars, { scaleY: 0 }); gsap.set(wipe, { clearProps: 'all' }); html.classList.remove('arriving'); } });
 
 /* =========================================================
-   2. NAV
+   NAV
    ========================================================= */
 const nav = $('#nav'), menuBtn = $('#menuBtn'), sheet = $('#sheet');
-let lastY = scrollY, sheetOpen = false;
-function navScroll() {
-  const y = scrollY;
+let sheetOpen = false, lastY = 0;
+const onScroll = y => {
   nav.classList.toggle('solid', y > 40);
-  if (!sheetOpen && y > lastY + 2 && y > 400) nav.classList.add('away');
-  if (y < lastY - 2) nav.classList.remove('away');
+  if (!sheetOpen && y > lastY + 4 && y > 500) nav.classList.add('away');
+  if (y < lastY - 4) nav.classList.remove('away');
   lastY = y;
-}
-addEventListener('scroll', navScroll, { passive: true }); navScroll();
+};
+lenis ? lenis.on('scroll', ({ scroll }) => onScroll(scroll)) : addEventListener('scroll', () => onScroll(scrollY), { passive: true });
 function setSheet(open) {
   sheetOpen = open; menuBtn.setAttribute('aria-expanded', open);
-  if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); document.body.style.overflow = 'hidden'; nav.classList.remove('away'); }
-  else { sheet.classList.remove('open'); document.body.style.overflow = ''; setTimeout(() => { if (!sheetOpen) sheet.hidden = true; }, reduce ? 0 : 800); }
+  if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open'))); stopScroll(); nav.classList.remove('away'); }
+  else { sheet.classList.remove('open'); startScroll(); setTimeout(() => { if (!sheetOpen) sheet.hidden = true; }, 800); }
 }
 menuBtn.addEventListener('click', () => setSheet(!sheetOpen));
 sheet.addEventListener('click', e => { const a = e.target.closest('a'); if (a && a.getAttribute('aria-current') === 'page') { e.preventDefault(); setSheet(false); } });
 addEventListener('keydown', e => { if (e.key === 'Escape' && sheetOpen) { setSheet(false); menuBtn.focus(); } });
 
 /* =========================================================
-   3. SCROLL REVEALS + one shared scroll loop
+   SCROLL ANIMATIONS (GSAP + ScrollTrigger + SplitText)
    ========================================================= */
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0 });
-function reveal(sel, cls = 'rv', step = .08) {
-  $$(sel).forEach(el => {
-    if (reduce) { el.classList.add('in'); return; }
-    el.classList.add(cls);
-    const sibs = [...el.parentElement.children];
-    el.style.setProperty('--d', Math.min(sibs.indexOf(el), 5) * step + 's');
-    io.observe(el);
+const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]);
+const BLOCKS = '.eyebrow, .chips, .handles, .links li, .form, .kit__bar, .cta .btn, .filters, .hpin__head .btn, .posters__head .lede, .site__go, .deck, .stack__more';
+const CARDS = '.grid-work .pcard, .tool, .board, .also__grid article, .pad, .scope, .site__shot';
+
+Promise.all([fontsReady, arrived]).then(() => {
+  if (!gsap || !ST || reduce) { countAll(); return; }
+
+  // headings: letters flip up out of a mask
+  $$('.h2, .h3, .split-chars').forEach(el => {
+    if (el.closest('.scene')) return;
+    const sp = new Split(el, { type: 'lines,words,chars', mask: 'lines', charsClass: 'ch' });
+    el.classList.add('is-split'); $$('.sun-text, .sun-text-x', el).forEach(n => n.classList.add('is-split'));
+    gsap.from(sp.chars, { yPercent: 120, rotate: 12, transformOrigin: '0% 100%', duration: 1.1, ease: 'expo.out', stagger: .016, scrollTrigger: { trigger: el, start: 'top 88%' } });
   });
-}
-// footer word is split right away so it never flashes
-const fw = $('.foot__word');
-if (fw) { fw.setAttribute('aria-label', fw.textContent); fw.innerHTML = [...fw.textContent].map((c, i) => `<span aria-hidden="true" style="--i:${i}">${c}</span>`).join(''); }
-introReady.then(() => {
-  reveal('.eyebrow, .lede, .h2, .h3, .stats div, .tool, .board, .split p, .chips, .bio p, .handles, .also__grid article, .links, .form, .kit__bar, .cta .btn, .rail-head > *, .posters__head > *, .filters');
-  reveal('.grid-work .pcard, .scope, .pads', 'clip', .07);
-  if (fw) reduce ? fw.classList.add('in') : io.observe(fw);
+  // inner page titles slam in right after arrival
+  $$('.phead .h1').forEach(el => {
+    const sp = new Split(el, { type: 'chars', charsClass: 'ch' });
+    el.classList.add('is-split');
+    gsap.from(sp.chars, { yPercent: 130, rotate: 14, opacity: 0, scale: 1.4, duration: 1.2, ease: 'expo.out', stagger: .045, delay: .05 });
+  });
+  // paragraphs rise line by line
+  $$('.lede, .split p:not(.bignum):not(.mono), .bio > p:not(.lede):not(.eyebrow), .site__body p:not(.mono)').forEach(el => {
+    if (el.closest('.scene')) return;
+    const sp = new Split(el, { type: 'lines', mask: 'lines' });
+    gsap.from(sp.lines, { yPercent: 105, duration: 1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: el, start: 'top 92%' } });
+  });
+  // general blocks
+  if ($$(BLOCKS).length) gsap.set(BLOCKS, { opacity: 0, y: 50 });
+  if ($$(BLOCKS).length) ST.batch(BLOCKS, { start: 'top 94%', once: true, onEnter: b => gsap.to(b, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', stagger: .07, overwrite: true }) });
+  // cards fall into place in 3D
+  if ($$(CARDS).length) gsap.set(CARDS, { opacity: 0, y: 110, rotateX: -28, transformPerspective: 1000, transformOrigin: '50% 0%' });
+  if ($$(CARDS).length) ST.batch(CARDS, { start: 'top 94%', once: true, onEnter: b => gsap.to(b, { y: 0, rotateX: 0, opacity: 1, duration: 1.2, ease: 'expo.out', stagger: .08, overwrite: true }) });
+  // image parallax inside frames
+  $$('[data-parallax]').forEach(el => {
+    const img = $('img', el); if (!img) return;
+    gsap.fromTo(img, { yPercent: -7, scale: 1.16 }, { yPercent: 7, scale: 1.16, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+  // mini sun on inner pages sinks as you scroll
+  $$('.phead__mini-sun').forEach(s => gsap.to(s, { yPercent: 70, ease: 'none', scrollTrigger: { trigger: s.closest('section') || s, start: 'top top', end: 'bottom top', scrub: true } }));
+
+  // statement: words light up as you read down
+  const st = $('.statement p');
+  if (st) {
+    const sp = new Split(st, { type: 'words', wordsClass: 'wd' });
+    const hot = (st.dataset.hot || '').split(',');
+    sp.words.forEach(w => { if (hot.includes(w.textContent.replace(/[^\w-]/g, '').toLowerCase())) w.classList.add('hot'); });
+    gsap.fromTo(sp.words, { opacity: .12 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: st, start: 'top 82%', end: 'bottom 40%', scrub: true } });
+  }
+
+  // posters: fanned deck straightens out as it scrolls in
+  const posters = $$('.poster');
+  if (posters.length && innerWidth > 760) {
+    gsap.fromTo(posters, { y: i => 220 + i * 40, rotation: i => (i - 1.5) * 14, rotationY: i => (i - 1.5) * -20, scale: .82, opacity: 0, transformPerspective: 1200 },
+      { y: 0, rotation: 0, rotationY: 0, scale: 1, opacity: 1, ease: 'power3.out', stagger: .06, scrollTrigger: { trigger: '.poster-row', start: 'top 98%', end: 'top 35%', scrub: 1 } });
+  }
+
+  // shipped-websites stack: each card shrinks back as the next slides over it
+  const stack = $$('.stack__card');
+  stack.forEach((c, i) => {
+    const next = stack[i + 1]; if (!next) return;
+    gsap.to(c, { scale: .9, filter: 'brightness(.4)', ease: 'none', scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 18%', scrub: true } });
+  });
+
+  // featured builds: pinned, slide sideways, cards lean with scroll speed
+  const hpin = $('.hpin'), track = $('.hpin__track');
+  if (hpin && track) {
+    const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+    const leaners = $$('.pcard, .end', track);
+    const skew = gsap.quickTo(leaners, 'skewX', { duration: .5, ease: 'power3' });
+    gsap.to(track, {
+      x: () => -dist(), ease: 'none',
+      scrollTrigger: { trigger: hpin, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1,
+        onUpdate: s => { hpin.style.setProperty('--hp', s.progress.toFixed(4)); skew(clamp(s.getVelocity() / -350, -8, 8)); } }
+    });
+  }
+
+  // marquee: direction + speed follow your scroll
+  const mq = $('.marquee div');
+  if (mq) {
+    const loop = gsap.to(mq, { xPercent: -50, repeat: -1, duration: 22, ease: 'none' });
+    let dir = 1;
+    ST.create({ trigger: '.marquee', start: 'top bottom', end: 'bottom top', onUpdate: s => {
+      const v = s.getVelocity(); if (Math.abs(v) > 20) dir = v < 0 ? -1 : 1;
+      gsap.timeline({ overwrite: true }).to(loop, { timeScale: dir * (1 + Math.min(Math.abs(v) / 250, 8)), duration: .2 }).to(loop, { timeScale: dir, duration: 1.2, ease: 'power2.out' }, .3);
+    } });
+    gsap.fromTo('.marquee', { rotate: -5 }, { rotate: 2, ease: 'none', scrollTrigger: { trigger: '.marquee', start: 'top bottom', end: 'bottom top', scrub: true } });
+  }
+
+  // big footer name builds up letter by letter
+  $$('.foot__word').forEach(fw => {
+    const sp = new Split(fw, { type: 'chars', charsClass: 'ch' }); fw.classList.add('is-split');
+    gsap.from(sp.chars, { yPercent: 110, rotate: 10, opacity: 0, stagger: .04, ease: 'expo.out', scrollTrigger: { trigger: fw, start: 'top 98%', end: 'top 60%', scrub: 1 } });
+  });
+
+  // roadmap trace
+  const trace = $('#trace');
+  if (trace) {
+    gsap.fromTo(trace, { '--tp': 0 }, { '--tp': 1, ease: 'none', scrollTrigger: { trigger: trace, start: 'top 65%', end: 'bottom 65%', scrub: true } });
+    $$('li', trace).forEach(li => ST.create({ trigger: li, start: 'top 65%', end: 'max', onToggle: s => li.classList.toggle('on', s.isActive) }));
+  }
+
+  countAll();
+  ST.refresh();
+  addEventListener('load', () => ST.refresh());
 });
 
-const countIO = new IntersectionObserver(es => es.forEach(e => {
-  if (!e.isIntersecting) return; countIO.unobserve(e.target);
-  const el = e.target, end = +el.dataset.count, t0 = performance.now(), dur = 1800;
-  if (reduce) { el.textContent = end; return; }
-  const tick = t => { const p = Math.min((t - t0) / dur, 1), k = 1 - Math.pow(1 - p, 4); el.textContent = Math.round(end * k); if (p < 1) requestAnimationFrame(tick); };
-  requestAnimationFrame(tick);
-}), { threshold: .6 });
-$$('[data-count]').forEach(el => countIO.observe(el));
-
-const scrollFx = [];
-let sraf = 0, vel = 0, prevY = scrollY;
-function runFx() {
-  sraf = 0;
-  const y = scrollY; vel = vel * .8 + (y - prevY) * .2; prevY = y;
-  for (const f of scrollFx) f(y, vel);
-  if (Math.abs(vel) > .3) sraf = requestAnimationFrame(runFx);
+function countAll() {
+  $$('[data-count]').forEach(el => {
+    const end = +el.dataset.count;
+    if (!gsap || !ST || reduce) { el.textContent = end; return; }
+    const o = { v: 0 };
+    ST.create({ trigger: el, start: 'top 92%', once: true, onEnter: () => gsap.to(o, { v: end, duration: 2, ease: 'expo.out', onUpdate: () => (el.textContent = Math.round(o.v)) }) });
+  });
 }
-const kick = () => { if (!sraf) sraf = requestAnimationFrame(runFx); };
-addEventListener('scroll', kick, { passive: true });
-addEventListener('resize', kick);
 
 /* =========================================================
-   4. HOME: sunset scene
+   TILT + spotlight under the mouse
    ========================================================= */
-const scene = $('#scene');
-if (scene) {
-  const stars = $('.stars', scene);
-  [0, 1].forEach(() => {
-    const i = document.createElement('i'), sh = [];
-    for (let n = 0; n < 70; n++) sh.push(`${(rnd() * 100).toFixed(2)}vw ${(rnd() * 60).toFixed(2)}svh 0 ${rnd() < .15 ? 1 : 0}px rgba(255,${200 + (rnd() * 55 | 0)},${220 + (rnd() * 35 | 0)},${(.35 + rnd() * .6).toFixed(2)})`);
-    i.style.boxShadow = sh.join(','); stars.append(i);
+if (fine && !reduce && gsap) $$('.poster, .stack__card, .site__shot').forEach(p => {
+  const rx = gsap.quickTo(p, 'rotationX', { duration: .6, ease: 'power3' }), ry = gsap.quickTo(p, 'rotationY', { duration: .6, ease: 'power3' });
+  gsap.set(p, { transformPerspective: 1100 });
+  const k = p.classList.contains('poster') ? 1 : .3;
+  p.addEventListener('pointermove', e => {
+    const r = p.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    ry((x - .5) * 14 * k); rx((.5 - y) * 10 * k);
+    p.style.setProperty('--mx', (x * 100).toFixed(1) + '%'); p.style.setProperty('--my', (y * 100).toFixed(1) + '%');
   });
-
-  const sky = $('.skyline', scene);
-  function buildSkyline() {
-    seed = 21;
-    const W = Math.max(1, sky.clientWidth), H = Math.max(1, sky.clientHeight);
-    let x = 0, out = '', win = '';
-    while (x < W) {
-      const bw = 18 + rnd() * 54, mid = Math.abs(x / W - .5) < .22;
-      const bh = H * (mid ? .25 + rnd() * .45 : .3 + rnd() * .7);
-      const y = H - bh;
-      out += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}"/>`;
-      if (rnd() < .18) out += `<rect x="${(x + bw / 2 - 1).toFixed(1)}" y="${(y - 14).toFixed(1)}" width="2" height="14"/>`;
-      for (let wy = y + 6; wy < H - 6; wy += 7) for (let wx = x + 4; wx < x + bw - 5; wx += 6) {
-        if (rnd() < .13) win += `<rect x="${wx.toFixed(1)}" y="${wy.toFixed(1)}" width="2.4" height="3" fill="${rnd() < .6 ? '#ffd36e' : '#ff6fb0'}" opacity="${(.5 + rnd() * .5).toFixed(2)}"/>`;
-      }
-      x += bw + (rnd() < .3 ? 2 + rnd() * 10 : 0);
-    }
-    sky.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><g fill="#2a0e3c">${out}</g><g>${win}</g></svg>`;
-  }
-
-  // palm trees drawn from code: curved trunk + drooping, serrated fronds
-  function palm(cx, by, h, lean, s) {
-    const L1 = [], R1 = [], top = { x: cx + lean, y: by - h };
-    for (let i = 0; i <= 24; i++) {
-      const t = i / 24, mx = cx + lean * .15, my = by - h * .5;
-      const x = (1 - t) * (1 - t) * cx + 2 * (1 - t) * t * mx + t * t * top.x;
-      const y = (1 - t) * (1 - t) * by + 2 * (1 - t) * t * my + t * t * top.y;
-      const w = (17 - 9 * t) * s * (i % 3 === 0 ? 1.08 : 1);
-      L1.push([x - w / 2, y]); R1.unshift([x + w / 2, y]);
-    }
-    let d = 'M' + L1.concat(R1).map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L') + 'Z';
-    [-172, -150, -128, -104, -80, -55, -32, -10, -160, -20].forEach((a0, k) => {
-      const a = (a0 + (rnd() - .5) * 12) * Math.PI / 180, L = h * (.36 + rnd() * .14) * (k > 7 ? .7 : 1);
-      const dx = Math.cos(a), dy = Math.sin(a), g = .9 + rnd() * .5;
-      const left = [], right = [], N = 16;
-      for (let i = 0; i <= N; i++) {
-        const t = i / N;
-        const x = top.x + dx * L * t, y = top.y + dy * L * t + g * L * t * t * .75;
-        const tx = dx, ty = dy + 2 * g * t * .75, tl = Math.hypot(tx, ty) || 1;
-        const nx = -ty / tl, ny = tx / tl;
-        const w = 13 * s * Math.sin(Math.PI * Math.min(1, t * 1.1)) * (i % 2 ? 1 : .35) + 1.2;
-        left.push([x + nx * w, y + ny * w + (i % 2 ? 6 * s * t : 0)]);
-        right.unshift([x - nx * w, y - ny * w + (i % 2 ? 6 * s * t : 0)]);
-      }
-      d += 'M' + left.concat(right).map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L') + 'Z';
-    });
-    return d;
-  }
-  function buildPalms() {
-    const mk = (flip, sd) => {
-      seed = sd;
-      const big = palm(170, 1000, 860, 70, 1.25), small = palm(40, 1000, 560, 34, .85);
-      return `<svg viewBox="0 -120 600 1120" preserveAspectRatio="xMinYMax meet" aria-hidden="true"${flip ? ' style="transform:scaleX(-1)"' : ''}><g fill="#12051c"><path class="palm" d="${big}"/><path class="palm b" d="${small}"/></g></svg>`;
-    };
-    $('.palm-l', scene).innerHTML = mk(false, 99);
-    $('.palm-r', scene).innerHTML = mk(true, 314);
-  }
-
-  // ocean: sun reflection broken up by little waves, plus swell lines
-  const oc = $('.ocean canvas', scene), octx = oc.getContext('2d');
-  let OW = 1, OH = 1, ot = 0, oraf = 0, ovis = true;
-  function sizeOcean() { const d = Math.min(devicePixelRatio || 1, 1.5); OW = oc.clientWidth || 1; OH = oc.clientHeight || 1; oc.width = OW * d | 0; oc.height = OH * d | 0; octx.setTransform(d, 0, 0, d, 0, 0); }
-  function drawOcean() {
-    ot += 1 / 60;
-    const g = octx.createLinearGradient(0, 0, 0, OH);
-    g.addColorStop(0, '#5a1a6a'); g.addColorStop(.25, '#2c0d40'); g.addColorStop(1, '#0d0614');
-    octx.fillStyle = g; octx.fillRect(0, 0, OW, OH);
-    const cx = OW / 2, sw = Math.min(OW * .64, 620) * .5;
-    for (let y = 2; y < OH; y += 3) {
-      const k = y / OH, persp = Math.pow(k, .7);
-      const w = sw * (1 - k * .55) * (.55 + .45 * Math.sin(ot * 1.6 + y * .21) * Math.sin(ot * .7 + y * .05));
-      if (w <= 2) continue;
-      const off = Math.sin(ot * 1.1 + y * .09) * (6 + 14 * k);
-      const gg = 211 - 170 * persp | 0, b = 110 + 28 * persp | 0;
-      octx.fillStyle = `rgba(255,${gg},${b},${(.75 * (1 - k * .85)).toFixed(3)})`;
-      octx.fillRect(cx - w + off, y, w * 2, 1.4 + k * 1.2);
-    }
-    octx.strokeStyle = 'rgba(255,140,200,.08)'; octx.lineWidth = 1;
-    for (let i = 0; i < 14; i++) {
-      const k = ((i / 14) + ot * .02) % 1, y = Math.pow(k, 1.8) * OH;
-      octx.beginPath(); octx.moveTo(0, y); octx.lineTo(OW, y); octx.stroke();
-    }
-    oraf = ovis && !reduce && !document.hidden ? requestAnimationFrame(drawOcean) : 0;
-  }
-  const startOcean = () => { if (!oraf && ovis && !document.hidden && !reduce) oraf = requestAnimationFrame(drawOcean); };
-  new IntersectionObserver(([e]) => { ovis = e.isIntersecting; startOcean(); }).observe(scene);
-  document.addEventListener('visibilitychange', startOcean);
-
-  const h1 = $('.title h1', scene);
-  h1.setAttribute('aria-label', h1.textContent.trim());
-  h1.innerHTML = [...h1.textContent.trim()].map((c, i) => `<span aria-hidden="true" style="--i:${i}">${c}</span>`).join('');
-
-  let lw = 0;
-  function layoutScene() {
-    sizeOcean();
-    if (Math.abs(innerWidth - lw) < 2) return;
-    lw = innerWidth; buildSkyline(); buildPalms();
-    if (reduce) drawOcean();
-  }
-  layoutScene();
-  new ResizeObserver(layoutScene).observe(scene);
-  startOcean();
-
-  let tx = 0, ty = 0, px = 0, py = 0, praf = 0;
-  const pl = () => { px += (tx - px) * .06; py += (ty - py) * .06; scene.style.setProperty('--px', px.toFixed(3)); scene.style.setProperty('--py', py.toFixed(3)); praf = Math.abs(tx - px) + Math.abs(ty - py) > .002 ? requestAnimationFrame(pl) : 0; };
-  if (fine && !reduce) addEventListener('pointermove', e => { tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5; if (!praf) praf = requestAnimationFrame(pl); }, { passive: true });
-
-  // fly-through while the scene is pinned
-  const pin = $('.scene-pin');
-  scrollFx.push(() => {
-    const r = pin.getBoundingClientRect(), span = Math.max(1, r.height - innerHeight);
-    scene.style.setProperty('--p', clamp(-r.top / span, 0, 1).toFixed(4));
-  });
-}
-
-/* statement: words light up as you read down */
-const stmt = $('.statement p');
-if (stmt) {
-  const text = stmt.textContent.trim();
-  const hot = (stmt.dataset.hot || '').split(',').map(s => s.trim().toLowerCase());
-  stmt.setAttribute('aria-label', text);
-  stmt.innerHTML = text.split(/\s+/).map(w => `<span class="wd${hot.includes(w.replace(/[^\w-]/g, '').toLowerCase()) ? ' hot' : ''}" aria-hidden="true">${w}</span>`).join(' ');
-  const wds = $$('.wd', stmt);
-  scrollFx.push(() => {
-    const r = stmt.getBoundingClientRect();
-    const p = reduce ? 1 : clamp((innerHeight * .85 - r.top) / (r.height + innerHeight * .35), 0, 1);
-    const n = Math.round(p * wds.length);
-    wds.forEach((w, i) => w.classList.toggle('lit', i < n));
-  });
-}
-
-/* posters: fan in, then tilt with the mouse */
-const prow = $('.poster-row');
-if (prow) {
-  $$('.poster', prow).forEach((p, i) => p.style.setProperty('--n', i));
-  if (!reduce && innerWidth > 760) {
-    prow.classList.add('fan');
-    introReady.then(() => io.observe(prow));
-    prow.addEventListener('transitionend', e => { if (e.propertyName === 'transform' && e.target.classList.contains('poster')) e.target.classList.add('settled'); });
-  }
-  if (fine && !reduce) $$('.poster', prow).forEach(p => {
-    p.addEventListener('pointermove', e => {
-      const r = p.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-      p.style.setProperty('--ry', ((x - .5) * 12).toFixed(2) + 'deg'); p.style.setProperty('--rx', ((.5 - y) * 10).toFixed(2) + 'deg');
-      p.style.setProperty('--mx', (x * 100).toFixed(1) + '%'); p.style.setProperty('--my', (y * 100).toFixed(1) + '%');
-    });
-    p.addEventListener('pointerleave', () => { p.style.setProperty('--rx', '0deg'); p.style.setProperty('--ry', '0deg'); });
-  });
-}
-
-/* horizontal pinned rail: scrolling down slides the builds sideways */
-const hpin = $('.hpin');
-if (hpin && !reduce) {
-  const track = $('.hpin__track', hpin);
-  let dist = 0;
-  const size = () => { dist = Math.max(0, track.scrollWidth - innerWidth); hpin.style.height = (dist + innerHeight) + 'px'; kick(); };
-  size(); addEventListener('resize', size); document.fonts?.ready.then(size); addEventListener('load', size);
-  scrollFx.push(() => {
-    const r = hpin.getBoundingClientRect();
-    const p = dist ? clamp(-r.top / dist, 0, 1) : 0;
-    track.style.transform = `translate3d(${(-p * dist).toFixed(1)}px,0,0)`;
-    hpin.style.setProperty('--hp', p.toFixed(4));
-  });
-}
-
-/* marquee reacts to scroll speed and direction */
-const mq = $('.marquee div');
-if (mq && !reduce) {
-  mq.style.animation = 'none';
-  let x = 0, dir = 1, mraf = 0, w = 0, vis = false;
-  const loop = () => {
-    if (!w) w = mq.scrollWidth / 2;
-    if (Math.abs(vel) > 1) dir = vel > 0 ? 1 : -1;
-    x -= (1.1 + Math.min(Math.abs(vel) * .5, 22)) * dir;
-    if (x < -w) x += w; if (x > 0) x -= w;
-    mq.style.transform = `translate3d(${x.toFixed(1)}px,0,0)`;
-    mraf = vis ? requestAnimationFrame(loop) : 0;
-  };
-  new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis && !mraf) mraf = requestAnimationFrame(loop); }).observe(mq);
-}
+  p.addEventListener('pointerleave', () => { rx(0); ry(0); });
+});
 
 /* =========================================================
-   5. WORK: filters (with FLIP animation) + detail drawer
+   WORK: filters (FLIP) + detail drawer
    ========================================================= */
 const grid = $('.grid-work');
 if (grid) {
@@ -346,18 +264,19 @@ if (grid) {
   function filter(cat) {
     const first = new Map(cards.map(c => [c, c.getBoundingClientRect()]));
     btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.f === cat));
-    cards.forEach(c => { c.hidden = !(cat === 'all' || c.dataset.cat.split(' ').includes(cat)); c.classList.add('in'); });
-    if (reduce) return;
+    cards.forEach(c => { c.hidden = !(cat === 'all' || c.dataset.cat.split(' ').includes(cat)); if (gsap) gsap.set(c, { opacity: 1, y: 0, rotateX: 0 }); });
+    if (reduce) { ST && ST.refresh(); return; }
     cards.forEach(c => {
       if (c.hidden) return;
       const a = first.get(c), b = c.getBoundingClientRect();
-      if (!a.width) { c.animate([{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.2,.7,.1,1)' }); return; }
-      c.animate([{ transform: `translate(${a.left - b.left}px,${a.top - b.top}px)` }, { transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.2,.7,.1,1)' });
+      if (!a.width) { c.animate([{ opacity: 0, transform: 'scale(.85) rotate(-3deg)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.2,.7,.1,1)' }); return; }
+      c.animate([{ transform: `translate(${a.left - b.left}px,${a.top - b.top}px)` }, { transform: 'none' }], { duration: 800, easing: 'cubic-bezier(.2,.7,.1,1)' });
     });
+    ST && setTimeout(() => ST.refresh(), 820);
   }
   btns.forEach(b => b.addEventListener('click', () => { filter(b.dataset.f); history.replaceState(null, '', b.dataset.f === 'all' ? location.pathname : '#' + b.dataset.f); }));
   const h = location.hash.slice(1);
-  if (h && btns.some(b => b.dataset.f === h)) filter(h);
+  if (h && btns.some(b => b.dataset.f === h)) arrived.then(() => setTimeout(() => filter(h), 400));
 
   const dlg = $('#drawer');
   cards.forEach(c => c.addEventListener('click', () => {
@@ -369,7 +288,8 @@ if (grid) {
     $('.drawer__text', dlg).innerHTML = $('template', c).innerHTML;
     $('.drawer__uses', dlg).innerHTML = (c.dataset.uses || '').split('|').filter(Boolean).map(u => `<li>${u}</li>`).join('');
     $('.drawer__usesWrap', dlg).hidden = !c.dataset.uses;
-    dlg.showModal(); dlg.scrollTop = 0; document.body.style.overflow = 'hidden';
+    dlg.showModal(); dlg.scrollTop = 0; stopScroll();
+    if (gsap && !reduce) gsap.from($$('.drawer__body > *', dlg), { y: 40, opacity: 0, stagger: .06, duration: .9, ease: 'expo.out', delay: .15 });
   }));
   const close = () => {
     if (!dlg.open) return;
@@ -377,14 +297,14 @@ if (grid) {
     dlg.classList.add('closing');
     setTimeout(() => { dlg.classList.remove('closing'); dlg.close(); }, 380);
   };
-  dlg.addEventListener('close', () => { document.body.style.overflow = ''; });
+  dlg.addEventListener('close', startScroll);
   $('.drawer__close', dlg).addEventListener('click', close);
   dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
   dlg.addEventListener('cancel', e => { e.preventDefault(); close(); });
 }
 
 /* =========================================================
-   6. SOUND: playable kit + live oscilloscope
+   SOUND: playable kit + live oscilloscope
    ========================================================= */
 const kit = $('#kit');
 if (kit) {
@@ -415,7 +335,11 @@ if (kit) {
   };
   const pads = $$('.pad', kit), byKey = {}, byV = {};
   pads.forEach(p => { byKey[p.dataset.key] = p; byV[p.dataset.v] = p; });
-  const flash = p => { p.classList.remove('hit'); void p.offsetWidth; p.classList.add('hit'); clearTimeout(p._t); p._t = setTimeout(() => p.classList.remove('hit'), 110); };
+  const pulse = $('.kit-pulse');
+  const flash = p => {
+    p.classList.remove('hit'); void p.offsetWidth; p.classList.add('hit'); clearTimeout(p._t); p._t = setTimeout(() => p.classList.remove('hit'), 110);
+    if (pulse && gsap && !reduce && (p.dataset.v === 'kick' || p.dataset.v === 'bass')) gsap.fromTo(pulse, { opacity: .55, scale: .96 }, { opacity: 0, scale: 1.04, duration: .5, ease: 'power2.out', overwrite: true });
+  };
   function hit(p) { audio(); V[p.dataset.v](ac.currentTime + .005); flash(p); }
   pads.forEach(p => {
     p.addEventListener('pointerdown', e => { e.preventDefault(); hit(p); });
@@ -471,7 +395,7 @@ if (kit) {
 }
 
 /* =========================================================
-   7. ABOUT: photo deck you can throw + roadmap trace
+   ABOUT: photo deck you can throw
    ========================================================= */
 const deckWrap = $('#deckCards');
 if (deckWrap) {
@@ -524,18 +448,9 @@ if (deckWrap) {
   addEventListener('pointerup', end); addEventListener('pointercancel', end);
   layout();
 }
-const trace = $('#trace');
-if (trace) {
-  const items = $$('li', trace);
-  scrollFx.push(() => {
-    const r = trace.getBoundingClientRect(), line = innerHeight * .65;
-    trace.style.setProperty('--tp', clamp((line - r.top) / r.height, 0, 1).toFixed(3));
-    items.forEach(li => li.classList.toggle('on', li.getBoundingClientRect().top < line));
-  });
-}
 
 /* =========================================================
-   8. CONTACT form (opens the visitor's mail app)
+   CONTACT form (opens the visitor's mail app)
    ========================================================= */
 const form = $('#form');
 if (form) {
@@ -556,15 +471,14 @@ if (form) {
 }
 
 /* =========================================================
-   9. CURSOR + magnetic buttons (mouse only)
+   CURSOR + magnetic buttons (mouse only)
    ========================================================= */
-if (fine && !reduce) {
+if (fine && !reduce && gsap) {
   const cur = document.createElement('div'); cur.className = 'cursor hide'; cur.setAttribute('aria-hidden', 'true'); cur.innerHTML = '<i></i><b></b>'; document.body.append(cur);
   const lab = cur.querySelector('b');
-  let mx = -100, my = -100, cx = -100, cy = -100, craf = 0;
-  const loop = () => { cx += (mx - cx) * .2; cy += (my - cy) * .2; cur.style.transform = `translate3d(${cx}px,${cy}px,0)`; craf = Math.abs(mx - cx) + Math.abs(my - cy) > .3 ? requestAnimationFrame(loop) : 0; };
-  addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; cur.classList.remove('hide'); if (!craf) craf = requestAnimationFrame(loop); }, { passive: true });
-  document.documentElement.addEventListener('pointerleave', () => cur.classList.add('hide'));
+  const xTo = gsap.quickTo(cur, 'x', { duration: .45, ease: 'power3' }), yTo = gsap.quickTo(cur, 'y', { duration: .45, ease: 'power3' });
+  addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); cur.classList.remove('hide'); }, { passive: true });
+  html.addEventListener('pointerleave', () => cur.classList.add('hide'));
   addEventListener('pointerdown', () => cur.classList.add('down')); addEventListener('pointerup', () => cur.classList.remove('down'));
   document.addEventListener('pointerover', e => {
     const t = e.target.closest('[data-cursor], a, button, .card, .pad');
@@ -572,11 +486,9 @@ if (fine && !reduce) {
     lab.textContent = t ? (t.dataset.cursor || '') : '';
   });
   $$('.btn, .rbtn').forEach(b => {
-    b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px, ${(e.clientY - r.top - r.height / 2) * .3}px)`; });
-    b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+    const mx = gsap.quickTo(b, 'x', { duration: .6, ease: 'elastic.out(1,.4)' }), my = gsap.quickTo(b, 'y', { duration: .6, ease: 'elastic.out(1,.4)' });
+    b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * .25); my((e.clientY - r.top - r.height / 2) * .35); });
+    b.addEventListener('pointerleave', () => { mx(0); my(0); });
   });
 }
-
-introReady.then(kick);
-kick();
 })();

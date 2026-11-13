@@ -15,9 +15,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
+<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+<script src="js/main.js" defer></script>
+
 </head>
-<body data-page="about" class="hold">
+<body data-page="about">
 <svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
@@ -28,28 +35,28 @@
     <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
   </div>
 </div>
-<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
-<header class="nav" id="nav">
+<div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
+<header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
     <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html" aria-current="page">About</a></nav>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html" aria-current="page">About</a></nav>
     <a class="btn btn--sm nav__cta" href="contact.html">Let's talk</a>
     <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
   </div>
 </header>
 <div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html"><small>03</small>Sound</a><a href="about.html" aria-current="page"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
+  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="web.html"><small>03</small>Web</a><a href="sound.html"><small>04</small>Sound</a><a href="about.html" aria-current="page"><small>05</small>About</a><a href="contact.html"><small>06</small>Contact</a></nav>
   <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
 </div>
 <main id="main">
 <section class="phead">
   <div class="wrap about-hero">
     <div class="bio">
-      <p class="eyebrow mono"><b>04</b> About</p>
-      <h1 class="vice h1 sun-text" aria-label="Hi, I'm Doorgesh"><span class="ln"><span style="--i:0">Hi, I'm</span></span><span class="ln"><span style="--i:1">Doorgesh</span></span></h1>
+      <p class="eyebrow mono"><b>05</b> About</p>
+      <h1 class="vice h1 sun-text" aria-label="Hi, I'm Doorgesh">Hi, I'm<br>Doorgesh</h1>
       <p class="lede">Better known online as Zenn Prxd. I build custom audio systems, sim rigs, computer-vision hardware and high-voltage experiments, then write the code and make the content around them.</p>
       <p>Drummer and leader of a school band, first-place winner at RGSC Science Quest 2026, and always in the middle of a new build.</p>
-      <p>I also run <a class="ulink" href="https://webluxe.github.io/WebLuxe/" target="_blank" rel="noopener">WebLuxe</a>, a web design studio in Mauritius.</p>
+      <p>I run <a class="ulink" href="https://webluxe.github.io/WebLuxe/" target="_blank" rel="noopener">WebLuxe</a>, a web design studio in Mauritius, and have shipped sites for car dealers, a hotel, a tools shop, an auto-styling workshop and an NGO.</p>
       <ul class="handles"><li><span class="mono">YouTube</span>Zenn Prxd</li><li><span class="mono">TikTok</span>@r0shibhadain</li><li><span class="mono">Based in</span>Mauritius</li></ul>
     </div>
     <div class="deck">
@@ -67,7 +74,7 @@
   <div class="wrap">
     <p class="eyebrow mono">Roadmap</p>
     <h2 id="rm" class="vice h2">Where it's <span class="sun-text-x">heading.</span></h2>
-    <ol class="trace" id="trace"><li><span class="mono">Now</span><h3>Push the high-voltage research further</h3><p>Build on the award project and go deeper into electrohydrodynamics and high-voltage systems.</p></li><li><span class="mono">Next</span><h3>Custom boards, smarter vision</h3><p>Design custom PCB layouts and grow the ESP32-CAM vision work into real products.</p></li><li><span class="mono">Then</span><h3>The Corolla EE111 build</h3><p>Turn the Toyota engine study into hands-on performance tuning.</p></li><li><span class="mono">Later</span><h3>Electronics &amp; engineering</h3><p>Study and build toward a career in electronics and applied physics.</p></li><li><span class="mono">The goal</span><h3>A tech company that ships</h3><p>Turn the hardware, audio and IT skills into a business that makes real products.</p></li></ol>
+    <ol class="trace" id="trace"><li><span class="mono">Now</span><h3>Push the high-voltage research further</h3><p>Build on The Ionic Engine and go deeper into electrohydrodynamics and high-voltage systems.</p></li><li><span class="mono">Next</span><h3>Custom boards, smarter vision</h3><p>Design custom PCB layouts and grow the ESP32-CAM vision work into real products.</p></li><li><span class="mono">Then</span><h3>The Corolla EE111 build</h3><p>Turn the Toyota engine study into hands-on performance tuning.</p></li><li><span class="mono">Later</span><h3>Electronics &amp; engineering</h3><p>Study and build toward a career in electronics and applied physics.</p></li><li><span class="mono">The goal</span><h3>A tech company that ships</h3><p>Turn the hardware, audio and IT skills into a business that makes real products.</p></li></ol>
   </div>
 </section>
 <section class="also" aria-labelledby="al">
@@ -94,11 +101,10 @@
     <p class="foot__word vice sun-text">Doorgesh</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
   </div>
 </footer>
-<script src="js/main.js" defer></script>
 </body>
 </html>

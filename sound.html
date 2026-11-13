@@ -15,9 +15,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<noscript><style>body.hold *{animation-play-state:running!important}.loader{display:none}</style></noscript>
+<script>(function(){var h=document.documentElement;try{if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else if(!sessionStorage.getItem('seen'))h.classList.add('first')}catch(e){}})()</script>
+<noscript><style>.loader{display:none}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+<script src="js/main.js" defer></script>
+
 </head>
-<body data-page="sound" class="hold">
+<body data-page="sound">
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__half t"></div><div class="loader__half b"></div>
@@ -27,29 +34,30 @@
     <div class="loader__row"><span class="mono">Mauritius</span><span class="loader__bar"><i></i></span><span class="loader__num">000</span></div>
   </div>
 </div>
-<div class="wipe" id="wipe" aria-hidden="true"><span></span></div>
-<header class="nav" id="nav">
+<div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
+<header class="nav" id="nav" data-intro>
   <div class="wrap nav__bar">
     <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html" aria-current="page">Sound</a><a href="about.html">About</a></nav>
+    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html" aria-current="page">Sound</a><a href="about.html">About</a></nav>
     <a class="btn btn--sm nav__cta" href="contact.html">Let's talk</a>
     <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
   </div>
 </header>
 <div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="sound.html" aria-current="page"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
+  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Work</a><a href="web.html"><small>03</small>Web</a><a href="sound.html" aria-current="page"><small>04</small>Sound</a><a href="about.html"><small>05</small>About</a><a href="contact.html"><small>06</small>Contact</a></nav>
   <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
 </div>
 <main id="main">
 <section class="phead">
   <div class="phead__mini-sun" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="eyebrow mono"><b>03</b> Sound</p>
-    <h1 class="vice h1 sun-text" aria-label="Sound check"><span class="ln"><span style="--i:0">Sound check</span></span></h1>
+    <p class="eyebrow mono"><b>04</b> Sound</p>
+    <h1 class="vice h1 sun-text" aria-label="Sound check">Sound check</h1>
     <p class="lede">Drummer, band leader and the producer behind <strong>Zenn Prxd</strong>. Go on, hit something. Every sound is made live in your browser.</p>
     
   </div>
 </section>
+<div class="kit-pulse" aria-hidden="true"></div>
 <section aria-label="Drum kit">
   <div class="wrap kit" id="kit">
     <div class="pads"><button type="button" class="pad" data-v="kick" data-key="a" data-cursor="Hit"><b>Kick</b><span class="mono">Key A</span></button><button type="button" class="pad" data-v="snare" data-key="s" data-cursor="Hit"><b>Snare</b><span class="mono">Key S</span></button><button type="button" class="pad" data-v="hat" data-key="d" data-cursor="Hit"><b>Hi-hat</b><span class="mono">Key D</span></button><button type="button" class="pad" data-v="clap" data-key="f" data-cursor="Hit"><b>Clap</b><span class="mono">Key F</span></button><button type="button" class="pad" data-v="bass" data-key="g" data-cursor="Hit"><b>808</b><span class="mono">Key G</span></button><button type="button" class="pad" data-v="zap" data-key="h" data-cursor="Hit"><b>Zap</b><span class="mono">Key H</span></button></div>
@@ -95,11 +103,10 @@
     <p class="foot__word vice sun-text">Doorgesh</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Work</a><a href="web.html">Web</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
       <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
     </div>
   </div>
 </footer>
-<script src="js/main.js" defer></script>
 </body>
 </html>
