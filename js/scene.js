@@ -270,7 +270,10 @@ fontsReady.then(() => {
     const filmEl = document.getElementById('film');
     if (filmEl) {
       const vid = filmEl.querySelector('video');
-      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + '.mp4?v=2';
+      // same film at 720p (1.2 MB instead of 2.9 MB) for data-saver, slow connections and small screens
+      const conn = navigator.connection || {};
+      const lite = conn.saveData || (conn.effectiveType && conn.effectiveType !== '4g') || (conn.downlink && conn.downlink < 4) || Math.min(screen.width, screen.height) * (devicePixelRatio || 1) < 800;
+      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + (lite ? '-lite' : '') + '.mp4?v=2';
       vid.load();
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);
       const upd = () => { try { if (vid.duration && vid.buffered.length) src.p = Math.max(src.p, vid.buffered.end(vid.buffered.length - 1) / vid.duration); } catch (e) {} if (vid.readyState >= 4) src.p = 1; };
@@ -304,7 +307,7 @@ fontsReady.then(() => {
     try {
       music = new Audio(); music.preload = 'auto'; music.volume = .85; DG.music = music;
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);       // the loader waits for it like it does for the film
-      musicReady = fetch('assets/audio/intro.mp3?v=2').then(r => (r.ok ? r.blob() : Promise.reject())).then(b => { music.src = URL.createObjectURL(b); return true; })
+      musicReady = fetch('assets/audio/intro.mp3?v=2', { priority: 'high' }).then(r => (r.ok ? r.blob() : Promise.reject())).then(b => { music.src = URL.createObjectURL(b); return true; })
         .catch(() => { music = null; return false; }).then(ok => { src.p = 1; return ok; });
       setTimeout(() => (src.p = 1), 5000);
     } catch (e) { music = null; }
@@ -313,23 +316,24 @@ fontsReady.then(() => {
     if (!music) return;
     try { const pr = music.play(); if (pr && pr.then) pr.then(() => { if (!music.dataset.live) music.pause(); }).catch(() => {}); } catch (e) {}
   };
-  function playMusic(at) {
+  // clock() says where in the track we should be at the moment it actually starts. If the file is still
+  // downloading (slow connection), the music joins in at the right spot as soon as it arrives.
+  function playMusic(clock) {
     if (!music || !soundOK || muted) return;
-    music.dataset.live = '1';
-    try { music.currentTime = Math.max(0, at); } catch (e) {}
-    music.volume = .85;
-    const pr = music.play(); if (pr && pr.catch) pr.catch(() => {});
+    const go = () => {
+      if (!music || !soundOK || muted) return;
+      music.dataset.live = '1';
+      try { music.currentTime = Math.max(0, clock()); } catch (e) {}
+      music.volume = .85;
+      const pr = music.play(); if (pr && pr.catch) pr.catch(() => {});
+    };
+    if (music.getAttribute('src')) go(); else musicReady.then(ok => { if (ok) go(); });
   }
+  // Always ask for the tap (unless the visitor switched sound off before). Guessing whether the browser would
+  // allow sound without one turned out unreliable on real connections: it could end with no prompt and no sound.
   function soundGate() {
     if (!music || muted) return Promise.resolve();
-    return Promise.race([musicReady, new Promise(r => setTimeout(() => r(false), 1500))]).then(ok => (ok && music ? probeSound() : undefined));
-  }
-  function probeSound() {
-    music.volume = .001;                    // not zero: browsers treat a silent element as "muted" and always allow it, which tells us nothing
-    let pr; try { pr = music.play(); } catch (e) { pr = Promise.reject(e); }
-    const probe = (pr && pr.then ? pr : Promise.resolve()).then(() => { music.pause(); try { music.currentTime = 0; } catch (e) {} soundOK = true; });
-    // a refusal means "ask for a tap" (and wait for it); no answer at all within a second and a half means carry on silently
-    return Promise.race([probe.then(() => 'ok', () => 'ask'), new Promise(r => setTimeout(() => r('skip'), 1500))]).then(r => (r === 'ask' ? askTap() : undefined));
+    return askTap();
   }
   function askTap() {
     return new Promise(res => {
@@ -351,7 +355,7 @@ fontsReady.then(() => {
       const tap = () => go(true);
       const key = e => { if (!e.metaKey && !e.ctrlKey && !e.altKey) go(true); };
       addEventListener('pointerdown', tap, true); addEventListener('keydown', key, true);
-      const timer = setTimeout(() => go(false), 6000);
+      const timer = setTimeout(() => go(false), 8000);
     });
   }
   function soundButton(btn, clock) {       // clock() says where in the track we should be right now
@@ -362,7 +366,7 @@ fontsReady.then(() => {
       e.stopPropagation();
       const on = soundOK && !muted;
       if (on) { muted = true; music.pause(); }
-      else { muted = false; soundOK = true; playMusic(clock()); }
+      else { muted = false; soundOK = true; unlock(); playMusic(clock); }
       try { localStorage.setItem('dg-mute', muted ? '1' : '0'); } catch (err) {}
       paint();
     });
@@ -370,7 +374,8 @@ fontsReady.then(() => {
 
   function cinematic() {
     wake();
-    playMusic(HIT - 4.13);                 // the 3D fallback intro is shorter: join the track so the hit still lands on the name
+    const c0 = performance.now();          // the 3D fallback intro is shorter: join the track so the hit still lands on the name
+    playMusic(() => HIT - 4.13 + (performance.now() - c0) / 1000);
     document.getElementById('film')?.remove();
     ui && gsap.set(ui, { autoAlpha: 1 }); gsap.set('#introBlack', { opacity: 1 });
     // ---- cinematic first-visit intro ----
@@ -438,13 +443,19 @@ fontsReady.then(() => {
     const roll = () => {
       if (rolling || finished) return; rolling = true;
       filmEl.classList.add('on'); ambient(); answer('film');
-      playMusic(vid.currentTime);
+      playMusic(() => vid.currentTime);
       const snd = filmEl.querySelector('.film__snd');
       soundButton(snd, () => vid.currentTime);
       gsap.to([skip, snd].filter(Boolean), { opacity: 1, duration: .6, delay: 1.2 });
     };
+    // the music follows the picture: if the film stops to buffer, the track waits and picks up at the same spot
+    let stalled = false;
+    const live = () => music && music.dataset.live && !finished && !muted;
+    vid.addEventListener('waiting', () => { if (live()) { stalled = true; music.pause(); } });
+    vid.addEventListener('playing', () => { if (stalled && live()) { stalled = false; playMusic(() => vid.currentTime); } });
     vid.addEventListener('timeupdate', () => {
       if (!vid.duration) return;
+      if (live() && !music.paused && !stalled && Math.abs(music.currentTime - vid.currentTime) > .3) { try { music.currentTime = vid.currentTime; } catch (e) {} }
       if (vid.currentTime > vid.duration - .6) wake();          // the 3D scene starts drawing again just before the cut
       if (vid.currentTime > vid.duration - .12) finish();
     });
