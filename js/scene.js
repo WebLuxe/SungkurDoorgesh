@@ -255,6 +255,9 @@ fontsReady.then(() => {
   const first = document.documentElement.classList.contains('first') && !reduce;
   setTimeout(() => DG.sceneReadyResolve && DG.sceneReadyResolve(), 0);
 
+  const HIT = 6.27;                         // where the big hit sits in the track: it lands as the name slams in
+  let music = null, soundOK = false, muted = false, musicReady = Promise.resolve(false);
+  try { muted = localStorage.getItem('dg-mute') === '1'; } catch (e) {}
   const wake = () => { DG.wake ? DG.wake() : (S.hold = false); };
   const done = () => { wake(); document.documentElement.classList.remove('first'); DG.introDone && DG.introDone(); };
 
@@ -276,7 +279,8 @@ fontsReady.then(() => {
       vid.addEventListener('error', () => (src.p = 1), { once: true });
       setTimeout(() => (src.p = 1), 6500);
       // the loader asks this when it reaches 100: start the film underneath it, answer once it is really rolling
-      DG.gate = () => startFilm(filmEl);
+      loadMusic();
+      DG.gate = () => soundGate().then(() => startFilm(filmEl));
       if (DG.arrivedDone) startFilm(filmEl);
     } else DG.arrived.then(cinematic);
   } else {
@@ -291,8 +295,82 @@ fontsReady.then(() => {
     DG.arrived ? DG.arrived.then(go) : go();
   }
 
+  /* ---- intro music: an original synthwave sting cut to the film (assets/audio/intro.mp3) ----
+     Browsers only let a page make sound after a tap, click or key press. So when the loader reaches 100 we
+     test whether sound may start; if not, the loader asks for one tap ("tap to start") and carries on
+     silently after a few seconds if nobody does. A sound button in the film turns it on or off at any time. */
+  function loadMusic() {
+    // fetched whole and played from memory: that way jumping to any point in the track is exact on every server
+    try {
+      music = new Audio(); music.preload = 'auto'; music.volume = .85; DG.music = music;
+      const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);       // the loader waits for it like it does for the film
+      musicReady = fetch('assets/audio/intro.mp3').then(r => (r.ok ? r.blob() : Promise.reject())).then(b => { music.src = URL.createObjectURL(b); return true; })
+        .catch(() => { music = null; return false; }).then(ok => { src.p = 1; return ok; });
+      setTimeout(() => (src.p = 1), 5000);
+    } catch (e) { music = null; }
+  }
+  const unlock = () => {                    // must run inside the tap itself so phones allow playback later
+    if (!music) return;
+    try { const pr = music.play(); if (pr && pr.then) pr.then(() => { if (!music.dataset.live) music.pause(); }).catch(() => {}); } catch (e) {}
+  };
+  function playMusic(at) {
+    if (!music || !soundOK || muted) return;
+    music.dataset.live = '1';
+    try { music.currentTime = Math.max(0, at); } catch (e) {}
+    music.volume = .85;
+    const pr = music.play(); if (pr && pr.catch) pr.catch(() => {});
+  }
+  function soundGate() {
+    if (!music || muted) return Promise.resolve();
+    return Promise.race([musicReady, new Promise(r => setTimeout(() => r(false), 1500))]).then(ok => (ok && music ? probeSound() : undefined));
+  }
+  function probeSound() {
+    music.volume = .001;                    // not zero: browsers treat a silent element as "muted" and always allow it, which tells us nothing
+    let pr; try { pr = music.play(); } catch (e) { pr = Promise.reject(e); }
+    const probe = (pr && pr.then ? pr : Promise.resolve()).then(() => { music.pause(); try { music.currentTime = 0; } catch (e) {} soundOK = true; });
+    // a refusal means "ask for a tap" (and wait for it); no answer at all within a second and a half means carry on silently
+    return Promise.race([probe.then(() => 'ok', () => 'ask'), new Promise(r => setTimeout(() => r('skip'), 1500))]).then(r => (r === 'ask' ? askTap() : undefined));
+  }
+  function askTap() {
+    return new Promise(res => {
+      const L = document.getElementById('loader');
+      if (!L) return res();
+      const coarse = matchMedia('(pointer: coarse)').matches;
+      const btn = document.createElement('p');
+      btn.className = 'loader__start';
+      btn.innerHTML = '<b>' + (coarse ? 'Tap' : 'Click') + ' to start</b><span class="mono">Sound on</span>';
+      L.append(btn); L.classList.add('ask');
+      let done = false;
+      const go = sound => {
+        if (done) return; done = true;
+        removeEventListener('pointerdown', tap, true); removeEventListener('keydown', key, true); clearTimeout(timer);
+        if (sound) { soundOK = true; unlock(); }
+        L.classList.remove('ask'); L.classList.add('asked');
+        res();
+      };
+      const tap = () => go(true);
+      const key = e => { if (!e.metaKey && !e.ctrlKey && !e.altKey) go(true); };
+      addEventListener('pointerdown', tap, true); addEventListener('keydown', key, true);
+      const timer = setTimeout(() => go(false), 6000);
+    });
+  }
+  function soundButton(btn, clock) {       // clock() says where in the track we should be right now
+    if (!btn || !music) { btn && btn.remove(); return; }
+    const paint = () => { const on = soundOK && !muted; btn.textContent = on ? 'Sound on' : 'Sound off'; btn.setAttribute('aria-pressed', on); };
+    paint();
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const on = soundOK && !muted;
+      if (on) { muted = true; music.pause(); }
+      else { muted = false; soundOK = true; playMusic(clock()); }
+      try { localStorage.setItem('dg-mute', muted ? '1' : '0'); } catch (err) {}
+      paint();
+    });
+  }
+
   function cinematic() {
     wake();
+    playMusic(HIT - 4.13);                 // the 3D fallback intro is shorter: join the track so the hit still lands on the name
     document.getElementById('film')?.remove();
     ui && gsap.set(ui, { autoAlpha: 1 }); gsap.set('#introBlack', { opacity: 1 });
     // ---- cinematic first-visit intro ----
@@ -337,6 +415,8 @@ fontsReady.then(() => {
     const finish = () => {
       if (finished) return; finished = true; answer('film');
       wake();
+      // skipped early: jump the track to just before its big hit so it still lands with the name
+      if (music && music.dataset.live && !music.paused && vid.duration && vid.currentTime < vid.duration - .4) { try { music.currentTime = HIT - .56; } catch (e) {} }
       Object.assign(S, { speed: 70 }); gsap.to(S, { speed: 14, duration: 2.4, ease: 'power3.out' });
       gsap.timeline({ onComplete: () => { filmEl.remove(); DG.startScroll && DG.startScroll(); done(); } })
         .fromTo(flash, { opacity: 0 }, { opacity: 1, duration: .14, ease: 'power2.in' })
@@ -358,7 +438,10 @@ fontsReady.then(() => {
     const roll = () => {
       if (rolling || finished) return; rolling = true;
       filmEl.classList.add('on'); ambient(); answer('film');
-      gsap.to(skip, { opacity: 1, duration: .6, delay: 1.2 });
+      playMusic(vid.currentTime);
+      const snd = filmEl.querySelector('.film__snd');
+      soundButton(snd, () => vid.currentTime);
+      gsap.to([skip, snd].filter(Boolean), { opacity: 1, duration: .6, delay: 1.2 });
     };
     vid.addEventListener('timeupdate', () => {
       if (!vid.duration) return;

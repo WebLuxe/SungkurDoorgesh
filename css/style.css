@@ -1049,3 +1049,17 @@ html.lf .loader__w{opacity:1;transform:none}
   .reel__row::-webkit-scrollbar{display:none}
   .shot-clip,.shot-clip:nth-child(even),.shot-clip:nth-child(odd){flex:0 0 64vw;margin:0;scroll-snap-align:center}
 }
+
+/* ================= intro music: the "tap to start" beat on the loader, the sound button in the film ================= */
+.loader__start{position:absolute;left:0;right:0;top:calc(50% + min(13vw,13rem));margin:0;display:grid;justify-items:center;gap:8px;text-align:center;pointer-events:none;animation:ldUp .5s var(--ease) both}
+.loader__start b{font-family:var(--disp);font-style:italic;font-weight:900;font-stretch:68%;text-transform:uppercase;font-size:clamp(1.7rem,4.6vw,3rem);line-height:.9;letter-spacing:.02em;background:var(--sunset-x);-webkit-background-clip:text;background-clip:text;color:transparent;animation:ldPulse .8s ease-in-out infinite alternate}
+.loader__start span{color:var(--muted)}
+@keyframes ldPulse{from{opacity:.35}to{opacity:1}}
+.loader.ask{cursor:pointer}
+.loader.ask .loader__msg{opacity:0;transition:opacity .3s}
+.loader.asked .loader__start{opacity:0;transform:translateY(-10px);transition:opacity .3s ease,transform .4s var(--ease);animation:none}
+@media (max-width:760px){.loader__start{top:calc(50% + 17vw)}}
+.film__snd{position:absolute;left:max(var(--pad),env(safe-area-inset-left));bottom:calc(24px + env(safe-area-inset-bottom));z-index:2;color:rgba(255,243,234,.75);opacity:0;padding:10px 0}
+.film__snd:hover{color:var(--gold)}
+.film__snd::before{content:"";display:inline-block;width:8px;height:8px;margin-right:9px;border-radius:50%;background:var(--dim);vertical-align:1px}
+.film__snd[aria-pressed=true]::before{background:var(--pink);box-shadow:0 0 10px var(--pink)}

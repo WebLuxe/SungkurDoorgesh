@@ -255,7 +255,7 @@ function runLoader() {
     // home, first visit: the film starts underneath and the loader cross-fades into it. Everywhere else the
     // word lifts away and the whole panel slides up off the page.
     let mode = 'page';
-    try { if (DG.gate) mode = (await Promise.race([DG.gate(), new Promise(r => setTimeout(() => r('page'), 2200))])) || 'page'; } catch (e) {}
+    try { if (DG.gate) mode = (await Promise.race([DG.gate(), new Promise(r => setTimeout(() => r('page'), 9500))])) || 'page'; } catch (e) {}
     const film = mode === 'film';
     L.classList.add('done', film ? 'to-film' : 'to-page');
     setTimeout(arrivedResolve, film ? 0 : 480);
@@ -264,6 +264,13 @@ function runLoader() {
       if (page !== 'home') { html.classList.remove('first'); introResolve(); }
       startScroll();
     }, film ? 950 : 1500);
+    // last resort: if the home intro never got going (a script failed), don't leave a black film over the page
+    if (page === 'home') setTimeout(() => {
+      const f = $('#film'), v = f && $('video', f);
+      if (!html.classList.contains('first') || !f || !v || !(v.paused && v.currentTime === 0)) return;
+      f.remove(); $('#introUI')?.remove(); html.classList.remove('first', 'lock'); locked = 0; introResolve();
+      gsap.set('[data-intro], #heroTitle, #heroTitle *', { opacity: 1, clearProps: 'transform' }); gsap.set('#introBlack', { opacity: 0 }); DG.wake && DG.wake();
+    }, 7000);
   }
 }
 
