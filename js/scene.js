@@ -276,8 +276,8 @@ fontsReady.then(() => {
       const lite = conn.saveData || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || '') || (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) * (devicePixelRatio || 1) < 800);
       // big screens with a mouse: the intro captured at 2560x1440 (1440p screens and up) or a high-quality 1080p cut of it
       const big = !lite && innerWidth > innerHeight && matchMedia('(hover: hover) and (pointer: fine)').matches;
-      const tier = lite ? '-lite' : big ? (Math.max(screen.width, screen.height) * (devicePixelRatio || 1) > 2000 ? '-1440' : '-hq') : '';
-      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + tier + '.mp4?v=2';
+      const tier = lite ? '-lite' : big ? '-hq' : '';
+      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + tier + '.mp4?v=3';
       vid.load();
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);
       const upd = () => { try { if (vid.duration && vid.buffered.length) src.p = Math.max(src.p, vid.buffered.end(vid.buffered.length - 1) / vid.duration); } catch (e) {} if (vid.readyState >= 4) src.p = 1; };

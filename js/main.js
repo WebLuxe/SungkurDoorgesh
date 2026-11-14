@@ -21,6 +21,7 @@ const DG = window.DG = { arrived, introDone: () => introResolve(), lenis: null, 
 const conn = navigator.connection || {};
 const HD = DG.HD = fine && !conn.saveData && !(conn.effectiveType && /2g|3g/.test(conn.effectiveType)) && Math.max(screen.width, screen.height) * (devicePixelRatio || 1) >= 1280;
 const hd = src => (HD && /assets\/video\/(real\/[\w-]+|drive-loop)\.mp4$/.test(src || '') ? src.replace(/\.mp4$/, '-hd.mp4') : src);
+if (HD) $$('img[data-hd]').forEach(i => { i.src = i.dataset.hd; });   // 2x AI-enhanced photos
 if (HD) $$('video[data-src]').forEach(v => { if (hd(v.dataset.src) !== v.dataset.src && v.getAttribute('poster')) v.poster = v.getAttribute('poster').replace(/\.jpg$/, '-hd.jpg'); });
 const sceneReady = page === 'home' ? new Promise(r => (DG.sceneReadyResolve = r)) : Promise.resolve();
 
