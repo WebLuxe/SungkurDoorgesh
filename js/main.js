@@ -16,6 +16,12 @@ let arrivedResolve; const arrived = new Promise(r => (arrivedResolve = r));
 arrived.then(() => { if (window.DG) window.DG.arrivedDone = true; });
 let introResolve; const introDone = new Promise(r => (introResolve = r));
 const DG = window.DG = { arrived, introDone: () => introResolve(), lenis: null, shake: null, extra: [] };
+// Big screens with a mouse get the full-quality media (2x clips, 1080p drive loop, 1800 px photos via srcset);
+// phones, data-saver and slow connections keep the light files.
+const conn = navigator.connection || {};
+const HD = DG.HD = fine && !conn.saveData && !(conn.effectiveType && /2g|3g/.test(conn.effectiveType)) && Math.max(screen.width, screen.height) * (devicePixelRatio || 1) >= 1280;
+const hd = src => (HD && /assets\/video\/(real\/[\w-]+|drive-loop)\.mp4$/.test(src || '') ? src.replace(/\.mp4$/, '-hd.mp4') : src);
+if (HD) $$('video[data-src]').forEach(v => { if (hd(v.dataset.src) !== v.dataset.src && v.getAttribute('poster')) v.poster = v.getAttribute('poster').replace(/\.jpg$/, '-hd.jpg'); });
 const sceneReady = page === 'home' ? new Promise(r => (DG.sceneReadyResolve = r)) : Promise.resolve();
 
 /* safety net: if anything fails to load, never leave the page hidden */
@@ -300,7 +306,7 @@ addEventListener('pageshow', e => { if (e.persisted && gsap) { gsap.set(bars, { 
 const vidIO = new IntersectionObserver(es => es.forEach(e => {
   const v = e.target;
   if (e.isIntersecting) {
-    if (!v.src && v.dataset.src) { v.src = v.dataset.src; }
+    if (!v.src && v.dataset.src) { v.src = hd(v.dataset.src); }
     if (!reduce) v.play().catch(() => {});
   } else v.pause();
 }), { rootMargin: '200px 0px' });
@@ -490,7 +496,7 @@ if (grid) {
     art.className = 'drawer__art ' + ([...c.classList].find(k => k.startsWith('bg-')) || '');
     art.innerHTML = $('.pcard__art', c).innerHTML;
     const dv = $('video', art);                      // a build with real footage: it plays in the drawer too
-    if (dv) { dv.src = dv.dataset.src; if (!reduce) dv.play().catch(() => {}); }
+    if (dv) { dv.src = hd(dv.dataset.src); if (dv.getAttribute('poster') && hd(dv.dataset.src) !== dv.dataset.src) dv.poster = dv.getAttribute('poster').replace(/\.jpg$/, '-hd.jpg'); if (!reduce) dv.play().catch(() => {}); }
     $('.drawer__tag', dlg).textContent = c.dataset.tagline || '';
     $('h2', dlg).textContent = $('h3', c).textContent;
     $('.drawer__text', dlg).innerHTML = $('template', c).innerHTML;

@@ -28,7 +28,7 @@ if (!renderer) {
 }
 
 function build() {
-  let pr = Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75);
+  let pr = Math.min(devicePixelRatio || 1, small ? 1.5 : 2);          // full sharpness on high-density laptop screens; it still steps down if frames run slow
   renderer.setPixelRatio(pr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   const scene = new THREE.Scene();
@@ -272,8 +272,12 @@ fontsReady.then(() => {
       const vid = filmEl.querySelector('video');
       // same film at 720p (1.2 MB instead of 2.9 MB) for data-saver, slow connections and small screens
       const conn = navigator.connection || {};
-      const lite = conn.saveData || (conn.effectiveType && conn.effectiveType !== '4g') || (conn.downlink && conn.downlink < 4) || Math.min(screen.width, screen.height) * (devicePixelRatio || 1) < 800;
-      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + (lite ? '-lite' : '') + '.mp4?v=2';
+      // (the browser's own speed estimate is too rough to trust: it reports ~1.5 Mbit/s on fast lines, so only data-saver and real 2G/3G count)
+      const lite = conn.saveData || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || '') || (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) * (devicePixelRatio || 1) < 800);
+      // big screens with a mouse: the intro captured at 2560x1440 (1440p screens and up) or a high-quality 1080p cut of it
+      const big = !lite && innerWidth > innerHeight && matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const tier = lite ? '-lite' : big ? (Math.max(screen.width, screen.height) * (devicePixelRatio || 1) > 2000 ? '-1440' : '-hq') : '';
+      vid.src = 'assets/video/intro-' + (innerHeight > innerWidth ? 'portrait' : 'landscape') + tier + '.mp4?v=2';
       vid.load();
       const src = { p: 0 }; (DG.extra = DG.extra || []).push(src);
       const upd = () => { try { if (vid.duration && vid.buffered.length) src.p = Math.max(src.p, vid.buffered.end(vid.buffered.length - 1) / vid.duration); } catch (e) {} if (vid.readyState >= 4) src.p = 1; };
