@@ -556,10 +556,11 @@
       track.setAttribute("aria-valuenow", Math.round(cur)); track.setAttribute("aria-valuemax", Math.round(dur));
       track.setAttribute("aria-valuetext", fmt(cur) + " of " + fmt(dur));
     };
-    // the bar fades away while the movie plays and nothing moves
+    // the bar fades away while the movie plays and nothing moves (it stays for keyboard users)
+    var kbFocus = function () { try { return !!m.querySelector(":focus-visible"); } catch (e) { return m.contains(document.activeElement); } };
     var wake = function () {
       m.classList.remove("idle"); clearTimeout(idleT);
-      idleT = setTimeout(function () { if (m.classList.contains("playing") && !dragging && !m.contains(document.activeElement)) m.classList.add("idle"); }, 2600);
+      idleT = setTimeout(function () { if (m.classList.contains("playing") && !dragging && !kbFocus()) m.classList.add("idle"); }, 2600);
     };
     var setPlaying = function (on) {
       m.classList.toggle("playing", on); m.classList.toggle("paused", !on);
