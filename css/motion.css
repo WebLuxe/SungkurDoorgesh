@@ -129,3 +129,48 @@ html.intro .cue{opacity:0;transition:none}
 @media (max-width:700px){.movie{border-radius:18px;min-width:0;width:100%}.movie__meta b{font-size:24px}}
 @media (prefers-reduced-motion:reduce){.movie__play::before{animation:none}}
 .movie__poster[hidden]{display:none}
+
+/* ---------- movie controls ---------- */
+.movie iframe{pointer-events:none}
+.movie__hit{position:absolute;inset:0;z-index:3;display:none;cursor:pointer}
+.movie.live .movie__hit{display:grid;place-items:center}
+.movie__pop{width:clamp(64px,7vw,92px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:rgba(9,6,28,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5);opacity:0;transform:scale(.7);pointer-events:none}
+.movie__pop svg{width:38%;fill:#fff;display:none}
+.movie__pop.pop{animation:mpop .7s cubic-bezier(.16,1,.3,1)}
+.movie.paused .movie__pop{opacity:1;transform:none;transition:opacity .3s,transform .5s cubic-bezier(.16,1,.3,1)}
+@keyframes mpop{0%{opacity:0;transform:scale(.6)}25%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
+.movie.paused .movie__pop.pop{animation:none}
+.movie .i-pause{display:none}
+.movie.playing .mbar__pp .i-play{display:none}
+.movie.playing .mbar__pp .i-pause{display:block}
+.movie__pop .i-play{display:block;margin-left:8%}
+.movie.playing .movie__pop .i-play{display:none}
+.movie.playing .movie__pop .i-pause{display:block;margin:0}
+.mbar{position:absolute;left:clamp(10px,1.6vw,18px);right:clamp(10px,1.6vw,18px);bottom:clamp(10px,1.6vw,18px);z-index:4;display:flex;align-items:center;gap:clamp(8px,1.2vw,16px);padding:8px 14px 8px 8px;border-radius:999px;background:rgba(9,6,28,.55);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(0,0,0,.35);color:#fff;transition:opacity .45s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+.mbar[hidden]{display:none}
+.movie.playing.idle .mbar{opacity:0;transform:translateY(12px);pointer-events:none}
+.movie.playing.idle{cursor:none}
+.mbar button{flex:none;display:grid;place-items:center;border:0;padding:0;cursor:pointer;color:#fff;background:none}
+.mbar__pp{width:44px;height:44px;border-radius:50%;background:var(--neon-x)!important;box-shadow:0 0 22px rgba(255,126,182,.55);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.mbar__pp:hover{transform:scale(1.08)}.mbar__pp:active{transform:scale(.92)}
+.mbar__pp svg{width:18px;fill:#09061C}
+.mbar__pp .i-play{margin-left:2px}
+.mbar__t{flex:none;font-size:12px;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.7)}
+.mbar__t b{color:#fff;font-weight:600}
+.mbar__track{position:relative;flex:1;height:22px;cursor:pointer;outline:none;touch-action:none}
+.mbar__track::before,.mbar__buf,.mbar__fill{content:"";position:absolute;left:0;top:50%;height:4px;margin-top:-2px;border-radius:4px}
+.mbar__track::before{right:0;background:rgba(255,255,255,.18)}
+.mbar__buf{width:0;background:rgba(255,255,255,.28)}
+.mbar__fill{width:0;background:var(--neon-x);box-shadow:0 0 10px rgba(255,126,182,.7)}
+.mbar__knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;box-shadow:0 0 12px rgba(255,126,182,.9);transform:scale(0);transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.mbar__track:hover .mbar__knob,.mbar__track:focus-visible .mbar__knob,.mbar__track.drag .mbar__knob{transform:scale(1)}
+.mbar__track:focus-visible::before{box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+.mbar__snd,.mbar__fs{width:34px;height:34px;border-radius:50%;transition:background .25s}
+.mbar__snd:hover,.mbar__fs:hover{background:rgba(255,255,255,.12)!important}
+.mbar__snd svg,.mbar__fs svg{width:20px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mbar__snd .spk{fill:#fff;stroke:none}
+.mbar__snd .off{display:none}
+.mbar__snd[aria-pressed=true] .wav{display:none}
+.mbar__snd[aria-pressed=true] .off{display:inline}
+.movie:fullscreen{border-radius:0;width:100%;max-width:none;aspect-ratio:auto}
+@media (max-width:560px){.mbar__t .mbar__dur,.mbar__t{font-size:11px}.mbar__fs{display:none!important}.mbar{padding-right:8px}}

@@ -541,21 +541,121 @@
     fit();
   }
 
-  /* ---------- The End: load YouTube only when asked, stop it when scrolled away ---------- */
-  $$(".movie[data-yt]").forEach(function (m) {
-    var btn = $(".movie__poster", m), id = m.dataset.yt, frame = null;
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
+  /* ---------- The End: in-page YouTube player with our own controls ---------- */
+  Array.prototype.slice.call(document.querySelectorAll(".movie[data-yt]")).forEach(function (m) {
+    var poster = $(".movie__poster", m), hit = $(".movie__hit", m), pop = $(".movie__pop", m), bar = $(".mbar", m);
+    var pp = $(".mbar__pp", m), snd = $(".mbar__snd", m), fs = $(".mbar__fs", m), track = $(".mbar__track", m);
+    var fill = $(".mbar__fill", m), buf = $(".mbar__buf", m), knob = $(".mbar__knob", m), now = $(".mbar__now", m), durEl = $(".mbar__dur", m);
+    var id = m.dataset.yt, frame = null, state = -1, cur = 0, dur = 113, muted = false, dragging = false, idleT = 0, ticker = 0, lastTick = 0;
+    var fmt = function (s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
+    var cmd = function (func, args) { if (frame && frame.contentWindow) frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: args || [] }), "*"); };
+    var paint = function () {
+      var p = dur ? Math.min(1, cur / dur) : 0;
+      fill.style.width = (p * 100) + "%"; knob.style.left = (p * 100) + "%";
+      now.textContent = fmt(cur); durEl.textContent = fmt(dur);
+      track.setAttribute("aria-valuenow", Math.round(cur)); track.setAttribute("aria-valuemax", Math.round(dur));
+      track.setAttribute("aria-valuetext", fmt(cur) + " of " + fmt(dur));
+    };
+    // the bar fades away while the movie plays and nothing moves
+    var wake = function () {
+      m.classList.remove("idle"); clearTimeout(idleT);
+      idleT = setTimeout(function () { if (m.classList.contains("playing") && !dragging && !m.contains(document.activeElement)) m.classList.add("idle"); }, 2600);
+    };
+    var setPlaying = function (on) {
+      m.classList.toggle("playing", on); m.classList.toggle("paused", !on);
+      pp.setAttribute("aria-label", on ? "Pause" : "Play");
+      if (!on) { m.classList.remove("idle"); clearTimeout(idleT); } else wake();
+    };
+    var popIt = function () { pop.classList.remove("pop"); void pop.offsetWidth; pop.classList.add("pop"); };
+    // smooth progress between YouTube's few updates a second
+    var tick = function (t) {
+      if (state === 1 && !dragging && lastTick) cur = Math.min(dur, cur + (t - lastTick) / 1000);
+      lastTick = t; paint();
+      ticker = requestAnimationFrame(tick);
+    };
+    addEventListener("message", function (e) {
+      if (!frame || e.source !== frame.contentWindow || typeof e.data !== "string") return;
+      var d; try { d = JSON.parse(e.data); } catch (err) { return; }
+      var info = d.info && typeof d.info === "object" ? d.info : {};
+      if (typeof info.duration === "number" && info.duration > 0) dur = info.duration;
+      if (typeof info.currentTime === "number" && !dragging && (state !== 1 || Math.abs(info.currentTime - cur) > 0.35)) cur = info.currentTime;
+      if (typeof info.videoLoadedFraction === "number") buf.style.width = (info.videoLoadedFraction * 100) + "%";
+      if (typeof info.muted === "boolean") { muted = info.muted; snd.setAttribute("aria-pressed", muted); snd.setAttribute("aria-label", muted ? "Unmute" : "Mute"); }
+      var st = d.event === "onStateChange" ? d.info : info.playerState;
+      if (typeof st === "number" && st !== state) {
+        state = st;
+        if (st === 1) setPlaying(true);
+        else if (st === 2) setPlaying(false);
+        else if (st === 0) { setPlaying(false); cur = dur; }
+      }
+    });
+    var start = function () {
       frame = document.createElement("iframe");
-      frame.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1";
+      frame.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&controls=0&rel=0&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1&origin=" + encodeURIComponent(location.origin);
       frame.title = "The End, a Minecraft movie by Doorgesh";
       frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-      frame.allowFullscreen = true;
-      btn.hidden = true; m.appendChild(frame);
+      frame.setAttribute("tabindex", "-1");
+      frame.addEventListener("load", function () {
+        // ask the player to start sending its time and state
+        var hello = function () { if (frame) frame.contentWindow.postMessage(JSON.stringify({ event: "listening", id: id, channel: "widget" }), "*"); };
+        hello(); setTimeout(hello, 400); setTimeout(hello, 1200);
+      });
+      poster.hidden = true; bar.hidden = false;
+      m.insertBefore(frame, hit); m.classList.add("live");
+      setPlaying(true); paint();
+      cancelAnimationFrame(ticker); ticker = requestAnimationFrame(tick);
+      try { pp.focus({ preventScroll: true }); } catch (e) {}
+    };
+    var toggle = function () {
+      if (!frame) { start(); return; }
+      if (state === 0) { cmd("seekTo", [0, true]); cmd("playVideo"); cur = 0; setPlaying(true); }
+      else if (m.classList.contains("playing")) { cmd("pauseVideo"); setPlaying(false); }
+      else { cmd("playVideo"); setPlaying(true); }
+      popIt();
+    };
+    poster.addEventListener("click", function (e) { e.preventDefault(); start(); });
+    hit.addEventListener("click", toggle);
+    pp.addEventListener("click", toggle);
+    snd.addEventListener("click", function () {
+      muted = !muted; cmd(muted ? "mute" : "unMute");
+      snd.setAttribute("aria-pressed", muted); snd.setAttribute("aria-label", muted ? "Unmute" : "Mute");
     });
+    fs.addEventListener("click", function () {
+      var full = document.fullscreenElement || document.webkitFullscreenElement;
+      if (full) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else if (m.requestFullscreen) m.requestFullscreen(); else if (m.webkitRequestFullscreen) m.webkitRequestFullscreen();
+    });
+    // seeking: click or drag the line, or use the arrow keys on it
+    var at = function (x) { var r = track.getBoundingClientRect(); return Math.max(0, Math.min(1, (x - r.left) / r.width)) * dur; };
+    track.addEventListener("pointerdown", function (e) {
+      if (!frame) return;
+      dragging = true; track.classList.add("drag");
+      try { track.setPointerCapture(e.pointerId); } catch (err) {}
+      cur = at(e.clientX); paint();
+    });
+    track.addEventListener("pointermove", function (e) { if (dragging) { cur = at(e.clientX); paint(); } });
+    var drop = function () { if (!dragging) return; dragging = false; track.classList.remove("drag"); cmd("seekTo", [cur, true]); wake(); };
+    track.addEventListener("pointerup", drop); track.addEventListener("pointercancel", drop);
+    track.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowRight" ? 5 : e.key === "ArrowLeft" ? -5 : 0;
+      if (!d || !frame) return;
+      e.preventDefault(); e.stopPropagation();
+      cur = Math.max(0, Math.min(dur, cur + d)); cmd("seekTo", [cur, true]); paint();
+    });
+    // space or K toggles while the player has focus (the play button handles its own space)
+    m.addEventListener("keydown", function (e) {
+      if ((e.key === " " || e.key === "k") && frame && e.target !== snd && e.target !== fs) {
+        e.preventDefault(); e.stopPropagation();
+        if (e.target !== pp || e.key === "k") toggle();
+      }
+    });
+    pp.addEventListener("keyup", function (e) { if (e.key === " ") e.preventDefault(); });
+    m.addEventListener("pointermove", function () { if (frame) wake(); });
+    m.addEventListener("focusin", function () { if (frame) wake(); });
+    // scrolled away: pause and keep the spot
     if (IO) new IntersectionObserver(function (es) {
-      if (es[0].isIntersecting || !frame) return;
-      frame.remove(); frame = null; btn.hidden = false;
+      if (es[0].isIntersecting || !frame || !m.classList.contains("playing")) return;
+      cmd("pauseVideo"); setPlaying(false);
     }, { threshold: 0 }).observe(m);
   });
 

@@ -18,9 +18,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,900&amp;display=swap">
-<link rel="stylesheet" href="css/site.css?v=7">
-<link rel="stylesheet" href="css/intro.css?v=7">
-<link rel="stylesheet" href="css/motion.css?v=7">
+<link rel="stylesheet" href="css/site.css?v=8">
+<link rel="stylesheet" href="css/intro.css?v=8">
+<link rel="stylesheet" href="css/motion.css?v=8">
 <style>
 /* ---------- hero + stage (Claim Your Summit) ---------- */
 .hero{
@@ -117,8 +117,8 @@ html.intro .word .l,html.intro .kicker{opacity:0}
 html.intro .front{transform:translateY(66%)}
 html.intro .shade{opacity:0}
 </style>
-<script src="js/site.js?v=7" defer></script>
-<script src="js/intro.js?v=7" defer></script>
+<script src="js/site.js?v=8" defer></script>
+<script src="js/intro.js?v=8" defer></script>
 </head>
 <body>
 <div class="loader" id="loader" aria-hidden="true">
@@ -250,6 +250,14 @@ html.intro .shade{opacity:0}
         <span class="movie__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
         <span class="movie__meta" aria-hidden="true"><b>InfiniteSMPS4</b><span>The End Movie · 8K upscaled · 1:53</span></span>
       </a>
+      <div class="movie__hit" aria-hidden="true"><span class="movie__pop"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg></span></div>
+      <div class="mbar" role="group" aria-label="Movie controls" hidden>
+        <button class="mbar__pp" type="button" aria-label="Pause"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg></button>
+        <span class="mbar__t"><b class="mbar__now">0:00</b> / <span class="mbar__dur">1:53</span></span>
+        <div class="mbar__track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="113" aria-valuenow="0"><i class="mbar__buf"></i><i class="mbar__fill"></i><i class="mbar__knob"></i></div>
+        <button class="mbar__snd" type="button" aria-label="Mute" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="wav" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M16 9l6 6M22 9l-6 6"/></svg></button>
+        <button class="mbar__fs" type="button" aria-label="Full screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
