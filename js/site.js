@@ -219,7 +219,8 @@
         } else lay();
       };
       c.addEventListener("pointerup", up);
-      c.addEventListener("pointercancel", up);
+      // the browser took the gesture over (a vertical swipe scrolls the page on touch screens): put the photo back
+      c.addEventListener("pointercancel", function () { if (!drag) return; drag = false; c.classList.remove("dragging", "raw"); lay(); });
     });
     lay();
   }
@@ -455,7 +456,10 @@
   DG.stops = function () { return snap.stops.slice(); };
   DG.scrollTo = function (y, how) { scrollToY(clamp(y, 0, maxY()), how); };
 
-  if (!reduce) {
+  // touch screens keep native scrolling (follows the finger, has momentum); snapping a swipe
+  // into a canned one-screen glide felt detached and ignored flicks, so it is desktop-only
+  var touchUI = matchMedia("(pointer: coarse)").matches;
+  if (!reduce && !touchUI) {
     html.classList.add("snap");
     var inOverlay = function (t) { return t && t.closest && t.closest("dialog[open]"); };
     var inField = function (t) { return t && (/^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable); };
@@ -531,14 +535,25 @@
     if (document.fonts) document.fonts.ready.then(function () { fit(); measure(); });
     fit(); measure();
 
-    // slim progress line on the right edge
+  } else {
+    fit(); measure();
+    // stops still serve the scroll cue and in-page links; keep them current when the layout settles
+    var remeasureT = function () { fit(); measure(); };
+    addEventListener("load", function () { setTimeout(remeasureT, 60); });
+    addEventListener("dg:intro", function () { setTimeout(remeasureT, 30); });
+    addEventListener("orientationchange", function () { setTimeout(remeasureT, 300); });
+    // a finger always wins over a glide started by the scroll cue or a link
+    addEventListener("touchstart", function () { if (moving()) { cancelAnimationFrame(snap.raf); snap.p = 1; } }, { passive: true });
+    if (document.fonts) document.fonts.ready.then(remeasureT);
+  }
+
+  // slim progress line on the right edge
+  if (!reduce) {
     var pg = document.createElement("div"); pg.className = "pg"; pg.setAttribute("aria-hidden", "true"); pg.innerHTML = "<i></i>";
     document.body.appendChild(pg);
     var pgi = pg.firstChild;
     var paintPg = function () { pgi.style.transform = "scaleY(" + (window.scrollY / (maxY() || 1)).toFixed(4) + ")"; };
     addEventListener("scroll", paintPg, { passive: true }); paintPg();
-  } else {
-    fit();
   }
 
   /* ---------- The End: in-page YouTube player with our own controls ---------- */

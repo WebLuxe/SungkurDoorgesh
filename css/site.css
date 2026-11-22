@@ -574,3 +574,12 @@ ul,ol{padding:0;list-style:none}
   :root{--u:max(.85px, calc(min(100vw, 160svh) / 1440))}
   .nav{padding:0 clamp(32px, 6vw, 104px)}
 }
+/* phones scroll natively, so text passes under the nav: keep the backdrop solid behind the whole nav, then fade */
+@media (max-width:819.98px){
+  .nav::before{height:150px;background:linear-gradient(to bottom, var(--bg) 0, var(--bg) 108px, rgba(13,10,34,0) 150px)}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .nav::before{height:72px;background:linear-gradient(to bottom, var(--bg) 0, var(--bg) 50px, rgba(13,10,34,0) 72px)}
+}
+/* touch screens scroll natively: an up/down swipe on the photo deck scrolls the page, a sideways drag still throws the photo */
+@media (pointer:coarse){.card{touch-action:pan-y}}

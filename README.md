@@ -22,4 +22,6 @@ Plain HTML/CSS/JS — no build step. Open `index.html` through any static server
 
 ## Snap scrolling and motion
 
-Every section is one screen. A wheel tick, swipe, arrow key or Page Down glides exactly one screen (`js/site.js`, the SNAP block); sections taller than a phone screen get extra stops so each stop starts on a whole card. Headings rise word by word, images wipe open from a slow zoom, and the hero splits into depth as you leave it. Styles are in `css/motion.css`. People who turn off animations in their device settings get normal scrolling with everything shown.
+Every section is one screen. On a mouse or trackpad, a wheel tick, arrow key or Page Down glides exactly one screen (`js/site.js`, the SNAP block); sections taller than the window get extra stops so each stop starts on a whole card. Headings rise word by word, images wipe open from a slow zoom, and the hero splits into depth as you leave it. Styles are in `css/motion.css`.
+
+Touch screens (phones, tablets) scroll natively instead: the page follows the finger and flicks carry momentum. Snapping each swipe into a fixed glide felt detached on phones. They also get lighter reveals (a fade and rise instead of the clip-path wipe, the image zoom and per-word layers) and no live blur, because those dropped frames on a real phone. People who turn off animations in their device settings get normal scrolling with everything shown.
