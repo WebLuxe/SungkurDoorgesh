@@ -18,9 +18,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,900&amp;display=swap">
-<link rel="stylesheet" href="css/site.css?v=4">
-<link rel="stylesheet" href="css/intro.css?v=4">
-<link rel="stylesheet" href="css/motion.css?v=4">
+<link rel="stylesheet" href="css/site.css?v=6">
+<link rel="stylesheet" href="css/intro.css?v=6">
+<link rel="stylesheet" href="css/motion.css?v=6">
 <style>
 /* ---------- hero + stage (Claim Your Summit) ---------- */
 .hero{
@@ -117,8 +117,8 @@ html.intro .word .l,html.intro .kicker{opacity:0}
 html.intro .front{transform:translateY(66%)}
 html.intro .shade{opacity:0}
 </style>
-<script src="js/site.js?v=4" defer></script>
-<script src="js/intro.js?v=4" defer></script>
+<script src="js/site.js?v=6" defer></script>
+<script src="js/intro.js?v=6" defer></script>
 </head>
 <body>
 <div class="loader" id="loader" aria-hidden="true">
@@ -244,11 +244,11 @@ html.intro .shade{opacity:0}
       <div class="sec-head__side"><p class="lede" data-reveal="3">A movie I made from my Minecraft survival world, InfiniteSMPS4. Shot, edited and upscaled to 8K by me.</p>
         <a class="btn btn--ghost" href="https://www.youtube.com/watch?v=R4aH7zbozoE" target="_blank" rel="noopener" data-reveal="4">Watch on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
     </div>
-    <div class="movie frame" data-reveal="2">
-      <a class="movie__poster" href="https://www.youtube.com/watch?v=R4aH7zbozoE" target="_blank" rel="noopener" data-cursor="Watch" aria-label="Watch The End, a Minecraft movie by Doorgesh, on YouTube (opens in a new tab)">
+    <div class="movie frame" data-reveal="2" data-yt="R4aH7zbozoE">
+      <a class="movie__poster" href="https://www.youtube.com/watch?v=R4aH7zbozoE" target="_blank" rel="noopener" data-cursor="Play" aria-label="Play The End, a Minecraft movie by Doorgesh">
         <img src="assets/img/the-end.webp" srcset="assets/img/the-end-sm.webp 640w, assets/img/the-end.webp 1280w" sizes="(max-width:900px) 100vw, 80vw" alt="The End dimension at night: obsidian pillars under a starry sky and the ender dragon overhead" loading="lazy" decoding="async">
         <span class="movie__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-        <span class="movie__meta" aria-hidden="true"><b>InfiniteSMPS4</b><span>The End Movie · 8K upscaled · Watch on YouTube</span></span>
+        <span class="movie__meta" aria-hidden="true"><b>InfiniteSMPS4</b><span>The End Movie · 8K upscaled · 1:53</span></span>
       </a>
     </div>
   </div>
@@ -325,8 +325,8 @@ html.intro .shade{opacity:0}
     mid:    "063252_b9f2fecf-9be0-485f-842f-3aa6bbc251f2",
     front:  "063151_7804d758-a2eb-4499-9b56-8f493edbb206"
   };
-  var TILT_SRC = CDN + "063355_a600befc-45d6-4a32-9db6-9d6565a89609.mp4";
-  var RAIN_SRC = CDN + "063703_04e54df7-2236-4dff-b95b-a9a34c1f78ec.mp4";
+  var TILT_SRC = "assets/video/hero-tilt.mp4";      // re-encoded 2.3 MB copy of the spec clip
+  var RAIN_SRC = "assets/video/hero-rain.mp4";      // only the 3.75 s the loop uses, 0.7 MB
   function img(id, w) {
     return "https://images.higgs.ai/?default=1&output=webp&url=" +
       encodeURIComponent(CDN + id + ".png") + "&w=" + w + "&q=85";
@@ -429,8 +429,15 @@ html.intro .shade{opacity:0}
       }
     });
   });
-  function loadRain() { if (rainA.getAttribute("src")) return; rainA.src = RAIN_SRC; rainB.src = RAIN_SRC; rainA.load(); rainB.load(); }
-  function startRain() { if (rainStarted) return; rainStarted = true; loadRain(); activeRain = 0; rainOn(0); }
+  // both crossfade players share one download
+  var rainLoading = false;
+  function loadRain() {
+    if (rainLoading) return; rainLoading = true;
+    var use = function (src) { RAIN.forEach(function (v) { v.src = src; v.load(); }); if (rainStarted) rainOn(activeRain < 0 ? 0 : activeRain); };
+    if (window.fetch && window.URL && URL.createObjectURL) fetch(RAIN_SRC).then(function (r) { if (!r.ok) throw 0; return r.blob(); }).then(function (b) { use(URL.createObjectURL(b)); }).catch(function () { use(RAIN_SRC); });
+    else use(RAIN_SRC);
+  }
+  function startRain() { if (rainStarted) return; rainStarted = true; activeRain = 0; if (rainLoading && RAIN[0].getAttribute("src")) rainOn(0); else loadRain(); }
   function resumeRain() { if (rainStarted && activeRain >= 0 && heroVisible && !document.hidden) { var v = RAIN[activeRain]; if (v.paused) safePlay(v); } }
   document.addEventListener("visibilitychange", resumeRain);
   // pause the rain while the hero is scrolled out of view
@@ -454,7 +461,9 @@ html.intro .shade{opacity:0}
     var done = function () { res(); };
     tilt.addEventListener("canplaythrough", done, { once: true });
     tilt.addEventListener("error", done, { once: true });
-    tilt.src = TILT_SRC; tilt.load();
+    var go = function () { if (tilt.getAttribute("src")) return; tilt.src = TILT_SRC; tilt.load(); };
+    if (root.classList.contains("filming")) { addEventListener("dg:film", go, { once: true }); setTimeout(go, 7000); }
+    else go();
   });
 
   var D = 7400, anims = [];
@@ -520,6 +529,11 @@ html.intro .shade{opacity:0}
     var hero = document.getElementById("hero"), hl = document.getElementById("headline");
     var L = [[back, 0.12, 1.06], [hl, 0.42, 0.92], [mid, 0.2, 1.02], [front, 0.04, 1]];
     var cue = hero.querySelector(".cue"), ticking = false;
+    var dim = document.createElement("div");
+    dim.setAttribute("aria-hidden", "true");
+    dim.style.cssText = "position:absolute;inset:0;z-index:8;pointer-events:none;background:#09061C;opacity:0;will-change:opacity";
+    hero.appendChild(dim);
+    L.forEach(function (l) { if (l[0]) l[0].style.willChange = "translate, scale"; });
     var paint = function () {
       ticking = false;
       var p = Math.max(0, Math.min(1, window.scrollY / innerHeight));
@@ -530,7 +544,7 @@ html.intro .shade{opacity:0}
       });
       if (hl) hl.style.opacity = String(1 - p * 1.4);
       if (cue) cue.style.opacity = String(1 - p * 3);
-      hero.style.filter = p > 0.01 ? "brightness(" + (1 - p * 0.45).toFixed(3) + ")" : "";
+      dim.style.opacity = (p * 0.5).toFixed(3);
     };
     addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }, { passive: true });
     paint();
@@ -550,13 +564,12 @@ html.intro .shade{opacity:0}
     started = true;
     onStart.forEach(function (f) { f(); });
     clearTimeout(failsafe);
-    loadRain();
+    setTimeout(loadRain, 400);
     requestAnimationFrame(function (now) { t0 = now; frame(now); });
   }
   var ready = Promise.all(imgReady.concat([tiltReady]));
-  var heroP = { p: 0 };
-  (window.DG_EXTRA = window.DG_EXTRA || []).push(heroP);   // the loader waits for the hero too
-  ready.then(function () { heroP.p = 1; loadRain(); });
+  // with the intro film the loader only waits for the film and its music; the hero loads while the film plays
+  if (!root.classList.contains("filming")) { var heroP = { p: 0 }; (window.DG_EXTRA = window.DG_EXTRA || []).push(heroP); ready.then(function () { heroP.p = 1; }); }
 
   if (root.classList.contains("filming")) {
     // the intro film plays first; intro.js calls start() on the flash that cuts from the film to the doors

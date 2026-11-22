@@ -544,9 +544,10 @@
   /* ---------- The End: load YouTube only when asked, stop it when scrolled away ---------- */
   $$(".movie[data-yt]").forEach(function (m) {
     var btn = $(".movie__poster", m), id = m.dataset.yt, frame = null;
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
       frame = document.createElement("iframe");
-      frame.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+      frame.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1";
       frame.title = "The End, a Minecraft movie by Doorgesh";
       frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
       frame.allowFullscreen = true;

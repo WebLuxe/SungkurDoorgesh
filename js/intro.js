@@ -149,6 +149,7 @@
     filmStart = new Promise(function (r) { answer = r; });
     var fallback = function () {
       if (finished) return; finished = true; answer("page");
+      try { dispatchEvent(new Event("dg:film")); } catch (e) {}
       endFilm(); startHero();
     };
     var finish = function () {
@@ -185,6 +186,7 @@
     var roll = function () {
       if (rolling || finished) return; rolling = true;
       film.classList.add("on"); ambient(); answer("film");
+      try { dispatchEvent(new Event("dg:film")); } catch (e) {}
       playMusic(function () { return vid.currentTime; });
       soundButton(snd, function () { return vid.currentTime; });
       setTimeout(function () { film.classList.add("ui"); }, 1200);
