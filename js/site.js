@@ -590,7 +590,7 @@
         else if (st === 0) { setPlaying(false); cur = dur; }
       }
     });
-    var start = function () {
+    var start = function (byKey) {
       frame = document.createElement("iframe");
       frame.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&controls=0&rel=0&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1&origin=" + encodeURIComponent(location.origin);
       frame.title = "The End, a Minecraft movie by Doorgesh";
@@ -605,7 +605,7 @@
       m.insertBefore(frame, hit); m.classList.add("live");
       setPlaying(true); paint();
       cancelAnimationFrame(ticker); ticker = requestAnimationFrame(tick);
-      try { pp.focus({ preventScroll: true }); } catch (e) {}
+      if (byKey) try { pp.focus({ preventScroll: true }); } catch (e) {}
     };
     var toggle = function () {
       if (!frame) { start(); return; }
@@ -614,7 +614,7 @@
       else { cmd("playVideo"); setPlaying(true); }
       popIt();
     };
-    poster.addEventListener("click", function (e) { e.preventDefault(); start(); });
+    poster.addEventListener("click", function (e) { e.preventDefault(); start(e.detail === 0); });
     hit.addEventListener("click", toggle);
     pp.addEventListener("click", toggle);
     snd.addEventListener("click", function () {
