@@ -104,3 +104,27 @@ html.intro .cue{opacity:0;transition:none}
   .wi{transform:none!important}
   .cue i::after{animation:none}
 }
+
+/* ---------- The End: Minecraft movie premiere ---------- */
+.movie-sec{position:relative;isolation:isolate}
+.movie-sec__bg{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.movie-sec__bg img{width:100%;height:100%;object-fit:cover;filter:blur(60px) saturate(1.4) brightness(.5);transform:scale(1.3);opacity:.55}
+.movie-sec__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg,#09061C) 0%,transparent 30%,transparent 70%,var(--bg,#09061C) 100%)}
+.movie{position:relative;width:min(100%,calc((100svh - var(--navh) - 250px) * 16 / 9));min-width:min(100%,520px);aspect-ratio:16/9;margin:0 auto;border-radius:28px;overflow:hidden;background:#000;box-shadow:0 40px 120px -30px rgba(195,139,255,.45),0 0 0 1px rgba(255,255,255,.08)}
+.movie__poster{display:block;position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer;color:#fff}
+.movie__poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.movie__poster::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,6,28,.85) 0%,rgba(9,6,28,0) 34%),radial-gradient(60% 60% at 50% 50%,transparent 30%,rgba(9,6,28,.55) 100%);transition:opacity .4s}
+.movie__play{position:absolute;left:50%;top:50%;z-index:2;width:clamp(68px,8vw,104px);aspect-ratio:1;margin:calc(clamp(68px,8vw,104px) / -2) 0 0 calc(clamp(68px,8vw,104px) / -2);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55),0 0 40px rgba(255,126,182,.45);transition:transform .6s var(--ease,cubic-bezier(.16,1,.3,1)),background .3s}
+.movie__play::before{content:"";position:absolute;inset:-14px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(255,126,182,.6);animation:moviePing 2.2s cubic-bezier(.16,1,.3,1) infinite}
+.movie__play svg{width:36%;fill:#fff;margin-left:8%}
+.movie__meta{position:absolute;left:clamp(18px,2.4vw,32px);bottom:clamp(16px,2.2vw,28px);z-index:2;display:grid;gap:4px;text-align:left}
+.movie__meta b{font-family:var(--disp);font-style:italic;font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:clamp(26px,3.2vw,44px);line-height:.9;background:var(--neon);-webkit-background-clip:text;background-clip:text;color:transparent}
+.movie__meta span{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.8)}
+.movie__poster:hover .movie__play,.movie__poster:focus-visible .movie__play{transform:scale(1.12);background:linear-gradient(135deg,rgba(255,126,182,.55),rgba(195,139,255,.55))}
+.movie__poster:hover img{transform:scale(1.04)}
+.movie__poster img{transition:transform 1.4s cubic-bezier(.16,1,.3,1)}
+.movie iframe{position:absolute;inset:0;width:100%;height:100%;border:0;animation:movieIn .6s ease both}
+@keyframes moviePing{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@keyframes movieIn{from{opacity:0}to{opacity:1}}
+@media (max-width:700px){.movie{border-radius:18px;min-width:0;width:100%}.movie__meta b{font-size:24px}}
+@media (prefers-reduced-motion:reduce){.movie__play::before{animation:none}}

@@ -541,6 +541,23 @@
     fit();
   }
 
+  /* ---------- The End: load YouTube only when asked, stop it when scrolled away ---------- */
+  $$(".movie[data-yt]").forEach(function (m) {
+    var btn = $(".movie__poster", m), id = m.dataset.yt, frame = null;
+    btn.addEventListener("click", function () {
+      frame = document.createElement("iframe");
+      frame.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+      frame.title = "The End, a Minecraft movie by Doorgesh";
+      frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      frame.allowFullscreen = true;
+      btn.hidden = true; m.appendChild(frame);
+    });
+    if (IO) new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting || !frame) return;
+      frame.remove(); frame = null; btn.hidden = false;
+    }, { threshold: 0 }).observe(m);
+  });
+
   /* scroll cue on the hero */
   var cue = $(".cue");
   if (cue) cue.addEventListener("click", function () { if (!step(1, "wheel")) window.scrollBy(0, innerHeight); });

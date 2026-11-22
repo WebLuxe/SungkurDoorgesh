@@ -18,9 +18,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,900&amp;display=swap">
-<link rel="stylesheet" href="css/site.css?v=3">
-<link rel="stylesheet" href="css/intro.css?v=3">
-<link rel="stylesheet" href="css/motion.css?v=3">
+<link rel="stylesheet" href="css/site.css?v=4">
+<link rel="stylesheet" href="css/intro.css?v=4">
+<link rel="stylesheet" href="css/motion.css?v=4">
 <style>
 /* ---------- hero + stage (Claim Your Summit) ---------- */
 .hero{
@@ -117,8 +117,8 @@ html.intro .word .l,html.intro .kicker{opacity:0}
 html.intro .front{transform:translateY(66%)}
 html.intro .shade{opacity:0}
 </style>
-<script src="js/site.js?v=3" defer></script>
-<script src="js/intro.js?v=3" defer></script>
+<script src="js/site.js?v=4" defer></script>
+<script src="js/intro.js?v=4" defer></script>
 </head>
 <body>
 <div class="loader" id="loader" aria-hidden="true">
@@ -233,6 +233,24 @@ html.intro .shade{opacity:0}
     <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/bike.jpg" data-src="assets/video/real/bike.mp4" aria-label="Close-ups of the wrapped Raleigh bicycle with purple spokes"></video></div><figcaption><span>03</span>The Raleigh</figcaption></figure>
     <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/leds.jpg" data-src="assets/video/real/leds.mp4" aria-label="An Arduino and breadboard with LEDs flashing"></video></div><figcaption><span>04</span>LEDs on the beat</figcaption></figure>
     <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/school.jpg" data-src="assets/video/real/school.mp4" aria-label="A school party under coloured lights"></video></div><figcaption><span>05</span>School nights</figcaption></figure>
+  </div>
+</section>
+
+<section class="sec movie-sec" aria-labelledby="movie-title">
+  <div class="movie-sec__bg" aria-hidden="true"><img src="assets/img/the-end-sm.webp" alt="" loading="lazy" decoding="async"></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal>Doorgesh presents</p><h2 id="movie-title" class="h2" data-reveal="2">The <span class="hl">End.</span></h2></div>
+      <div class="sec-head__side"><p class="lede" data-reveal="3">A movie I made from my Minecraft survival world, InfiniteSMPS4. Shot, edited and upscaled to 8K by me.</p>
+        <a class="btn btn--ghost" href="https://www.youtube.com/watch?v=R4aH7zbozoE" target="_blank" rel="noopener" data-reveal="4">Watch on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div>
+    </div>
+    <div class="movie frame" data-reveal="2">
+      <a class="movie__poster" href="https://www.youtube.com/watch?v=R4aH7zbozoE" target="_blank" rel="noopener" data-cursor="Watch" aria-label="Watch The End, a Minecraft movie by Doorgesh, on YouTube (opens in a new tab)">
+        <img src="assets/img/the-end.webp" srcset="assets/img/the-end-sm.webp 640w, assets/img/the-end.webp 1280w" sizes="(max-width:900px) 100vw, 80vw" alt="The End dimension at night: obsidian pillars under a starry sky and the ender dragon overhead" loading="lazy" decoding="async">
+        <span class="movie__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+        <span class="movie__meta" aria-hidden="true"><b>InfiniteSMPS4</b><span>The End Movie · 8K upscaled · Watch on YouTube</span></span>
+      </a>
+    </div>
   </div>
 </section>
 
