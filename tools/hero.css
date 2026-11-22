@@ -1,0 +1,94 @@
+/* ---------- hero + stage (Claim Your Summit) ---------- */
+.hero{
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  height:100vh;height:100svh;
+  min-height:520px;
+  overflow:hidden;
+  background:var(--bg);
+}
+.stage{
+  position:absolute;
+  left:50%;top:50%;
+  width:max(100vw, 177.7778vh);
+  aspect-ratio:16/9;
+  transform:translate(-50%,-50%);
+  z-index:1;
+}
+.stage.is-sized{transform:none}
+.layer{position:absolute;inset:0}
+.layer > img,.layer > video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  user-select:none;-webkit-user-drag:none;
+}
+.back{transform-origin:50% 40%;z-index:1}
+.headline{z-index:2}
+.mid{transform-origin:50% 45%;z-index:3}
+.front{transform-origin:50% 100%;z-index:4}
+.rain{opacity:0;transition:opacity .7s linear}
+.rain.on{opacity:1}
+.shade{
+  position:absolute;left:0;right:0;top:0;height:45%;
+  background:linear-gradient(to bottom, rgba(13,8,40,.45), rgba(13,8,40,0));
+  pointer-events:none;
+}
+.glass{
+  position:absolute;
+  left:5.2%;right:4.1%;top:57.9%;height:25.4%;
+  background:linear-gradient(to bottom, rgba(190,200,255,.10) 0%, rgba(150,160,230,.05) 60%, rgba(120,130,210,.08) 100%);
+  -webkit-backdrop-filter:blur(1.2px) saturate(1.05);
+  backdrop-filter:blur(1.2px) saturate(1.05);
+  border-top:1px solid rgba(255,255,255,.18);
+}
+.headline{position:absolute;top:0;left:0;width:100vw;height:100%;pointer-events:none}
+.word{
+  position:absolute;left:0;right:0;top:0;
+  margin:0;
+  font-size:290px;
+  font-weight:700;
+  letter-spacing:-.045em;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+  color:#fff;
+}
+.word .w{display:inline-block}
+.word .l{display:inline-block;will-change:transform,opacity}
+.word .bl{display:inline-block;width:0;height:0}
+.kicker{
+  position:absolute;
+  left:-.1em;right:.1em;top:0;
+  margin:0;
+  font-size:34px;
+  font-weight:300;
+  letter-spacing:-.01em;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+  color:#fff;
+}
+.opening{position:absolute;inset:0;z-index:6;background:var(--bg)}
+.opening > img,.opening > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.opening > video{opacity:0}
+.doors{position:absolute;inset:0;z-index:7;overflow:hidden}
+.door{
+  position:absolute;top:0;
+  width:50%;height:100%;
+  background-color:#07060f;
+  background-repeat:no-repeat;
+  background-size:200% 100%;
+  will-change:transform;
+}
+.door--l{left:0;background-position:0 50%}
+.door--r{right:0;background-position:100% 50%}
+html:not(.intro) .opening,html:not(.intro) .doors,.opening[hidden],.doors[hidden]{display:none}
+
+/* intro start states */
+html.intro .nav{opacity:0;transform:translateY(-6px)}
+html.intro .word .l,html.intro .kicker{opacity:0}
+html.intro .front{transform:translateY(66%)}
+html.intro .shade{opacity:0}

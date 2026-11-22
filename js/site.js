@@ -571,7 +571,7 @@
     var popIt = function () { pop.classList.remove("pop"); void pop.offsetWidth; pop.classList.add("pop"); };
     // smooth progress between YouTube's few updates a second
     var tick = function (t) {
-      if (state === 1 && !dragging && lastTick) cur = Math.min(dur, cur + (t - lastTick) / 1000);
+      if (state === 1 && !dragging && lastTick) cur = Math.min(dur, cur + (t - lastTick) / 1000 * rate);
       lastTick = t; paint();
       ticker = requestAnimationFrame(tick);
     };
@@ -627,6 +627,29 @@
       if (full) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
       else if (m.requestFullscreen) m.requestFullscreen(); else if (m.webkitRequestFullscreen) m.webkitRequestFullscreen();
     });
+    // speed menu
+    var sb = $(".mbar__sb", m), menu = $(".mbar__menu", m), rate = 1;
+    var openMenu = function (on) {
+      menu.hidden = !on; sb.setAttribute("aria-expanded", on); m.classList.toggle("menu-open", on);
+      if (on) { var c = $("[aria-checked=true]", menu); if (c) c.focus({ preventScroll: true }); } else wake();
+    };
+    sb.addEventListener("click", function (e) { e.stopPropagation(); openMenu(menu.hidden); });
+    Array.prototype.slice.call(menu.querySelectorAll("[data-rate]")).forEach(function (o) {
+      o.addEventListener("click", function (e) {
+        e.stopPropagation();
+        rate = +o.dataset.rate; cmd("setPlaybackRate", [rate]);
+        menu.querySelectorAll("[data-rate]").forEach(function (x) { x.setAttribute("aria-checked", x === o); });
+        $("b", sb).textContent = rate + "×"; sb.setAttribute("aria-label", "Playback speed, " + rate + " times");
+        openMenu(false); sb.focus({ preventScroll: true });
+      });
+    });
+    menu.addEventListener("keydown", function (e) {
+      var items = Array.prototype.slice.call(menu.querySelectorAll("[data-rate]")), i = items.indexOf(document.activeElement);
+      if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); openMenu(false); sb.focus(); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); e.stopPropagation(); items[(i + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length].focus(); }
+    });
+    document.addEventListener("pointerdown", function (e) { if (!menu.hidden && !e.target.closest(".mbar__spd")) openMenu(false); });
+
     // seeking: click or drag the line, or use the arrow keys on it
     var at = function (x) { var r = track.getBoundingClientRect(); return Math.max(0, Math.min(1, (x - r.left) / r.width)) * dur; };
     track.addEventListener("pointerdown", function (e) {
@@ -660,6 +683,21 @@
       cmd("pauseVideo"); setPlaying(false);
     }, { threshold: 0 }).observe(m);
   });
+
+  /* ---------- footer name: scale it so it fills the row without spilling ---------- */
+  var fw = $(".foot__word");
+  if (fw) {
+    var fitWord = function () {
+      var s = fw.firstElementChild; if (!s) return;
+      fw.classList.remove("fit"); fw.style.removeProperty("--fw");
+      fw.style.setProperty("--fw", "100px"); fw.classList.add("fit");
+      var w = s.getBoundingClientRect().width, room = fw.clientWidth;
+      if (w > 0 && room > 0) fw.style.setProperty("--fw", Math.min(320, (100 * room / w) * 0.995).toFixed(2) + "px");
+    };
+    fitWord();
+    if (document.fonts) document.fonts.ready.then(fitWord);
+    addEventListener("resize", fitWord);
+  }
 
   /* scroll cue on the hero */
   var cue = $(".cue");
