@@ -554,3 +554,23 @@ ul,ol{padding:0;list-style:none}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:0s!important;transition-delay:0s!important;scroll-behavior:auto!important}
   .js [data-reveal]{opacity:1;transform:none}
 }
+/* touch screens: give small text links a finger-sized hit area without changing the look */
+@media (pointer:coarse){
+  .foot__nav{gap:0}
+  .foot__nav a{padding:10px 0}
+  .brand{padding:14px 0;margin:-14px 0}
+}
+/* touch devices: live blur over the moving hero/video costs ~20fps on phones (measured 37 -> 56fps).
+   Swap every frosted panel for a solid tinted one that reads the same. */
+@media (pointer:coarse){
+  *,*::before,*::after,::backdrop{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .pills,.filters,.btn--ghost,.tile__go,.pcard__plus,.modal__x,.movie__play{background:linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)),rgba(22,16,56,.62)}
+  .num,.pad,.form{background:linear-gradient(rgba(255,255,255,.06),rgba(255,255,255,.06)),rgba(22,16,56,.55)}
+  .mbar,.movie__pop{background:rgba(9,6,28,.8)}
+  .modal::backdrop{background:rgba(8,6,22,.88)}
+}
+/* tablets + small laptops (820-1199px): the nav scaled down to 8.5-11px text; keep it readable and tighten the sides so the groups never touch */
+@media (min-width:820px) and (max-width:1199.98px) and (min-height:500.02px){
+  :root{--u:max(.85px, calc(min(100vw, 160svh) / 1440))}
+  .nav{padding:0 clamp(32px, 6vw, 104px)}
+}

@@ -270,22 +270,22 @@
     });
 
     var PAT = { kick: [0, 3, 8, 10], snare: [4, 12], hat: [0, 2, 4, 6, 8, 10, 12, 14, 15], clap: [12], bass: [0, 7, 10], zap: [14] };
-    var playBtn = $("#beat"), playing = false, step = 0, nextT = 0, timer = 0;
+    var playBtn = $("#beat"), playing = false, beat = 0, nextT = 0, timer = 0;
     var schedule = function () {
       var spb = 60 / 96 / 4;
       while (nextT < ac.currentTime + 0.12) {
-        for (var v in PAT) if (PAT[v].indexOf(step) > -1) {
+        for (var v in PAT) if (PAT[v].indexOf(beat) > -1) {
           V[v](nextT);
           (function (p, at) { setTimeout(function () { flash(p); }, Math.max(0, (at - ac.currentTime) * 1000)); })(byV[v], nextT);
         }
-        nextT += spb; step = (step + 1) % 16;
+        nextT += spb; beat = (beat + 1) % 16;
       }
     };
     playBtn.addEventListener("click", function () {
       audio(); playing = !playing;
       playBtn.setAttribute("aria-pressed", playing);
       $("span", playBtn).textContent = playing ? "Stop the beat" : "Play a beat";
-      if (playing) { step = 0; nextT = ac.currentTime + 0.05; timer = setInterval(schedule, 25); } else clearInterval(timer);
+      if (playing) { beat = 0; nextT = ac.currentTime + 0.05; timer = setInterval(schedule, 25); } else clearInterval(timer);
     });
     document.addEventListener("visibilitychange", function () { if (document.hidden && playing) playBtn.click(); });
 
@@ -328,7 +328,7 @@
   /* ---------- contact form (opens the visitor's mail app) ---------- */
   var form = $("#form");
   if (form) {
-    var EMAIL = "buildyourdreamwebsitedotcom@gmail.com";
+    var EMAIL = "doorgeshsungkur3@gmail.com";
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form, note = $("#note"), ok = /^\S+@\S+\.\S+$/;

@@ -69,7 +69,7 @@ html.snap .modal{touch-action:pan-y pinch-zoom}
 .in .wi{transform:none}
 .js [data-reveal].sh{opacity:1;transform:none}
 .hl.sh-hl{background:none}
-.hl .wi{background:var(--accent);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hl .wi{background:var(--accent);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.16em;margin-bottom:-.16em}
 
 /* ---------- images wipe open and settle ---------- */
 .js .tile[data-reveal],.js .frame[data-reveal],.js .pcard[data-reveal],.js .site__shot[data-reveal],.js .sq__shots[data-reveal],.js .reel[data-reveal] .frame{
