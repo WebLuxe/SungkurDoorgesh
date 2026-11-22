@@ -563,6 +563,7 @@
       idleT = setTimeout(function () { if (m.classList.contains("playing") && !dragging && !kbFocus()) m.classList.add("idle"); }, 2600);
     };
     var setPlaying = function (on) {
+      if (on && m.classList.contains("playing")) return;
       m.classList.toggle("playing", on); m.classList.toggle("paused", !on);
       pp.setAttribute("aria-label", on ? "Pause" : "Play");
       if (!on) { m.classList.remove("idle"); clearTimeout(idleT); } else wake();
