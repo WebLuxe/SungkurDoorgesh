@@ -4,112 +4,126 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sound — Doorgesh</title>
-<meta name="description" content="Play a drum kit in your browser, then check out Doorgesh's amp builds and DSP remasters as Zenn Prxd.">
-<meta name="theme-color" content="#0d0614">
+<meta name="description" content="Play Doorgesh's drum kit in your browser, and see the amps, remasters and band behind Zenn Prxd.">
+<meta name="theme-color" content="#0D0A22">
 <meta property="og:title" content="Sound — Doorgesh">
-<meta property="og:description" content="Play a drum kit in your browser, then check out Doorgesh's amp builds and DSP remasters as Zenn Prxd.">
+<meta property="og:description" content="Play Doorgesh's drum kit in your browser, and see the amps, remasters and band behind Zenn Prxd.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="assets/img/doorgesh-4.webp">
+<meta property="og:image" content="assets/img/doorgesh-4-sunset.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://images.higgs.ai" crossorigin>
+<link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin>
+<link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
+<script>(function(){var h=document.documentElement,home=h.getAttribute("data-page")==="home",s;window.DG_EXTRA=[];try{s=sessionStorage;var n=performance.getEntriesByType("navigation")[0];if(n&&n.type==="reload"){s.removeItem("dg-seen");s.removeItem("dg-home");s.removeItem("dg-wipe")}if(matchMedia("(prefers-reduced-motion: reduce)").matches){s.removeItem("dg-wipe");h.classList.add("nointro");return}if(home&&!s.getItem("dg-home")){s.removeItem("dg-wipe");h.classList.add("intro","filming","loading");return}if(home)h.classList.add("nointro");if(s.getItem("dg-wipe"))h.classList.add("arriving");else if(!s.getItem("dg-seen"))h.classList.add("loading")}catch(e){if(home)h.classList.add("nointro")}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=11">
-<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){sessionStorage.removeItem('seen');sessionStorage.removeItem('wipe');if(!/(^|\/)(index\.html)?$/.test(location.pathname)){h.classList.add('loading');location.replace('index.html');return}}if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
-<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="js/main.js?v=11" defer></script>
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,900&amp;display=swap">
+<link rel="stylesheet" href="css/site.css?v=3">
+<link rel="stylesheet" href="css/intro.css?v=3">
+<link rel="stylesheet" href="css/motion.css?v=3">
+<script src="js/site.js?v=3" defer></script>
+<script src="js/intro.js?v=3" defer></script>
 </head>
-<body data-page="sound">
-<a class="skip" href="#main">Skip to content</a>
+<body>
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
-  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
-  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__top"><span>Doorgesh</span><span>Zenn Prxd · Mauritius</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div></div>
+  <div class="loader__bottom"><span class="loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
-<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
-<header class="nav" id="nav" data-intro>
-  <div class="wrap nav__bar">
-    <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html" aria-current="page">Sound</a><a href="about.html">About</a></nav>
-    <a class="btn btn--sm nav__cta" href="contact.html">Say hi</a>
-    <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Doorgesh, home">DOORGESH</a>
+  <nav class="pills" aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="work.html">Builds</a>
+    <a href="sound.html" aria-current="page">Sound</a>
+    <a href="about.html">About</a>
+  </nav>
+  <div class="nav__right">
+    <span class="lang">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c-3.2 3-3.2 15 0 18M12 3c3.2 3 3.2 15 0 18"/></svg>
+      Eng
+    </span>
+    <a class="btn" href="contact.html">Say hi</a>
   </div>
 </header>
-<div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html"><small>01</small>Home</a><a href="work.html"><small>02</small>Builds</a><a href="sound.html" aria-current="page"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
-  <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
-</div>
 <main id="main">
 <section class="phead">
   <div class="phead__bg" aria-hidden="true"><img src="assets/img/mood/stage.webp" srcset="assets/img/mood/stage.webp 1400w, assets/img/mood/stage-hd.webp 2400w" sizes="100vw" alt=""></div>
-  <div class="phead__mini-sun" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="eyebrow mono"><b>03</b> Sound</p>
-    <h1 class="vice h1 sun-text" aria-label="Sound check">Sound check</h1>
-    <p class="lede">Drummer, band leader and the producer behind <strong>Zenn Prxd</strong>. Go on, hit something. Every sound is made live in your browser.</p>
+    <p class="eyebrow"><b>03</b> Sound</p>
+    <h1 class="h1">Sound check</h1>
+    <p class="lede">Drummer, band leader and the producer behind <strong style="color:#fff">Zenn Prxd</strong>. Go on, hit something. Every sound is made live in your browser.</p>
     
   </div>
 </section>
 <div class="kit-pulse" aria-hidden="true"></div>
-<section class="sec-kit" aria-label="Drum kit">
+<section class="sec sec--tight" aria-label="Drum kit">
   <div class="wrap kit" id="kit">
-    <div class="pads"><button type="button" class="pad" data-v="kick" data-key="a" data-cursor="Hit"><b>Kick</b><span class="mono">Key A</span></button><button type="button" class="pad" data-v="snare" data-key="s" data-cursor="Hit"><b>Snare</b><span class="mono">Key S</span></button><button type="button" class="pad" data-v="hat" data-key="d" data-cursor="Hit"><b>Hi-hat</b><span class="mono">Key D</span></button><button type="button" class="pad" data-v="clap" data-key="f" data-cursor="Hit"><b>Clap</b><span class="mono">Key F</span></button><button type="button" class="pad" data-v="bass" data-key="g" data-cursor="Hit"><b>808</b><span class="mono">Key G</span></button><button type="button" class="pad" data-v="zap" data-key="h" data-cursor="Hit"><b>Zap</b><span class="mono">Key H</span></button></div>
+    <div class="pads"><button type="button" class="pad" data-cursor="Hit" data-v="kick" data-key="a"><b>Kick</b><span>Key A</span></button><button type="button" class="pad" data-cursor="Hit" data-v="snare" data-key="s"><b>Snare</b><span>Key S</span></button><button type="button" class="pad" data-cursor="Hit" data-v="hat" data-key="d"><b>Hi-hat</b><span>Key D</span></button><button type="button" class="pad" data-cursor="Hit" data-v="clap" data-key="f"><b>Clap</b><span>Key F</span></button><button type="button" class="pad" data-cursor="Hit" data-v="bass" data-key="g"><b>808</b><span>Key G</span></button><button type="button" class="pad" data-cursor="Hit" data-v="zap" data-key="h"><b>Zap</b><span>Key H</span></button></div>
     <figure class="scope" aria-label="Oscilloscope showing the sound you play">
       <canvas id="scope" aria-hidden="true"></canvas>
-      <figcaption class="scope__bar mono"><b>CH1 · Live output</b><span id="scopeLvl">idle</span></figcaption>
+      <figcaption class="scope__bar"><b>CH1 · Live output</b><span id="scopeLvl">idle</span></figcaption>
     </figure>
-    <div class="kit__bar"><button class="btn" type="button" id="beat" aria-pressed="false" data-cursor="Play"><span>Play a beat</span> <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z"/></svg></button><p class="mono">Tap the pads, or use keys A S D F G H</p></div>
+    <div class="kit__bar"><button class="btn" type="button" id="beat" aria-pressed="false"><span>Play a beat</span> <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z" fill="currentColor" stroke="none"/></svg></button><p>Tap the pads, or use keys A S D F G H</p></div>
   </div>
 </section>
-<section>
+
+<section class="sec">
+  <div class="glow glow--a" aria-hidden="true"></div>
   <div class="wrap split">
-    <div><p class="eyebrow mono">Audio hardware</p><h2 class="vice h3">Amps &amp; subs,<br><span class="sun-text-x">built to shake.</span></h2>
-      <p>I build and tune amplifier systems on these boards, then put them in custom subwoofer and speaker enclosures. Tuned by ear first, then by DSP.</p>
-      <figure class="photo-card"><video muted loop playsinline preload="none" poster="assets/video/real/solder.jpg" data-src="assets/video/real/solder.mp4"></video></figure></div>
-    <div class="boards"><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>TPA3116D2</b><span>Class-D stereo amp board</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-TB21</b><span>Amp board with a bass channel</span></p></div><div class="board"><svg viewBox="0 0 52 52"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-HT21</b><span>Stereo + subwoofer amp board</span></p></div></div>
+    <div><p class="eyebrow" data-reveal>Audio hardware</p><h2 class="h3" data-reveal="2">Amps &amp; subs,<br><span class="hl">built to shake.</span></h2>
+      <p class="lede" data-reveal="3">I build and tune amplifier systems on these boards, then put them in custom subwoofer and speaker enclosures. Tuned by ear first, then by DSP.</p>
+      <figure class="frame" data-reveal="3"><video muted loop playsinline preload="none" poster="assets/video/real/solder.jpg" data-src="assets/video/real/solder.mp4" aria-label="Doorgesh soldering a board"></video></figure></div>
+    <div class="boards"><div class="board" data-reveal><svg viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>TPA3116D2</b><span>Class-D stereo amp board</span></p></div><div class="board" data-reveal><svg viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-TB21</b><span>Amp board with a bass channel</span></p></div><div class="board" data-reveal><svg viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="10" width="40" height="32" rx="3"/><path d="M13 42v5M39 42v5M13 18h10v8H13zM29 18h10M29 24h10M29 30h6"/><circle cx="18" cy="34" r="3"/></svg><p><b>ZK-HT21</b><span>Stereo + subwoofer amp board</span></p></div></div>
   </div>
 </section>
-<section>
+
+<section class="sec sec--tight">
   <div class="wrap split">
-    <div><p class="eyebrow mono">Zenn Prxd</p><p class="bignum sun-text"><span data-count="200">0</span>K+</p><p class="mono" style="color:var(--muted);margin-top:10px">views on YouTube · 1K+ subscribers</p></div>
-    <div><h2 class="vice h3">Remasters &amp;<br><span class="sun-text-x">visualisers.</span></h2>
-      <p>DSP remasters and music visualisers on YouTube under the name Zenn Prxd, edited and rendered with:</p>
-      <ul class="chips"><li>DaVinci Resolve</li><li>Avee Player</li><li>Shotcut</li><li>Filmora</li></ul>
-      <figure class="photo-card" data-parallax><img src="assets/img/mood/dsp.webp" srcset="assets/img/mood/dsp.webp 1400w, assets/img/mood/dsp-hd.webp 2400w" sizes="100vw" alt="" loading="lazy"></figure><p style="margin-top:26px"><a class="btn btn--ghost" href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">Find Zenn Prxd on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></p></div>
+    <div><p class="eyebrow" data-reveal>Zenn Prxd</p><p class="big hl" data-reveal="2"><span data-count="200">200</span>K+</p><p class="small" style="margin-top:14px" data-reveal="3">views on YouTube · 1K+ subscribers</p></div>
+    <div><h2 class="h3" data-reveal>Remasters &amp;<br><span class="hl">visualisers.</span></h2>
+      <p class="lede" data-reveal="2">DSP remasters and music visualisers on YouTube under the name Zenn Prxd, edited and rendered with:</p>
+      <ul class="chips" data-reveal="3"><li>DaVinci Resolve</li><li>Avee Player</li><li>Shotcut</li><li>Filmora</li></ul>
+      <figure class="frame" data-reveal="3"><img src="assets/img/mood/dsp.webp" srcset="assets/img/mood/dsp.webp 1400w, assets/img/mood/dsp-hd.webp 2400w" sizes="(max-width:900px) 100vw, 60vw" alt="" loading="lazy" decoding="async"></figure>
+      <div class="btns"><a class="btn btn--ghost" href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">Find Zenn Prxd on YouTube <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a></div></div>
   </div>
 </section>
-<section>
+
+<section class="sec">
+  <div class="glow glow--b" aria-hidden="true"></div>
   <div class="wrap split">
-    <div><p class="eyebrow mono">The band</p><h2 class="vice h3">Behind<br><span class="sun-text-x">the kit.</span></h2><figure class="photo-card" data-parallax><img src="assets/img/mood/drums.webp" srcset="assets/img/mood/drums.webp 1400w, assets/img/mood/drums-hd.webp 2400w" sizes="100vw" alt="" loading="lazy"></figure></div>
-    <div><p>Drummer and leader of a school band. Keeping time for a whole band is where the ear for tuning amps and remasters comes from.</p></div>
+    <div><p class="eyebrow" data-reveal>The band</p><h2 class="h3" data-reveal="2">Behind<br><span class="hl">the kit.</span></h2><figure class="frame" data-reveal="3"><img src="assets/img/mood/drums.webp" srcset="assets/img/mood/drums.webp 1400w, assets/img/mood/drums-hd.webp 2400w" sizes="(max-width:900px) 100vw, 60vw" alt="" loading="lazy" decoding="async"></figure></div>
+    <div><p class="lede" data-reveal>Drummer and leader of a school band. Keeping time for a whole band is where the ear for tuning amps and remasters comes from.</p></div>
   </div>
 </section>
-<section class="cta has-video">
-  <div class="sec-video" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/video/drive-loop.jpg" data-src="assets/video/drive-loop.mp4"></video></div>
+
+<section class="cta" aria-label="Contact">
+  <div class="cta__bg" data-rain="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_063703_04e54df7-2236-4dff-b95b-a9a34c1f78ec.mp4" aria-hidden="true">
+    <img src="https://images.higgs.ai/?default=1&amp;output=webp&amp;url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261117_063251_24fbd7cc-00df-49ec-8fbf-d8a0349b1e98.png&amp;w=2000&amp;q=85" alt="" loading="lazy" decoding="async">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+  </div>
   <div class="wrap">
-    <h2 class="vice h2 sun-text">Need it to<br>sound right?</h2>
-    <p class="lede">Amp builds, remasters, visualisers or video edits. Tell me about it.</p>
-    <a class="btn" href="contact.html">Start a conversation <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <p class="kick" data-reveal>Let's talk</p>
+    <h2 class="h1" data-reveal="2">Need it to sound right?</h2>
+    <p class="lede" data-reveal="3">Amp builds, remasters, visualisers or video edits. Tell me about it.</p>
+    <div class="btns" data-reveal="4"><a class="btn" href="contact.html">Start a conversation <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
   </div>
 </section>
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="foot__word vice sun-text">Doorgesh</p>
+    <p class="foot__word" aria-hidden="true">DOORGESH</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
-      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="web.html">Websites</a><a href="contact.html">Contact</a></nav>
+      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a><a href="https://webluxe.github.io/WebLuxe/" target="_blank" rel="noopener">WebLuxe ↗</a></div>
     </div>
-    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Harbour scenes and rain films made for this site.</p>
   </div>
 </footer>
 </body>

@@ -1,188 +1,559 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-page="home">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Doorgesh — Builder, drummer, producer</title>
-<meta name="description" content="Doorgesh (Zenn Prxd): drummer, builder and producer from Mauritius. High-voltage experiments, custom audio systems, sim rigs and more.">
-<meta name="theme-color" content="#0d0614">
-<meta property="og:title" content="Doorgesh — Builder, drummer, producer">
-<meta property="og:description" content="Doorgesh (Zenn Prxd): drummer, builder and producer from Mauritius. High-voltage experiments, custom audio systems, sim rigs and more.">
+<title>Doorgesh — Claim Your Summit</title>
+<meta name="description" content="Doorgesh (Zenn Prxd): builder, drummer and producer from Mauritius. High-voltage experiments, custom audio systems, sim rigs and websites. Claim your summit.">
+<meta name="theme-color" content="#0D0A22">
+<meta property="og:title" content="Doorgesh — Claim Your Summit">
+<meta property="og:description" content="Doorgesh (Zenn Prxd): builder, drummer and producer from Mauritius. High-voltage experiments, custom audio systems, sim rigs and websites. Claim your summit.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="assets/img/doorgesh-4.webp">
+<meta property="og:image" content="assets/img/doorgesh-4-sunset.webp">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://images.higgs.ai" crossorigin>
+<link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin>
+<link rel="preload" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
+<script>(function(){var h=document.documentElement,home=h.getAttribute("data-page")==="home",s;window.DG_EXTRA=[];try{s=sessionStorage;var n=performance.getEntriesByType("navigation")[0];if(n&&n.type==="reload"){s.removeItem("dg-seen");s.removeItem("dg-home");s.removeItem("dg-wipe")}if(matchMedia("(prefers-reduced-motion: reduce)").matches){s.removeItem("dg-wipe");h.classList.add("nointro");return}if(home&&!s.getItem("dg-home")){s.removeItem("dg-wipe");h.classList.add("intro","filming","loading");return}if(home)h.classList.add("nointro");if(s.getItem("dg-wipe"))h.classList.add("arriving");else if(!s.getItem("dg-seen"))h.classList.add("loading")}catch(e){if(home)h.classList.add("nointro")}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=11">
-<script>(function(){var h=document.documentElement;if('scrollRestoration' in history)history.scrollRestoration='manual';try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){sessionStorage.removeItem('seen');sessionStorage.removeItem('wipe');if(!/(^|\/)(index\.html)?$/.test(location.pathname)){h.classList.add('loading');location.replace('index.html');return}}if(sessionStorage.getItem('wipe'))h.classList.add('arriving');else{h.classList.add('loading');if(!sessionStorage.getItem('seen'))h.classList.add('first')}}catch(e){h.classList.add('loading')}})()</script>
-<noscript><style>.loader{display:none!important}html.first [data-intro],html.first .scene .title h1{opacity:1!important}#introBlack{display:none}</style></noscript>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
-<script src="js/main.js?v=11" defer></script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"}}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@1,62..125,900&amp;display=swap">
+<link rel="stylesheet" href="css/site.css?v=3">
+<link rel="stylesheet" href="css/intro.css?v=3">
+<link rel="stylesheet" href="css/motion.css?v=3">
+<style>
+/* ---------- hero + stage (Claim Your Summit) ---------- */
+.hero{
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  height:100vh;height:100svh;
+  min-height:520px;
+  overflow:hidden;
+  background:var(--bg);
+}
+.stage{
+  position:absolute;
+  left:50%;top:50%;
+  width:max(100vw, 177.7778vh);
+  aspect-ratio:16/9;
+  transform:translate(-50%,-50%);
+  z-index:1;
+}
+.stage.is-sized{transform:none}
+.layer{position:absolute;inset:0}
+.layer > img,.layer > video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  user-select:none;-webkit-user-drag:none;
+}
+.back{transform-origin:50% 40%;z-index:1}
+.headline{z-index:2}
+.mid{transform-origin:50% 45%;z-index:3}
+.front{transform-origin:50% 100%;z-index:4}
+.rain{opacity:0;transition:opacity .7s linear}
+.rain.on{opacity:1}
+.shade{
+  position:absolute;left:0;right:0;top:0;height:45%;
+  background:linear-gradient(to bottom, rgba(13,8,40,.45), rgba(13,8,40,0));
+  pointer-events:none;
+}
+.glass{
+  position:absolute;
+  left:5.2%;right:4.1%;top:57.9%;height:25.4%;
+  background:linear-gradient(to bottom, rgba(190,200,255,.10) 0%, rgba(150,160,230,.05) 60%, rgba(120,130,210,.08) 100%);
+  -webkit-backdrop-filter:blur(1.2px) saturate(1.05);
+  backdrop-filter:blur(1.2px) saturate(1.05);
+  border-top:1px solid rgba(255,255,255,.18);
+}
+.headline{position:absolute;top:0;left:0;width:100vw;height:100%;pointer-events:none}
+.word{
+  position:absolute;left:0;right:0;top:0;
+  margin:0;
+  font-size:290px;
+  font-weight:700;
+  letter-spacing:-.045em;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+  color:#fff;
+}
+.word .w{display:inline-block}
+.word .l{display:inline-block;will-change:transform,opacity}
+.word .bl{display:inline-block;width:0;height:0}
+.kicker{
+  position:absolute;
+  left:-.1em;right:.1em;top:0;
+  margin:0;
+  font-size:34px;
+  font-weight:300;
+  letter-spacing:-.01em;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+  color:#fff;
+}
+.opening{position:absolute;inset:0;z-index:6;background:var(--bg)}
+.opening > img,.opening > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.opening > video{opacity:0}
+.doors{position:absolute;inset:0;z-index:7;overflow:hidden}
+.door{
+  position:absolute;top:0;
+  width:50%;height:100%;
+  background-color:#07060f;
+  background-repeat:no-repeat;
+  background-size:200% 100%;
+  will-change:transform;
+}
+.door--l{left:0;background-position:0 50%}
+.door--r{right:0;background-position:100% 50%}
+html:not(.intro) .opening,html:not(.intro) .doors,.opening[hidden],.doors[hidden]{display:none}
+
+/* intro start states */
+html.intro .nav{opacity:0;transform:translateY(-6px)}
+html.intro .word .l,html.intro .kicker{opacity:0}
+html.intro .front{transform:translateY(66%)}
+html.intro .shade{opacity:0}
+</style>
+<script src="js/site.js?v=3" defer></script>
+<script src="js/intro.js?v=3" defer></script>
 </head>
-<body data-page="home">
-<svg class="duo-defs" aria-hidden="true" focusable="false"><filter id="duo-sunset" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".12 .86 1"/><feFuncG type="table" tableValues=".04 .24 .86"/><feFuncB type="table" tableValues=".2 .42 .55"/></feComponentTransfer></filter><filter id="duo-pink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".09 .78 1"/><feFuncG type="table" tableValues=".02 .12 .78"/><feFuncB type="table" tableValues=".2 .5 .9"/></feComponentTransfer></filter><filter id="duo-teal" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".05 .2 .85"/><feFuncG type="table" tableValues=".07 .5 1"/><feFuncB type="table" tableValues=".18 .62 .95"/></feComponentTransfer></filter><filter id="duo-violet" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".08 .5 1"/><feFuncG type="table" tableValues=".03 .24 .82"/><feFuncB type="table" tableValues=".2 .9 1"/></feComponentTransfer></filter></svg>
-<a class="skip" href="#main">Skip to content</a>
+<body>
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__bg"></div>
-  <div class="loader__top mono"><span>Doorgesh</span><span>Zenn Prxd &middot; Mauritius</span></div>
-  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill"><i>Doorgesh</i></span></div></div>
-  <div class="loader__bottom"><span class="mono loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
+  <div class="loader__top"><span>Doorgesh</span><span>Zenn Prxd · Mauritius</span></div>
+  <div class="loader__word"><div class="loader__w"><span class="loader__out">Doorgesh</span><span class="loader__fill">Doorgesh</span></div></div>
+  <div class="loader__bottom"><span class="loader__msg">Loading the drive</span><span class="loader__num">000</span></div>
   <div class="loader__line"><i></i></div>
 </div>
-<script>(function(){var h=document.documentElement,d=function(){h.classList.add("lf")};try{document.fonts.load("italic 900 extra-condensed 40px Archivo","DOORGESH").then(d,d)}catch(e){d()}setTimeout(d,2200)})()</script>
 <div class="wipe" id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
-<header class="nav" id="nav" data-intro>
-  <div class="wrap nav__bar">
-    <a class="logo" href="index.html" aria-label="Doorgesh, home"><b>Doorgesh</b><i></i></a>
-    <nav class="nav__links" aria-label="Pages"><a href="index.html" aria-current="page">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a></nav>
-    <a class="btn btn--sm nav__cta" href="contact.html">Say hi</a>
-    <button class="nav__menu" id="menuBtn" type="button" aria-expanded="false" aria-controls="sheet"><span></span><span></span><i class="sr">Menu</i></button>
+<div class="film" id="film">
+  <canvas class="film__amb" aria-hidden="true"></canvas>
+  <video muted playsinline preload="auto" aria-label="Intro film: a drive into a neon city ending on the name Doorgesh"></video>
+  <button type="button" class="film__snd" aria-pressed="false">Sound off</button>
+  <button type="button" class="film__skip">Skip intro →</button>
+</div>
+<div class="flash" id="flash" aria-hidden="true"></div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Doorgesh, home">DOORGESH</a>
+  <nav class="pills" aria-label="Main">
+    <a href="index.html" aria-current="page">Home</a>
+    <a href="work.html">Builds</a>
+    <a href="sound.html">Sound</a>
+    <a href="about.html">About</a>
+  </nav>
+  <div class="nav__right">
+    <span class="lang">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c-3.2 3-3.2 15 0 18M12 3c3.2 3 3.2 15 0 18"/></svg>
+      Eng
+    </span>
+    <a class="btn" href="contact.html">Say hi</a>
   </div>
 </header>
-<div class="sheet" id="sheet" hidden>
-  <nav aria-label="Menu"><a href="index.html" aria-current="page"><small>01</small>Home</a><a href="work.html"><small>02</small>Builds</a><a href="sound.html"><small>03</small>Sound</a><a href="about.html"><small>04</small>About</a><a href="contact.html"><small>05</small>Contact</a></nav>
-  <div class="sheet__foot mono"><span>Zenn Prxd · Mauritius</span><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
-</div>
 <main id="main">
-<div class="scene-pin">
-<section class="scene" id="scene" aria-label="Doorgesh">
-  <canvas class="gl" id="gl" aria-hidden="true"></canvas>
-  <div class="layer stars" aria-hidden="true"></div>
-  <div class="layer sunglow" aria-hidden="true"></div>
-  <div class="layer sun" aria-hidden="true"><div></div></div>
-  <div class="layer title"><h1 class="vice" id="heroTitle">Doorgesh</h1></div>
-  <p class="scene__kicker mono" data-intro>Hardware engineer · Applied physics · Full-stack IT · Audio producer</p>
-  <div class="scene__copy">
-    <div class="wrap">
-      <p data-intro>I build things that fly on ions, shake rooms with bass and see through a camera. Drummer, builder and producer from Mauritius.</p>
-      <div class="scene__cta" data-intro><a class="btn" href="about.html">About me <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn--ghost" href="work.html">My builds</a></div>
+<section class="hero" id="hero" aria-label="Doorgesh — Claim Your Summit">
+  <div class="stage" id="stage">
+    <div class="layer back" id="back">
+      <img id="imgBack" alt="" decoding="async">
+      <video class="rain" id="rainA" muted playsinline preload="auto" aria-hidden="true"></video>
+      <video class="rain" id="rainB" muted playsinline preload="auto" aria-hidden="true"></video>
+      <div class="shade" id="shade"></div>
+    </div>
+    <div class="headline" id="headline">
+      <p class="kicker" id="kicker" aria-hidden="true">Claim Your</p>
+      <h1 class="word" id="word" aria-label="Claim Your Summit"><span class="w" id="wordInner" aria-hidden="true"><span class="l">S</span><span class="l">u</span><span class="l">m</span><span class="l">m</span><span class="l">i</span><span class="l">t</span><i class="bl" id="baseline"></i></span></h1>
+    </div>
+    <div class="layer mid" id="mid">
+      <img id="imgMid" alt="" decoding="async">
+    </div>
+    <div class="layer front" id="front">
+      <div class="glass" aria-hidden="true"></div>
+      <img id="imgFront" alt="A man in a long dark coat stands at a glass balcony railing, looking out over a rainy neon harbour at night" decoding="async">
     </div>
   </div>
-  <span class="scroll-cue" aria-hidden="true" data-intro></span>
-  <div class="shade" aria-hidden="true"></div>
-  <div id="introBlack" aria-hidden="true"></div>
-  <div class="flash" id="flash" aria-hidden="true"></div>
-  <div class="film" id="film">
-    <canvas class="film__amb" aria-hidden="true"></canvas>
-    <video muted playsinline preload="auto" aria-label="Intro film: a drive into a neon sunset city ending on the name Doorgesh"></video>
-    <button type="button" class="film__snd mono" aria-pressed="false">Sound off</button>
-    <button type="button" class="film__skip mono">Skip intro →</button>
+  <div class="opening" id="opening" aria-hidden="true">
+    <img id="imgAerial" alt="" decoding="async">
+    <video id="tilt" muted playsinline preload="auto"></video>
   </div>
-  <div class="intro" id="introUI" aria-hidden="true">
-    <p class="intro__word"><span class="mk"><i>Now</i></span><span class="mk"><i>arriving</i></span><span class="mk"><i>Mauritius</i></span></p>
-    <div class="intro__meta"><span class="intro__num">000</span><span class="intro__bar"><i></i></span><button type="button" class="intro__skip">Skip intro →</button></div>
+  <div class="doors" id="doors" aria-hidden="true">
+    <div class="door door--l" id="doorL"></div>
+    <div class="door door--r" id="doorR"></div>
   </div>
+  <button class="cue" type="button" aria-label="Scroll to the next section">Scroll<i></i></button>
 </section>
-</div>
 
-<section class="me" aria-labelledby="me-title">
-  <div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
-  <div class="wrap me__grid">
-    <figure class="me__photo" data-parallax><img src="assets/img/doorgesh-4-sunset.webp" data-hd="assets/img/doorgesh-4-sunset-hd.webp" alt="Doorgesh flexing, mirror selfie in sunset colours" loading="lazy" decoding="async" style="object-position:45% 35%"></figure>
+<section class="sec" aria-labelledby="me-title">
+  <div class="glow glow--a" aria-hidden="true"></div>
+  <div class="wrap me">
+    <figure class="frame me__photo" data-reveal><img src="assets/img/doorgesh-4-sunset.webp" srcset="assets/img/doorgesh-4-sunset.webp 1x, assets/img/doorgesh-4-sunset-hd.webp 2x" alt="Doorgesh flexing, mirror selfie in sunset colours" loading="lazy" decoding="async" style="object-position:45% 35%"></figure>
     <div class="me__text">
-      <p class="eyebrow mono">Hey</p>
-      <h2 id="me-title" class="vice h2">I'm <span class="sun-text-x">Doorgesh.</span></h2>
-      <p class="lede">Better known online as Zenn Prxd. I build high-voltage experiments, custom audio systems and camera-powered gadgets, then write the code and make the content around them.</p>
-      <p class="me__p">Drummer and leader of a school band, first place at the RGSC Science Quest 2026, and always in the middle of a new build.</p>
-      <ul class="facts">
-        <li><span class="mono">Based in</span>Mauritius</li>
-        <li><span class="mono">Plays</span>Drums</li>
-        <li><span class="mono">Won</span>Science Quest 2026</li>
+      <p class="eyebrow" data-reveal>Hey</p>
+      <h2 id="me-title" class="h2" data-reveal="2">I'm <span class="hl">Doorgesh.</span></h2>
+      <p class="lede" data-reveal="3">Better known online as Zenn Prxd. I build high-voltage experiments, custom audio systems and camera-powered gadgets, then write the code and make the content around them.</p>
+      <p class="muted" data-reveal="3">Drummer and leader of a school band, first place at the RGSC Science Quest 2026, and always in the middle of a new build.</p>
+      <ul class="facts" data-reveal="4">
+        <li><span>Based in</span>Mauritius</li>
+        <li><span>Plays</span>Drums</li>
+        <li><span>Won</span>Science Quest 2026</li>
       </ul>
-      <a class="btn btn--ghost" href="about.html">More about me <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <div class="btns" data-reveal="4"><a class="btn btn--ghost" href="about.html">More about me <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
     </div>
   </div>
 </section>
 
-<section class="built" aria-labelledby="built-title">
-  <div class="wrap built__in">
-    <div class="built__s" data-screen>
-      <div class="sec-head"><p class="eyebrow mono">Things I've built</p><h2 id="built-title" class="vice h2">Made with <span class="sun-text-x">my hands.</span></h2></div>
-      <div class="tiles tiles--a">
-        <a class="tile" href="work.html"><img src="assets/img/mood/ionic.webp" srcset="assets/img/mood/ionic.webp 1400w, assets/img/mood/ionic-hd.webp 2400w" sizes="100vw" alt="" loading="lazy" decoding="async"><span class="tile__k mono">01 &middot; Physics</span><span class="tile__t">The Ionic Engine</span><span class="tile__d">Air pushed by electricity alone. First place, Science Quest 2026.</span></a>
-        <a class="tile" href="work.html"><img src="assets/img/real/tb21.webp" data-hd="assets/img/real/tb21-hd.webp" alt="" loading="lazy" decoding="async"><span class="tile__k mono">02 &middot; Audio</span><span class="tile__t">Amp &amp; sub systems</span><span class="tile__d">Class-D amp boards in boxes I built and tuned myself.</span></a>
-      </div>
+<section class="sec sec--tight" aria-labelledby="built-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal>Things I've built</p><h2 id="built-title" class="h2" data-reveal="2">Made with <span class="hl">my hands.</span></h2></div>
+      <p class="lede" data-reveal="3">Everything here I wired, coded and tested myself.</p>
     </div>
-    <div class="built__s" data-screen>
-      <div class="tiles tiles--b">
-        <a class="tile" href="work.html"><img src="assets/img/mood/sim.webp" srcset="assets/img/mood/sim.webp 1400w, assets/img/mood/sim-hd.webp 2400w" sizes="100vw" alt="" loading="lazy" decoding="async"><span class="tile__k mono">03 &middot; Sim rig</span><span class="tile__t">EuroSim wheel</span><span class="tile__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span></a>
-        <a class="tile" href="work.html"><img src="assets/video/real/wiring.jpg" alt="" loading="lazy" decoding="async"><span class="tile__k mono">04 &middot; Vision</span><span class="tile__t">AI sorting bin</span><span class="tile__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span></a>
-      </div>
-      <a class="btn btn--ghost rows__more" href="work.html">All my builds <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <div class="tiles">
+      <a class="tile" data-cursor="View" href="work.html" data-reveal><img src="assets/img/mood/ionic.webp" srcset="assets/img/mood/ionic.webp 1400w, assets/img/mood/ionic-hd.webp 2400w" sizes="(max-width:900px) 100vw, 60vw" alt="" loading="lazy" decoding="async"><span class="tile__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span><span class="tile__k">01 · Physics</span><span class="tile__t">The Ionic Engine</span><span class="tile__d">Air pushed by electricity alone. First place, Science Quest 2026.</span></a>
+      <a class="tile" data-cursor="View" href="work.html" data-reveal="2"><img src="assets/img/real/tb21.webp" srcset="assets/img/real/tb21.webp 1x, assets/img/real/tb21-hd.webp 2x" alt="" loading="lazy" decoding="async"><span class="tile__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span><span class="tile__k">02 · Audio</span><span class="tile__t">Amp &amp; sub systems</span><span class="tile__d">Class-D amp boards in boxes I built and tuned myself.</span></a>
+      <a class="tile" data-cursor="View" href="work.html" data-reveal><img src="assets/img/mood/sim.webp" srcset="assets/img/mood/sim.webp 1400w, assets/img/mood/sim-hd.webp 2400w" sizes="(max-width:900px) 100vw, 60vw" alt="" loading="lazy" decoding="async"><span class="tile__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span><span class="tile__k">03 · Sim rig</span><span class="tile__t">EuroSim wheel</span><span class="tile__d">A force-feedback wheel and shifter for Euro Truck Simulator 2.</span></a>
+      <a class="tile" data-cursor="View" href="work.html" data-reveal="2"><img src="assets/video/real/wiring.jpg" alt="" loading="lazy" decoding="async"><span class="tile__go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></span><span class="tile__k">04 · Vision</span><span class="tile__t">AI sorting bin</span><span class="tile__d">An ESP32-CAM bin that sees what you drop in and sorts it.</span></a>
     </div>
+    <div class="more"><a class="btn btn--ghost" href="work.html">All my builds <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
   </div>
 </section>
 
-<section class="reel" aria-labelledby="reel-title">
-  <div class="wrap reel__in">
-    <div class="sec-head"><p class="eyebrow mono">Real footage</p><h2 id="reel-title" class="vice h2">Caught <span class="sun-text-x">on camera.</span></h2></div>
-    <div class="reel__row">
-      <figure class="shot-clip"><video muted loop playsinline preload="none" poster="assets/video/real/solder.jpg" data-src="assets/video/real/solder.mp4" aria-label="Doorgesh soldering a board at his desk"></video><figcaption><span class="mono">01</span>On the iron</figcaption></figure>
-      <figure class="shot-clip"><video muted loop playsinline preload="none" poster="assets/video/real/ee111.jpg" data-src="assets/video/real/ee111.mp4" aria-label="A Corolla EE111 under garage lights, headlights cycling colours"></video><figcaption><span class="mono">02</span>The EE111</figcaption></figure>
-      <figure class="shot-clip"><video muted loop playsinline preload="none" poster="assets/video/real/bike.jpg" data-src="assets/video/real/bike.mp4" aria-label="Close-ups of the wrapped Raleigh bicycle with purple spokes"></video><figcaption><span class="mono">03</span>The Raleigh</figcaption></figure>
-      <figure class="shot-clip"><video muted loop playsinline preload="none" poster="assets/video/real/leds.jpg" data-src="assets/video/real/leds.mp4" aria-label="An Arduino and breadboard with LEDs flashing"></video><figcaption><span class="mono">04</span>LEDs on the beat</figcaption></figure>
-      <figure class="shot-clip"><video muted loop playsinline preload="none" poster="assets/video/real/school.jpg" data-src="assets/video/real/school.mp4" aria-label="A school party under coloured lights"></video><figcaption><span class="mono">05</span>School nights</figcaption></figure>
+<section class="sec" aria-labelledby="reel-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow" data-reveal>Real footage</p><h2 id="reel-title" class="h2" data-reveal="2">Caught <span class="hl">on camera.</span></h2></div>
+      <p class="lede" data-reveal="3">Straight off my phone: the bench, the garage and the nights out.</p>
     </div>
+  </div>
+  <div class="reel" data-reveal>
+    <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/solder.jpg" data-src="assets/video/real/solder.mp4" aria-label="Doorgesh soldering a board at his desk"></video></div><figcaption><span>01</span>On the iron</figcaption></figure>
+    <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/ee111.jpg" data-src="assets/video/real/ee111.mp4" aria-label="A Corolla EE111 under garage lights, headlights cycling colours"></video></div><figcaption><span>02</span>The EE111</figcaption></figure>
+    <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/bike.jpg" data-src="assets/video/real/bike.mp4" aria-label="Close-ups of the wrapped Raleigh bicycle with purple spokes"></video></div><figcaption><span>03</span>The Raleigh</figcaption></figure>
+    <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/leds.jpg" data-src="assets/video/real/leds.mp4" aria-label="An Arduino and breadboard with LEDs flashing"></video></div><figcaption><span>04</span>LEDs on the beat</figcaption></figure>
+    <figure class="clip"><div class="frame"><video muted loop playsinline preload="none" poster="assets/video/real/school.jpg" data-src="assets/video/real/school.mp4" aria-label="A school party under coloured lights"></video></div><figcaption><span>05</span>School nights</figcaption></figure>
   </div>
 </section>
 
-<section class="music has-bg" aria-labelledby="music-title">
-  <div class="sec-bg" data-parallax><img src="assets/img/mood/drums-violet.webp" srcset="assets/img/mood/drums-violet.webp 1400w, assets/img/mood/drums-violet-hd.webp 2400w" sizes="100vw" alt="" loading="lazy"></div>
-  <div class="wrap music__grid">
+<section class="sec band" aria-labelledby="music-title">
+  <div class="band__bg" aria-hidden="true"><img src="assets/img/mood/drums-violet.webp" srcset="assets/img/mood/drums-violet.webp 1400w, assets/img/mood/drums-violet-hd.webp 2400w" sizes="(max-width:900px) 100vw, 60vw" alt="" loading="lazy" decoding="async"></div>
+  <div class="wrap music">
     <div>
-      <p class="eyebrow mono">Zenn Prxd</p>
-      <h2 id="music-title" class="vice h2">I make <span class="sun-text-x">noise.</span></h2>
-      <p class="lede">Drums in a school band, DSP remasters and visualisers on YouTube, and amps that shake the room.</p>
-      <a class="btn" href="sound.html">Play my drum kit <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <p class="eyebrow" data-reveal>Zenn Prxd</p>
+      <h2 id="music-title" class="h2" data-reveal="2">I make <span class="hl">noise.</span></h2>
+      <p class="lede" data-reveal="3">Drums in a school band, DSP remasters and visualisers on YouTube, and amps that shake the room.</p>
+      <div class="btns" data-reveal="4"><a class="btn" href="sound.html">Play my drum kit <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
     </div>
-    <dl class="music__nums">
-      <div><dd class="bignum sun-text"><span data-count="200">0</span>K+</dd><dt class="mono">YouTube views</dt></div>
-      <div><dd class="bignum sun-text"><span data-count="1">0</span>K+</dd><dt class="mono">Subscribers</dt></div>
+    <dl class="nums" data-reveal="3">
+      <div class="num"><dd><b><span data-count="200">200</span>K+</b></dd><dt><span>YouTube views</span></dt></div>
+      <div class="num"><dd><b><span data-count="1">1</span>K+</b></dd><dt><span>Subscribers</span></dt></div>
     </dl>
   </div>
 </section>
 
-<section class="sidequest" aria-labelledby="sq-title">
-  <div class="wrap sidequest__grid">
+<section class="sec" aria-labelledby="sq-title">
+  <div class="glow glow--b" aria-hidden="true"></div>
+  <div class="wrap sq">
     <div>
-      <p class="eyebrow mono">Side quest</p>
-      <h2 id="sq-title" class="vice h3">I also make websites.</h2>
-      <p class="me__p">Some live sites I've designed and coded, from a car dealer with a 3D showroom to a hotel booking system.</p>
-      <a class="btn btn--ghost" href="web.html">See them <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <p class="eyebrow" data-reveal>Side quest</p>
+      <h2 id="sq-title" class="h3" data-reveal="2">I also make <span class="hl">websites.</span></h2>
+      <p class="lede" data-reveal="3" style="margin-top:20px">Live sites I've designed and coded, from a car dealer with a 3D showroom to a hotel booking system.</p>
+      <div class="btns" data-reveal="4"><a class="btn btn--ghost" href="web.html">See them <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
     </div>
-    <div class="sidequest__shots">
-      <img src="assets/img/sites/v8motors.webp" data-hd="assets/img/sites/v8motors-hd.webp" alt="V8 Motors website" loading="lazy">
-      <img src="assets/img/sites/edenvilla.webp" data-hd="assets/img/sites/edenvilla-hd.webp" alt="Eden Villa website" loading="lazy">
-      <img src="assets/img/sites/signtuning.webp" data-hd="assets/img/sites/signtuning-hd.webp" alt="SIGNTUNING website" loading="lazy">
+    <div class="sq__shots" data-reveal="2">
+      <img src="assets/img/sites/v8motors.webp" srcset="assets/img/sites/v8motors.webp 1x, assets/img/sites/v8motors-hd.webp 2x" alt="V8 Motors website" loading="lazy" decoding="async">
+      <img src="assets/img/sites/edenvilla.webp" srcset="assets/img/sites/edenvilla.webp 1x, assets/img/sites/edenvilla-hd.webp 2x" alt="Eden Villa website" loading="lazy" decoding="async">
+      <img src="assets/img/sites/signtuning.webp" srcset="assets/img/sites/signtuning.webp 1x, assets/img/sites/signtuning-hd.webp 2x" alt="SIGNTUNING website" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
 
-<section class="cta has-video">
-  <div class="sec-video" aria-hidden="true"><video muted loop playsinline preload="none" poster="assets/video/drive-loop.jpg" data-src="assets/video/drive-loop.mp4"></video></div>
+<section class="cta" aria-label="Contact">
+  <div class="cta__bg" data-rain="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_063703_04e54df7-2236-4dff-b95b-a9a34c1f78ec.mp4" aria-hidden="true">
+    <img src="https://images.higgs.ai/?default=1&amp;output=webp&amp;url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261117_063251_24fbd7cc-00df-49ec-8fbf-d8a0349b1e98.png&amp;w=2000&amp;q=85" alt="" loading="lazy" decoding="async">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+  </div>
   <div class="wrap">
-    <h2 class="vice h2 sun-text">Say hi.</h2>
-    <p class="lede">A collab, a build, a jam or just a hello. My inbox is open.</p>
-    <a class="btn" href="contact.html">Get in touch <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    <p class="kick" data-reveal>Let's talk</p>
+    <h2 class="h1" data-reveal="2">Say hi.</h2>
+    <p class="lede" data-reveal="3">A collab, a build, a jam or just a hello. My inbox is open.</p>
+    <div class="btns" data-reveal="4"><a class="btn" href="contact.html">Get in touch <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
   </div>
 </section>
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="foot__word vice sun-text">Doorgesh</p>
+    <p class="foot__word" aria-hidden="true">DOORGESH</p>
     <div class="foot__row">
       <div><p>© 2026 Doorgesh · Zenn Prxd · Mauritius</p><p class="foot__warn">High-voltage experiments are dangerous. Don't try them without proper training and supervision.</p></div>
-      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="web.html">Websites</a></nav>
-      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a></div>
+      <nav class="foot__nav" aria-label="Footer"><a href="index.html">Home</a><a href="work.html">Builds</a><a href="sound.html">Sound</a><a href="about.html">About</a><a href="web.html">Websites</a><a href="contact.html">Contact</a></nav>
+      <div class="foot__nav"><a href="https://www.youtube.com/results?search_query=Zenn+Prxd" target="_blank" rel="noopener">YouTube ↗</a><a href="https://www.tiktok.com/@r0shibhadain" target="_blank" rel="noopener">TikTok ↗</a><a href="https://webluxe.github.io/WebLuxe/" target="_blank" rel="noopener">WebLuxe ↗</a></div>
     </div>
-    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Intro and drive films rendered in Blender.</p>
+    <p class="foot__credits">Mood photos from <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>: Galina Bogdanova, Hoyoun Lee, ANOOF C, Hamed Taha, Zishan Khan, Luciano Donoso, Chris Becker, Erik Mclean, Vitalii Khodzinskyi, Magnus Lunay. Harbour scenes and rain films made for this site.</p>
   </div>
 </footer>
-<script type="module" src="js/scene.js?v=11"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- media ---------- */
+  var CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261117_";
+  var IDS = {
+    doors:  "063048_97fd9a70-adbe-46bd-bfce-ec1004f6c7d8",
+    aerial: "063055_ee1debcd-d200-484f-b94f-fad6dcffd4eb",
+    back:   "063251_24fbd7cc-00df-49ec-8fbf-d8a0349b1e98",
+    mid:    "063252_b9f2fecf-9be0-485f-842f-3aa6bbc251f2",
+    front:  "063151_7804d758-a2eb-4499-9b56-8f493edbb206"
+  };
+  var TILT_SRC = CDN + "063355_a600befc-45d6-4a32-9db6-9d6565a89609.mp4";
+  var RAIN_SRC = CDN + "063703_04e54df7-2236-4dff-b95b-a9a34c1f78ec.mp4";
+  function img(id, w) {
+    return "https://images.higgs.ai/?default=1&output=webp&url=" +
+      encodeURIComponent(CDN + id + ".png") + "&w=" + w + "&q=85";
+  }
+  function pickW(cssPx) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.ceil((cssPx * dpr) / 100) * 100;
+    return Math.max(600, Math.min(2700, w));
+  }
+
+  /* ---------- elements ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var root = document.documentElement;
+  var hero = $("hero"), stage = $("stage"), back = $("back"), mid = $("mid"), front = $("front");
+  var headline = $("headline"), word = $("word"), wordInner = $("wordInner"), baseline = $("baseline");
+  var kicker = $("kicker"), nav = $("nav"), shade = $("shade");
+  var opening = $("opening"), doors = $("doors"), doorL = $("doorL"), doorR = $("doorR");
+  var tilt = $("tilt"), rainA = $("rainA"), rainB = $("rainB");
+  var letters = Array.prototype.slice.call(word.querySelectorAll(".l"));
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var playIntro = root.classList.contains("intro");
+
+  /* ---------- layout ---------- */
+  var wpe = 3.4, blr = 0.8633;
+  function measure() {
+    var prev = word.style.fontSize;
+    word.style.fontSize = "100px";
+    var wr = wordInner.getBoundingClientRect(), hr = word.getBoundingClientRect(), br = baseline.getBoundingClientRect();
+    if (wr.width > 0) { wpe = wr.width / 100; blr = (br.bottom - hr.top) / 100; }
+    word.style.fontSize = prev;
+  }
+  function layout() {
+    var vw = hero.clientWidth, vh = hero.clientHeight;
+    var sw = Math.max(vw, vh * 16 / 9), sh = sw * 9 / 16;
+    var sl = (vw - sw) / 2, st = (vh - sh) / 2;
+    stage.classList.add("is-sized");
+    stage.style.width = sw + "px";
+    stage.style.height = sh + "px";
+    stage.style.left = sl + "px";
+    stage.style.top = st + "px";
+    headline.style.left = (-sl) + "px";
+    headline.style.width = vw + "px";
+
+    var portrait = vh > 1.2 * vw;
+    var bStage = sh * (portrait ? 0.362 : 0.43);
+    var bView = st + bStage;
+    var navBottom = (parseFloat(getComputedStyle(nav).top) || 0) + nav.offsetHeight;
+
+    var a = (0.625 * sw) / wpe;
+    var b = (0.92 * vw) / wpe;
+    var c = (bView - (navBottom + 0.035 * vh)) / 0.88;
+    var F = Math.max(24, Math.min(a, b, c));
+
+    word.style.fontSize = F + "px";
+    word.style.top = (bStage - blr * F) + "px";
+    kicker.style.fontSize = (0.118 * F) + "px";
+    kicker.style.top = (bStage - (0.727 + 0.02) * F) + "px";
+  }
+  var rz = 0;
+  window.addEventListener("resize", function () { cancelAnimationFrame(rz); rz = requestAnimationFrame(layout); });
+  layout();
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('700 100px "Inter"', "Summit").then(function () { measure(); layout(); }, function () {});
+    document.fonts.ready.then(function () { measure(); layout(); });
+  } else { measure(); layout(); }
+
+  /* ---------- images, sized to the screen ---------- */
+  var wStage = pickW(Math.max(hero.clientWidth, hero.clientHeight * 16 / 9)), wHero = pickW(hero.clientWidth);
+  function loadImg(el, src) {
+    return new Promise(function (res) {
+      var done = function () { res(); };
+      el.onload = function () { if (el.decode) el.decode().then(done, done); else done(); };
+      el.onerror = done;
+      el.src = src;
+    });
+  }
+  function loadBg(el, src) {
+    return new Promise(function (res) {
+      var i = new Image();
+      var done = function () { el.style.backgroundImage = 'url("' + src + '")'; res(); };
+      i.onload = function () { if (i.decode) i.decode().then(done, done); else done(); };
+      i.onerror = function () { res(); };
+      i.src = src;
+    });
+  }
+  var backReady = loadImg($("imgBack"), img(IDS.back, wStage));
+  var imgReady = [backReady, loadImg($("imgMid"), img(IDS.mid, wStage)), loadImg($("imgFront"), img(IDS.front, wStage))];
+
+  /* ---------- rain loop ---------- */
+  var RAIN = [rainA, rainB], LOOP = 3.6, LEAD = 0.75, activeRain = -1, rainStarted = false, heroVisible = true;
+  function safePlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  function rainOn(i) { var v = RAIN[i]; try { v.currentTime = 0; } catch (e) {} safePlay(v); v.classList.add("on"); }
+  RAIN.forEach(function (v, i) {
+    v.addEventListener("timeupdate", function () {
+      if (i !== activeRain || !heroVisible) return;
+      if (v.currentTime >= LOOP - LEAD) {
+        var n = 1 - i; activeRain = n; rainOn(n); v.classList.remove("on");
+        setTimeout(function () { if (activeRain !== i) v.pause(); }, 800);
+      }
+    });
+  });
+  function loadRain() { if (rainA.getAttribute("src")) return; rainA.src = RAIN_SRC; rainB.src = RAIN_SRC; rainA.load(); rainB.load(); }
+  function startRain() { if (rainStarted) return; rainStarted = true; loadRain(); activeRain = 0; rainOn(0); }
+  function resumeRain() { if (rainStarted && activeRain >= 0 && heroVisible && !document.hidden) { var v = RAIN[activeRain]; if (v.paused) safePlay(v); } }
+  document.addEventListener("visibilitychange", resumeRain);
+  // pause the rain while the hero is scrolled out of view
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) {
+    heroVisible = es[0].isIntersecting;
+    if (!rainStarted) return;
+    if (heroVisible) resumeRain(); else RAIN.forEach(function (v) { v.pause(); });
+  }).observe(hero);
+
+  /* ---------- reduced motion: final frame, nothing plays ---------- */
+  if (reduce) { root.classList.remove("intro"); return; }
+
+  /* ---------- already seen this session: final frame + live rain ---------- */
+  if (!playIntro) { backReady.then(startRain); depth(); return; }
+
+  /* ---------- the intro ---------- */
+  try { window.scrollTo(0, 0); } catch (e) {}
+  imgReady.push(loadImg($("imgAerial"), img(IDS.aerial, wStage)));
+  imgReady.push(loadBg(doorL, img(IDS.doors, wHero)).then(function () { doorR.style.backgroundImage = doorL.style.backgroundImage; }));
+  var tiltReady = new Promise(function (res) {
+    var done = function () { res(); };
+    tilt.addEventListener("canplaythrough", done, { once: true });
+    tilt.addEventListener("error", done, { once: true });
+    tilt.src = TILT_SRC; tilt.load();
+  });
+
+  var D = 7400, anims = [];
+  var E = {
+    door1: "cubic-bezier(.1,.2,.8,1)", door2: "cubic-bezier(.4,.6,.9,1)", io: "ease-in-out",
+    open: "cubic-bezier(.45,0,.55,1)", rise: "cubic-bezier(.2,.65,.3,1)", back: "cubic-bezier(.45,0,.35,1)",
+    mid1: "cubic-bezier(.45,0,.3,1)", mid2: "cubic-bezier(.45,0,.55,1)", head: "cubic-bezier(.3,0,.4,1)",
+    man1: "cubic-bezier(.2,.5,.2,1)", man2: "cubic-bezier(.45,0,.55,1)"
+  };
+  function track(el, points) {
+    var kf = [], first = points[0], last = points[points.length - 1];
+    if (first[0] > 0) kf.push(Object.assign({ offset: 0, easing: "linear" }, first[1]));
+    points.forEach(function (p) {
+      var k = Object.assign({ offset: Math.min(1, (p[0] * 1000) / D) }, p[1]);
+      k.easing = p[2] || "linear"; kf.push(k);
+    });
+    if (last[0] * 1000 < D) kf.push(Object.assign({ offset: 1 }, last[1]));
+    var a = el.animate(kf, { duration: D, fill: "both" });
+    a.pause(); a.currentTime = 0; anims.push(a);
+  }
+  track(doorL, [[0.02, { transform: "translateX(0)" }, E.door1], [1.13, { transform: "translateX(-101%)" }]]);
+  track(doorR, [[0.02, { transform: "translateX(0)" }, E.door2], [1.24, { transform: "translateX(101%)" }]]);
+  track(tilt, [[1.19, { opacity: 0 }, E.io], [1.47, { opacity: 1 }]]);
+  track(opening, [[2.45, { opacity: 1 }, E.open], [2.95, { opacity: 0 }]]);
+  track(nav, [[2.45, { opacity: 0, transform: "translateY(-6px)" }, "ease-out"], [2.75, { opacity: 1, transform: "translateY(0)" }]]);
+  track(kicker, [[2.45, { opacity: 0, transform: "translate(0, .5em)" }, E.rise], [3.10, { opacity: 1, transform: "translate(0, 0)" }]]);
+  letters.forEach(function (l, i) {
+    var s = 2.45 + i * 0.054;
+    track(l, [[s, { opacity: 0, transform: "translateY(.14em)" }, E.rise], [s + 0.70, { opacity: 1, transform: "translateY(0)" }]]);
+  });
+  track(shade, [[2.90, { opacity: 0 }, E.io], [3.70, { opacity: 1 }]]);
+  track(back, [[2.90, { transform: "translateY(0)" }, E.back], [4.30, { transform: "translateY(-1.5%)" }]]);
+  track(mid, [[2.90, { transform: "translateY(0)" }, E.mid1], [4.30, { transform: "translateY(-4%)" }], [4.60, { transform: "translateY(-4%)" }, E.mid2], [6.90, { transform: "translateY(0)" }]]);
+  track(headline, [[3.00, { transform: "translateY(6%)" }, E.head], [4.80, { transform: "translateY(0)" }]]);
+  track(front, [[3.35, { transform: "translateY(66%)" }, E.man1], [6.00, { transform: "translateY(-2.5%)" }, E.man2], [7.30, { transform: "translateY(0)" }]]);
+
+  var T0 = 1.25, T1 = 2.85, WIN = T1 - T0, tiltDone = false, tiltStarted = false;
+  function syncTilt(t) {
+    if (tiltDone) return;
+    var dur = (isFinite(tilt.duration) && tilt.duration > 0) ? tilt.duration : 5.04, base = dur / WIN;
+    if (t >= T1) { tiltDone = true; tilt.pause(); try { tilt.currentTime = Math.max(0, dur - 0.03); } catch (e) {} return; }
+    if (t < T0) return;
+    if (!tiltStarted) { tiltStarted = true; tilt.playbackRate = base; safePlay(tilt); }
+    var target = ((t - T0) / WIN) * dur, diff = target - tilt.currentTime;
+    var r = Math.max(0.85 * base, Math.min(1.2 * base, base * (1 + diff * 1.5)));
+    if (Math.abs(r - tilt.playbackRate) > 0.01 * base) tilt.playbackRate = r;
+  }
+
+  var started = false, t0 = 0, failsafe = 0;
+  function finish() {
+    anims.forEach(function (a) { a.currentTime = D; });
+    root.classList.remove("intro");
+    anims.forEach(function (a) { a.cancel(); });
+    opening.hidden = true; doors.hidden = true;
+    tilt.pause(); tilt.removeAttribute("src");
+    try { sessionStorage.setItem("dg-seen", "1"); sessionStorage.setItem("dg-home", "1"); } catch (e) {}
+    depth();
+    try { dispatchEvent(new Event("dg:intro")); } catch (e) {}
+  }
+  // after the intro, scrolling away splits the scene into depth: sky drifts slow, the man and railing fast
+  function depth() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var hero = document.getElementById("hero"), hl = document.getElementById("headline");
+    var L = [[back, 0.12, 1.06], [hl, 0.42, 0.92], [mid, 0.2, 1.02], [front, 0.04, 1]];
+    var cue = hero.querySelector(".cue"), ticking = false;
+    var paint = function () {
+      ticking = false;
+      var p = Math.max(0, Math.min(1, window.scrollY / innerHeight));
+      L.forEach(function (l) {
+        if (!l[0]) return;
+        l[0].style.translate = "0 " + (p * l[1] * 100).toFixed(2) + "vh";
+        if (l[2] !== 1) l[0].style.scale = String(1 + (l[2] - 1) * p);
+      });
+      if (hl) hl.style.opacity = String(1 - p * 1.4);
+      if (cue) cue.style.opacity = String(1 - p * 3);
+      hero.style.filter = p > 0.01 ? "brightness(" + (1 - p * 0.45).toFixed(3) + ")" : "";
+    };
+    addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }, { passive: true });
+    paint();
+  }
+  function frame(now) {
+    var ms = Math.min(now - t0, D);
+    for (var i = 0; i < anims.length; i++) anims[i].currentTime = ms;
+    var t = ms / 1000;
+    syncTilt(t);
+    if (t >= 2.40) startRain();
+    if (ms >= D) { finish(); return; }
+    requestAnimationFrame(frame);
+  }
+  var onStart = [];
+  function start() {
+    if (started) return;
+    started = true;
+    onStart.forEach(function (f) { f(); });
+    clearTimeout(failsafe);
+    loadRain();
+    requestAnimationFrame(function (now) { t0 = now; frame(now); });
+  }
+  var ready = Promise.all(imgReady.concat([tiltReady]));
+  var heroP = { p: 0 };
+  (window.DG_EXTRA = window.DG_EXTRA || []).push(heroP);   // the loader waits for the hero too
+  ready.then(function () { heroP.p = 1; loadRain(); });
+
+  if (root.classList.contains("filming")) {
+    // the intro film plays first; intro.js calls start() on the flash that cuts from the film to the doors
+    window.DG_HERO = {
+      start: function (cb) {
+        if (cb) { if (started) cb(); else onStart.push(cb); }
+        Promise.race([ready, new Promise(function (r) { setTimeout(r, 2500); })]).then(function () { setTimeout(start, 60); });
+      }
+    };
+    failsafe = setTimeout(start, 45000);
+  } else {
+    failsafe = setTimeout(start, 5000);
+    ready.then(function () { setTimeout(start, 120); });
+  }
+})();
+</script>
 </body>
 </html>
